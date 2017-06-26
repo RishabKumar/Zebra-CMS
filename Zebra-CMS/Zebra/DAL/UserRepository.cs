@@ -10,7 +10,7 @@ namespace Zebra.DAL
     {
         static List<User> users = new List<User>() {
 
-        new User() {Name="Rishabh",Roles= "Admin,Editor", Password="b" },
+        new User() {Name="Rishabh",Role= "Admin,Editor", Password="b" },
         
         };
 

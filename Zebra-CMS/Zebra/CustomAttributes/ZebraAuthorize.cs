@@ -21,7 +21,7 @@ namespace Zebra.CustomAttributes
 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
-            string returnUrl = filterContext.HttpContext.Request.Url.AbsoluteUri;
+            string returnUrl = HttpUtility.UrlEncode(filterContext.HttpContext.Request.Url.AbsoluteUri);
             var authCookie = filterContext.HttpContext.Request.Cookies[FormsAuthentication.FormsCookieName];
             if (authCookie != null)
             {

@@ -28,14 +28,14 @@ namespace Zebra.Controllers
                 if (user != null)
                 {
                     FormsAuthentication.SetAuthCookie(user.Name, false);
-                    var authTicket = new FormsAuthenticationTicket(1, user.Name, DateTime.Now, DateTime.Now.AddMinutes(20), false, user.Roles);
+                    var authTicket = new FormsAuthenticationTicket(1, user.Name, DateTime.Now, DateTime.Now.AddMinutes(20), false, user.Role);
                     string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
                     var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
                     HttpContext.Response.Cookies.Add(authCookie);
                     return Redirect(string.IsNullOrWhiteSpace(returnUrl)? "/": returnUrl);
                 }
             }
-            return RedirectToAction("Index", returnUrl);
+            return RedirectToAction("Index", new { returnUrl=returnUrl });
         }
 
         [HttpPost]
