@@ -180,7 +180,6 @@
       <LastGenOutput>Users.Context.cs</LastGenOutput>
       <DependentUpon>Users.edmx</DependentUpon>
     </Content>
-    <Content Include="Models\Users.edmx.sql" />
     <Content Include="Models\Users.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Users.cs</LastGenOutput>
