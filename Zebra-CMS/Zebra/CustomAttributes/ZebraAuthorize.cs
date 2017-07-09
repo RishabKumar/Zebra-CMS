@@ -1,13 +1,7 @@
-﻿
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
 using System.Web.Security;
-using Zebra.Models;
 
 namespace Zebra.CustomAttributes
 {
@@ -32,10 +26,10 @@ namespace Zebra.CustomAttributes
                     var roles = Roles.Split(',').OfType<string>().ToList<string>();
 
                     bool flag = true;
-
+                    
                     roles.ForEach(x=>
                     {
-                        flag &= userroles.Contains(x);
+                        flag &= userroles.Contains(x.ToLower());
                     });
 
                     if(!flag)

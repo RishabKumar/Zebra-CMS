@@ -5,11 +5,11 @@
   </EntityContainer>
   <EntityType Name="Users">
     <Key>
-      <PropertyRef Name="Id" />
+      <PropertyRef Name="UserId" />
     </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserName" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="Role" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Roles" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
 </Schema>

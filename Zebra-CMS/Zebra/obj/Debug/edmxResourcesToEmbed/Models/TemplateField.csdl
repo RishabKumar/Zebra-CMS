@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="System" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+  <EntityContainer Name="SystemContainer" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Templates1" EntityType="System.Templates" />
+    <EntitySet Name="Fields" EntityType="System.Fields" />
+    <AssociationSet Name="FieldsTemplates" Association="System.FieldsTemplates">
+      <End Role="Fields" EntitySet="Fields" />
+      <End Role="Templates" EntitySet="Templates1" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Templates">
+    <Key>
+      <PropertyRef Name="TemplateId" />
+    </Key>
+    <Property Name="TemplateId" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TemplateName" Type="String" Nullable="false" />
+    <Property Name="FieldId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Field" Relationship="System.FieldsTemplates" FromRole="Templates" ToRole="Fields" />
+  </EntityType>
+  <EntityType Name="Fields">
+    <Key>
+      <PropertyRef Name="FieldId" />
+    </Key>
+    <Property Name="FieldId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FieldName" Type="String" Nullable="false" />
+    <Property Name="TypeId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Templates" Relationship="System.FieldsTemplates" FromRole="Fields" ToRole="Templates" />
+  </EntityType>
+  <Association Name="FieldsTemplates">
+    <End Type="System.Fields" Role="Fields" Multiplicity="1" />
+    <End Type="System.Templates" Role="Templates" Multiplicity="*" />
+  </Association>
+</Schema>

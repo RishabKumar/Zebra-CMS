@@ -1,0 +1,10 @@
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Domain\obj\Debug\Zebra.DataRepository.csprojResolveAssemblyReference.cache
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Domain\bin\Debug\Zebra.Domain.dll.config
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Domain\bin\Debug\Zebra.Domain.dll
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Domain\bin\Debug\Zebra.Domain.pdb
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Domain\bin\Debug\EntityFramework.dll
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Domain\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Domain\bin\Debug\EntityFramework.xml
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Domain\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Domain\obj\Debug\Zebra.Domain.dll
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Domain\obj\Debug\Zebra.Domain.pdb

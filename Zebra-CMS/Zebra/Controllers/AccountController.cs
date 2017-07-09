@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Zebra.DAL;
-using Zebra.Models;
+using Zebra.Domain.Models;
 
 namespace Zebra.Controllers
 {
@@ -20,15 +20,15 @@ namespace Zebra.Controllers
         }
 
         [HttpPost]
-        public ActionResult Validate(User user, string returnUrl)
+        public ActionResult Validate(Users user, string returnUrl)
         {
             if (ModelState.IsValid)
             {
                 user = UserRepository.ValidateUser(user);
                 if (user != null)
                 {
-                    FormsAuthentication.SetAuthCookie(user.Name, false);
-                    var authTicket = new FormsAuthenticationTicket(1, user.Name, DateTime.Now, DateTime.Now.AddMinutes(20), false, user.Role);
+                    FormsAuthentication.SetAuthCookie(user.UserName, false);
+                    var authTicket = new FormsAuthenticationTicket(1, user.UserName, DateTime.Now, DateTime.Now.AddMinutes(20), false, user.Roles);
                     string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
                     var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
                     HttpContext.Response.Cookies.Add(authCookie);

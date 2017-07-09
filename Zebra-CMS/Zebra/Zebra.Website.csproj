@@ -144,27 +144,8 @@
     <Compile Include="Controllers\CPanelController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="CustomAttributes\ZebraAuthorize.cs" />
-    <Compile Include="DAL\UserRepository.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Models\User.cs">
-      <DependentUpon>Users.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Users.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Users.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Users.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Users.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Users.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Users.edmx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -175,25 +156,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Models\Users.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Users.Context.cs</LastGenOutput>
-      <DependentUpon>Users.edmx</DependentUpon>
-    </Content>
-    <Content Include="Models\Users.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Users.cs</LastGenOutput>
-      <DependentUpon>Users.edmx</DependentUpon>
-    </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\Users.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Users.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\Users.edmx.diagram">
-      <DependentUpon>Users.edmx</DependentUpon>
-    </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -234,6 +198,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Zebra.Domain\Zebra.DataRepository.csproj">
+      <Project>{95df0239-628c-4fc5-a6f2-01bf8ec2acbd}</Project>
+      <Name>Zebra.DataRepository</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
