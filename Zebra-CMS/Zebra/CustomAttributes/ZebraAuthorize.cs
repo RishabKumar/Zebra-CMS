@@ -15,6 +15,7 @@ namespace Zebra.CustomAttributes
 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
+
             string returnUrl = HttpUtility.UrlEncode(filterContext.HttpContext.Request.Url.AbsoluteUri);
             var authCookie = filterContext.HttpContext.Request.Cookies[FormsAuthentication.FormsCookieName];
             if (authCookie != null)
@@ -23,6 +24,10 @@ namespace Zebra.CustomAttributes
                 if (authTicket != null && !authTicket.Expired)
                 {
                     var userroles = authTicket.UserData.Split(',').OfType<string>().ToList<string>();
+                    if(string.IsNullOrWhiteSpace(Roles))
+                    {
+                        return;
+                    }
                     var roles = Roles.Split(',').OfType<string>().ToList<string>();
 
                     bool flag = true;

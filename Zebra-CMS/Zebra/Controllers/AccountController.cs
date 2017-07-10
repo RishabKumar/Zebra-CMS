@@ -4,13 +4,22 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using Zebra.DAL;
-using Zebra.Domain.Models;
+using Zebra.DataRepository.DAL;
+using Zebra.DataRepository.Models;
+using Zebra.Services.Interfaces;
+using Zebra.Services.Operations;
 
 namespace Zebra.Controllers
 {
     public class AccountController : Controller
     {
+        IUserOperations _base;
+
+        public AccountController(UserOperations userop)
+        {
+            _base = userop;
+        }
+
         // GET: Account
         [HttpGet]
         public ActionResult Index(string returnurl)
@@ -24,7 +33,7 @@ namespace Zebra.Controllers
         {
             if (ModelState.IsValid)
             {
-                user = UserRepository.ValidateUser(user);
+                user = _base.ValidateUser(user);
                 if (user != null)
                 {
                     FormsAuthentication.SetAuthCookie(user.UserName, false);
