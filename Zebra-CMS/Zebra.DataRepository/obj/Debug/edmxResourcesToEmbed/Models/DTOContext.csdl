@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Templates" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+  <EntityContainer Name="TemplatesContainer" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Templates" EntityType="Templates.Templates" />
+    <EntitySet Name="Fields" EntityType="Templates.Fields" />
+    <EntitySet Name="FieldTypes" EntityType="Templates.FieldTypes" />
+    <AssociationSet Name="FieldTypesFields" Association="Templates.FieldTypesFields">
+      <End Role="FieldTypes" EntitySet="FieldTypes" />
+      <End Role="Fields" EntitySet="Fields" />
+    </AssociationSet>
+    <EntitySet Name="TemplateFieldMaps" EntityType="Templates.TemplateFieldMap" />
+    <AssociationSet Name="TemplatesTemplateFieldMap" Association="Templates.TemplatesTemplateFieldMap">
+      <End Role="Templates" EntitySet="Templates" />
+      <End Role="TemplateFieldMap" EntitySet="TemplateFieldMaps" />
+    </AssociationSet>
+    <AssociationSet Name="FieldsTemplateFieldMap" Association="Templates.FieldsTemplateFieldMap">
+      <End Role="Fields" EntitySet="Fields" />
+      <End Role="TemplateFieldMap" EntitySet="TemplateFieldMaps" />
+    </AssociationSet>
+    <EntitySet Name="Users" EntityType="Templates.Users" />
+  </EntityContainer>
+  <EntityType Name="Templates">
+    <Key>
+      <PropertyRef Name="TemplateId" />
+    </Key>
+    <Property Name="TemplateId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
+    <Property Name="TemplateName" Type="String" Nullable="false" />
+    <NavigationProperty Name="TemplateFieldMaps" Relationship="Templates.TemplatesTemplateFieldMap" FromRole="Templates" ToRole="TemplateFieldMap" />
+  </EntityType>
+  <EntityType Name="Fields">
+    <Key>
+      <PropertyRef Name="FieldId" />
+    </Key>
+    <Property Name="FieldId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
+    <Property Name="FieldName" Type="String" Nullable="false" />
+    <Property Name="TypeId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="FieldType" Relationship="Templates.FieldTypesFields" FromRole="Fields" ToRole="FieldTypes" />
+    <NavigationProperty Name="TemplateFieldMaps" Relationship="Templates.FieldsTemplateFieldMap" FromRole="Fields" ToRole="TemplateFieldMap" />
+  </EntityType>
+  <EntityType Name="FieldTypes">
+    <Key>
+      <PropertyRef Name="TypeId" />
+    </Key>
+    <Property Name="TypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
+    <Property Name="TypeName" Type="String" Nullable="false" />
+    <Property Name="ClassPath" Type="String" Nullable="false" />
+    <NavigationProperty Name="Fields" Relationship="Templates.FieldTypesFields" FromRole="FieldTypes" ToRole="Fields" />
+  </EntityType>
+  <Association Name="FieldTypesFields">
+    <End Type="Templates.FieldTypes" Role="FieldTypes" Multiplicity="1" />
+    <End Type="Templates.Fields" Role="Fields" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FieldTypes">
+        <PropertyRef Name="TypeId" />
+      </Principal>
+      <Dependent Role="Fields">
+        <PropertyRef Name="TypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="TemplateFieldMap">
+    <Key>
+      <PropertyRef Name="MapId" />
+    </Key>
+    <Property Name="MapId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TemplateId" Type="Int32" Nullable="false" />
+    <Property Name="FieldId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Template" Relationship="Templates.TemplatesTemplateFieldMap" FromRole="TemplateFieldMap" ToRole="Templates" />
+    <NavigationProperty Name="Field" Relationship="Templates.FieldsTemplateFieldMap" FromRole="TemplateFieldMap" ToRole="Fields" />
+  </EntityType>
+  <Association Name="TemplatesTemplateFieldMap">
+    <End Type="Templates.Templates" Role="Templates" Multiplicity="1" />
+    <End Type="Templates.TemplateFieldMap" Role="TemplateFieldMap" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Templates">
+        <PropertyRef Name="TemplateId" />
+      </Principal>
+      <Dependent Role="TemplateFieldMap">
+        <PropertyRef Name="TemplateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FieldsTemplateFieldMap">
+    <End Type="Templates.Fields" Role="Fields" Multiplicity="1" />
+    <End Type="Templates.TemplateFieldMap" Role="TemplateFieldMap" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Fields">
+        <PropertyRef Name="FieldId" />
+      </Principal>
+      <Dependent Role="TemplateFieldMap">
+        <PropertyRef Name="FieldId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserName" Type="String" Nullable="false" />
+    <Property Name="Roles" Type="String" Nullable="false" />
+    <Property Name="Password" Type="String" Nullable="false" />
+  </EntityType>
+</Schema>

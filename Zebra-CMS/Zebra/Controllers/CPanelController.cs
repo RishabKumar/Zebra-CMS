@@ -7,10 +7,10 @@ using Zebra.CustomAttributes;
 
 namespace Zebra.Controllers
 {
-    public class CPanelController : Controller
+    public class CPanelController : ZebraController
     {
         // GET: CPanel
-        public ActionResult Index()
+        public override ActionResult Index()
         {
             return RedirectToAction("Editor");
         }

@@ -1,13 +1,7 @@
-﻿
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
 using System.Web.Security;
-using Zebra.Models;
 
 namespace Zebra.CustomAttributes
 {
@@ -21,7 +15,8 @@ namespace Zebra.CustomAttributes
 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
-            string returnUrl = filterContext.HttpContext.Request.Url.AbsoluteUri;
+
+            string returnUrl = HttpUtility.UrlEncode(filterContext.HttpContext.Request.Url.AbsoluteUri);
             var authCookie = filterContext.HttpContext.Request.Cookies[FormsAuthentication.FormsCookieName];
             if (authCookie != null)
             {
@@ -29,13 +24,17 @@ namespace Zebra.CustomAttributes
                 if (authTicket != null && !authTicket.Expired)
                 {
                     var userroles = authTicket.UserData.Split(',').OfType<string>().ToList<string>();
+                    if(string.IsNullOrWhiteSpace(Roles))
+                    {
+                        return;
+                    }
                     var roles = Roles.Split(',').OfType<string>().ToList<string>();
 
                     bool flag = true;
-
+                    
                     roles.ForEach(x=>
                     {
-                        flag &= userroles.Contains(x);
+                        flag &= userroles.Contains(x.ToLower());
                     });
 
                     if(!flag)

@@ -4,13 +4,22 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using Zebra.DAL;
-using Zebra.Models;
+using Zebra.DataRepository.DAL;
+using Zebra.DataRepository.Models;
+using Zebra.Services.Interfaces;
+using Zebra.Services.Operations;
 
 namespace Zebra.Controllers
 {
     public class AccountController : Controller
     {
+        IUserOperations _base;
+
+        public AccountController(UserOperations userop)
+        {
+            _base = userop;
+        }
+
         // GET: Account
         [HttpGet]
         public ActionResult Index(string returnurl)
@@ -20,22 +29,22 @@ namespace Zebra.Controllers
         }
 
         [HttpPost]
-        public ActionResult Validate(User user, string returnUrl)
+        public ActionResult Validate(Users user, string returnUrl)
         {
             if (ModelState.IsValid)
             {
-                user = UserRepository.ValidateUser(user);
+                user = _base.ValidateUser(user);
                 if (user != null)
                 {
-                    FormsAuthentication.SetAuthCookie(user.Name, false);
-                    var authTicket = new FormsAuthenticationTicket(1, user.Name, DateTime.Now, DateTime.Now.AddMinutes(20), false, user.Roles);
+                    FormsAuthentication.SetAuthCookie(user.UserName, false);
+                    var authTicket = new FormsAuthenticationTicket(1, user.UserName, DateTime.Now, DateTime.Now.AddMinutes(20), false, user.Roles);
                     string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
                     var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
                     HttpContext.Response.Cookies.Add(authCookie);
                     return Redirect(string.IsNullOrWhiteSpace(returnUrl)? "/": returnUrl);
                 }
             }
-            return RedirectToAction("Index", returnUrl);
+            return RedirectToAction("Index", new { returnUrl=returnUrl });
         }
 
         [HttpPost]
