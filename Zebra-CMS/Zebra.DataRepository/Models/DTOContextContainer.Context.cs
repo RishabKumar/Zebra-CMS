@@ -9,12 +9,11 @@
 
 namespace Zebra.DataRepository.Models
 {
-    using Models;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-
-    partial class DTOContextContainer : DbContext
+    
+    public partial class DTOContextContainer : DbContext
     {
         public DTOContextContainer()
             : base("name=DTOContextContainer")
@@ -31,5 +30,6 @@ namespace Zebra.DataRepository.Models
         public virtual DbSet<FieldTypes> FieldTypes { get; set; }
         public virtual DbSet<TemplateFieldMap> TemplateFieldMaps { get; set; }
         public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Nodes> Nodes { get; set; }
     }
 }

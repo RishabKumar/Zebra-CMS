@@ -4,72 +4,85 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Templates.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-  <EntityContainer Name="TemplatesStoreContainer">
-    <EntitySet Name="Templates" EntityType="Templates.Store.Templates" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Fields" EntityType="Templates.Store.Fields" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="FieldTypes" EntityType="Templates.Store.FieldTypes" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="TemplateFieldMaps" EntityType="Templates.Store.TemplateFieldMaps" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Users" EntityType="Templates.Store.Users" store:Type="Tables" Schema="dbo" />
-    <AssociationSet Name="FieldTypesFields" Association="Templates.Store.FieldTypesFields">
+    <Schema Namespace="Store.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="StoreStoreContainer">
+    <EntitySet Name="Templates" EntityType="Store.Store.Templates" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Fields" EntityType="Store.Store.Fields" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="FieldTypes" EntityType="Store.Store.FieldTypes" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="TemplateFieldMaps" EntityType="Store.Store.TemplateFieldMaps" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Users" EntityType="Store.Store.Users" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Nodes" EntityType="Store.Store.Nodes" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FieldTypesFields" Association="Store.Store.FieldTypesFields">
       <End Role="FieldTypes" EntitySet="FieldTypes" />
       <End Role="Fields" EntitySet="Fields" />
     </AssociationSet>
-    <AssociationSet Name="TemplatesTemplateFieldMap" Association="Templates.Store.TemplatesTemplateFieldMap">
+    <AssociationSet Name="TemplatesTemplateFieldMap" Association="Store.Store.TemplatesTemplateFieldMap">
       <End Role="Templates" EntitySet="Templates" />
       <End Role="TemplateFieldMap" EntitySet="TemplateFieldMaps" />
     </AssociationSet>
-    <AssociationSet Name="FieldsTemplateFieldMap" Association="Templates.Store.FieldsTemplateFieldMap">
+    <AssociationSet Name="FieldsTemplateFieldMap" Association="Store.Store.FieldsTemplateFieldMap">
       <End Role="Fields" EntitySet="Fields" />
       <End Role="TemplateFieldMap" EntitySet="TemplateFieldMaps" />
+    </AssociationSet>
+    <AssociationSet Name="TemplatesNodes" Association="Store.Store.TemplatesNodes">
+      <End Role="Templates" EntitySet="Templates" />
+      <End Role="Nodes" EntitySet="Nodes" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Templates">
     <Key>
-      <PropertyRef Name="TemplateId" />
+      <PropertyRef Name="Id" />
     </Key>
-    <Property Name="TemplateId" Type="int" Nullable="false" />
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
     <Property Name="TemplateName" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <EntityType Name="Fields">
     <Key>
-      <PropertyRef Name="FieldId" />
+      <PropertyRef Name="Id" />
     </Key>
-    <Property Name="FieldId" Type="int" Nullable="false" />
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
     <Property Name="FieldName" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="TypeId" Type="int" Nullable="false" />
+    <Property Name="TypeId" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="FieldTypes">
     <Key>
-      <PropertyRef Name="TypeId" />
+      <PropertyRef Name="Id" />
     </Key>
-    <Property Name="TypeId" Type="int" Nullable="false" />
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
     <Property Name="TypeName" Type="nvarchar(max)" Nullable="false" />
     <Property Name="ClassPath" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <EntityType Name="TemplateFieldMaps">
     <Key>
-      <PropertyRef Name="MapId" />
+      <PropertyRef Name="Id" />
     </Key>
-    <Property Name="MapId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TemplateId" Type="int" Nullable="false" />
-    <Property Name="FieldId" Type="int" Nullable="false" />
+    <Property Name="Id" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TemplateId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="FieldId" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="Users">
     <Key>
-      <PropertyRef Name="UserId" />
+      <PropertyRef Name="Id" />
     </Key>
-    <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Id" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="UserName" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Roles" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
+  <EntityType Name="Nodes">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="NodeName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="TemplateId" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
   <Association Name="FieldTypesFields">
-    <End Role="FieldTypes" Type="Templates.Store.FieldTypes" Multiplicity="1" />
-    <End Role="Fields" Type="Templates.Store.Fields" Multiplicity="*" />
+    <End Role="FieldTypes" Type="Store.Store.FieldTypes" Multiplicity="1" />
+    <End Role="Fields" Type="Store.Store.Fields" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="FieldTypes">
-        <PropertyRef Name="TypeId" />
+        <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="Fields">
         <PropertyRef Name="TypeId" />
@@ -77,11 +90,11 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="TemplatesTemplateFieldMap">
-    <End Role="Templates" Type="Templates.Store.Templates" Multiplicity="1" />
-    <End Role="TemplateFieldMap" Type="Templates.Store.TemplateFieldMaps" Multiplicity="*" />
+    <End Role="Templates" Type="Store.Store.Templates" Multiplicity="1" />
+    <End Role="TemplateFieldMap" Type="Store.Store.TemplateFieldMaps" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Templates">
-        <PropertyRef Name="TemplateId" />
+        <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="TemplateFieldMap">
         <PropertyRef Name="TemplateId" />
@@ -89,73 +102,91 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FieldsTemplateFieldMap">
-    <End Role="Fields" Type="Templates.Store.Fields" Multiplicity="1" />
-    <End Role="TemplateFieldMap" Type="Templates.Store.TemplateFieldMaps" Multiplicity="*" />
+    <End Role="Fields" Type="Store.Store.Fields" Multiplicity="1" />
+    <End Role="TemplateFieldMap" Type="Store.Store.TemplateFieldMaps" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Fields">
-        <PropertyRef Name="FieldId" />
+        <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="TemplateFieldMap">
         <PropertyRef Name="FieldId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="TemplatesNodes">
+    <End Role="Templates" Type="Store.Store.Templates" Multiplicity="1" />
+    <End Role="Nodes" Type="Store.Store.Nodes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Templates">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Nodes">
+        <PropertyRef Name="TemplateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Templates" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
-        <EntityContainer Name="TemplatesContainer" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Templates" EntityType="Templates.Templates" />
-          <EntitySet Name="Fields" EntityType="Templates.Fields" />
-          <EntitySet Name="FieldTypes" EntityType="Templates.FieldTypes" />
-          <AssociationSet Name="FieldTypesFields" Association="Templates.FieldTypesFields">
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Store" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="DTOContextContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Templates" EntityType="Store.Templates" />
+          <EntitySet Name="Fields" EntityType="Store.Fields" />
+          <EntitySet Name="FieldTypes" EntityType="Store.FieldTypes" />
+          <AssociationSet Name="FieldTypesFields" Association="Store.FieldTypesFields">
             <End Role="FieldTypes" EntitySet="FieldTypes" />
             <End Role="Fields" EntitySet="Fields" />
           </AssociationSet>
-          <EntitySet Name="TemplateFieldMaps" EntityType="Templates.TemplateFieldMap" />
-          <AssociationSet Name="TemplatesTemplateFieldMap" Association="Templates.TemplatesTemplateFieldMap">
+          <EntitySet Name="TemplateFieldMaps" EntityType="Store.TemplateFieldMap" />
+          <AssociationSet Name="TemplatesTemplateFieldMap" Association="Store.TemplatesTemplateFieldMap">
             <End Role="Templates" EntitySet="Templates" />
             <End Role="TemplateFieldMap" EntitySet="TemplateFieldMaps" />
           </AssociationSet>
-          <AssociationSet Name="FieldsTemplateFieldMap" Association="Templates.FieldsTemplateFieldMap">
+          <AssociationSet Name="FieldsTemplateFieldMap" Association="Store.FieldsTemplateFieldMap">
             <End Role="Fields" EntitySet="Fields" />
             <End Role="TemplateFieldMap" EntitySet="TemplateFieldMaps" />
           </AssociationSet>
-          <EntitySet Name="Users" EntityType="Templates.Users" />
+          <EntitySet Name="Users" EntityType="Store.Users" />
+          <EntitySet Name="Nodes" EntityType="Store.Nodes" />
+          <AssociationSet Name="TemplatesNodes" Association="Store.TemplatesNodes">
+            <End Role="Templates" EntitySet="Templates" />
+            <End Role="Nodes" EntitySet="Nodes" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Templates">
           <Key>
-            <PropertyRef Name="TemplateId" />
+            <PropertyRef Name="Id" />
           </Key>
-          <Property Name="TemplateId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
           <Property Name="TemplateName" Type="String" Nullable="false" />
-          <NavigationProperty Name="TemplateFieldMaps" Relationship="Templates.TemplatesTemplateFieldMap" FromRole="Templates" ToRole="TemplateFieldMap" />
+          <NavigationProperty Name="TemplateFieldMaps" Relationship="Store.TemplatesTemplateFieldMap" FromRole="Templates" ToRole="TemplateFieldMap" />
+          <NavigationProperty Name="Nodes" Relationship="Store.TemplatesNodes" FromRole="Templates" ToRole="Nodes" />
         </EntityType>
         <EntityType Name="Fields">
           <Key>
-            <PropertyRef Name="FieldId" />
+            <PropertyRef Name="Id" />
           </Key>
-          <Property Name="FieldId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
           <Property Name="FieldName" Type="String" Nullable="false" />
-          <Property Name="TypeId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="FieldType" Relationship="Templates.FieldTypesFields" FromRole="Fields" ToRole="FieldTypes" />
-          <NavigationProperty Name="TemplateFieldMaps" Relationship="Templates.FieldsTemplateFieldMap" FromRole="Fields" ToRole="TemplateFieldMap" />
+          <Property Name="TypeId" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="FieldType" Relationship="Store.FieldTypesFields" FromRole="Fields" ToRole="FieldTypes" />
+          <NavigationProperty Name="TemplateFieldMaps" Relationship="Store.FieldsTemplateFieldMap" FromRole="Fields" ToRole="TemplateFieldMap" />
         </EntityType>
         <EntityType Name="FieldTypes">
           <Key>
-            <PropertyRef Name="TypeId" />
+            <PropertyRef Name="Id" />
           </Key>
-          <Property Name="TypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
           <Property Name="TypeName" Type="String" Nullable="false" />
           <Property Name="ClassPath" Type="String" Nullable="false" />
-          <NavigationProperty Name="Fields" Relationship="Templates.FieldTypesFields" FromRole="FieldTypes" ToRole="Fields" />
+          <NavigationProperty Name="Fields" Relationship="Store.FieldTypesFields" FromRole="FieldTypes" ToRole="Fields" />
         </EntityType>
         <Association Name="FieldTypesFields">
-          <End Type="Templates.FieldTypes" Role="FieldTypes" Multiplicity="1" />
-          <End Type="Templates.Fields" Role="Fields" Multiplicity="*" />
+          <End Type="Store.FieldTypes" Role="FieldTypes" Multiplicity="1" />
+          <End Type="Store.Fields" Role="Fields" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="FieldTypes">
-              <PropertyRef Name="TypeId" />
+              <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Fields">
               <PropertyRef Name="TypeId" />
@@ -164,20 +195,20 @@
         </Association>
         <EntityType Name="TemplateFieldMap">
           <Key>
-            <PropertyRef Name="MapId" />
+            <PropertyRef Name="Id" />
           </Key>
-          <Property Name="MapId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TemplateId" Type="Int32" Nullable="false" />
-          <Property Name="FieldId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Template" Relationship="Templates.TemplatesTemplateFieldMap" FromRole="TemplateFieldMap" ToRole="Templates" />
-          <NavigationProperty Name="Field" Relationship="Templates.FieldsTemplateFieldMap" FromRole="TemplateFieldMap" ToRole="Fields" />
+          <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TemplateId" Type="Guid" Nullable="false" />
+          <Property Name="FieldId" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Template" Relationship="Store.TemplatesTemplateFieldMap" FromRole="TemplateFieldMap" ToRole="Templates" />
+          <NavigationProperty Name="Field" Relationship="Store.FieldsTemplateFieldMap" FromRole="TemplateFieldMap" ToRole="Fields" />
         </EntityType>
         <Association Name="TemplatesTemplateFieldMap">
-          <End Type="Templates.Templates" Role="Templates" Multiplicity="1" />
-          <End Type="Templates.TemplateFieldMap" Role="TemplateFieldMap" Multiplicity="*" />
+          <End Type="Store.Templates" Role="Templates" Multiplicity="1" />
+          <End Type="Store.TemplateFieldMap" Role="TemplateFieldMap" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Templates">
-              <PropertyRef Name="TemplateId" />
+              <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="TemplateFieldMap">
               <PropertyRef Name="TemplateId" />
@@ -185,11 +216,11 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FieldsTemplateFieldMap">
-          <End Type="Templates.Fields" Role="Fields" Multiplicity="1" />
-          <End Type="Templates.TemplateFieldMap" Role="TemplateFieldMap" Multiplicity="*" />
+          <End Type="Store.Fields" Role="Fields" Multiplicity="1" />
+          <End Type="Store.TemplateFieldMap" Role="TemplateFieldMap" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Fields">
-              <PropertyRef Name="FieldId" />
+              <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="TemplateFieldMap">
               <PropertyRef Name="FieldId" />
@@ -198,61 +229,91 @@
         </Association>
         <EntityType Name="Users">
           <Key>
-            <PropertyRef Name="UserId" />
+            <PropertyRef Name="Id" />
           </Key>
-          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserName" Type="String" Nullable="false" />
           <Property Name="Roles" Type="String" Nullable="false" />
           <Property Name="Password" Type="String" Nullable="false" />
         </EntityType>
+        <EntityType Name="Nodes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="NodeName" Type="String" Nullable="false" />
+          <NavigationProperty Name="Template" Relationship="Store.TemplatesNodes" FromRole="Nodes" ToRole="Templates" />
+          <Property Name="TemplateId" Type="Guid" Nullable="false" />
+        </EntityType>
+        <Association Name="TemplatesNodes">
+          <End Type="Store.Templates" Role="Templates" Multiplicity="1" />
+          <End Type="Store.Nodes" Role="Nodes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Templates">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Nodes">
+              <PropertyRef Name="TemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
     <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="TemplatesStoreContainer" CdmEntityContainer="TemplatesContainer">
+  <EntityContainerMapping StorageEntityContainer="StoreStoreContainer" CdmEntityContainer="DTOContextContainer">
     <EntitySetMapping Name="Templates">
-      <EntityTypeMapping TypeName="IsTypeOf(Templates.Templates)">
+      <EntityTypeMapping TypeName="IsTypeOf(Store.Templates)">
         <MappingFragment StoreEntitySet="Templates">
-          <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="TemplateName" ColumnName="TemplateName" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Fields">
-      <EntityTypeMapping TypeName="IsTypeOf(Templates.Fields)">
+      <EntityTypeMapping TypeName="IsTypeOf(Store.Fields)">
         <MappingFragment StoreEntitySet="Fields">
-          <ScalarProperty Name="FieldId" ColumnName="FieldId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="FieldName" ColumnName="FieldName" />
           <ScalarProperty Name="TypeId" ColumnName="TypeId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="FieldTypes">
-      <EntityTypeMapping TypeName="IsTypeOf(Templates.FieldTypes)">
+      <EntityTypeMapping TypeName="IsTypeOf(Store.FieldTypes)">
         <MappingFragment StoreEntitySet="FieldTypes">
-          <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="TypeName" ColumnName="TypeName" />
           <ScalarProperty Name="ClassPath" ColumnName="ClassPath" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="TemplateFieldMaps">
-      <EntityTypeMapping TypeName="IsTypeOf(Templates.TemplateFieldMap)">
+      <EntityTypeMapping TypeName="IsTypeOf(Store.TemplateFieldMap)">
         <MappingFragment StoreEntitySet="TemplateFieldMaps">
-          <ScalarProperty Name="MapId" ColumnName="MapId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
           <ScalarProperty Name="FieldId" ColumnName="FieldId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Users">
-      <EntityTypeMapping TypeName="IsTypeOf(Templates.Users)">
+      <EntityTypeMapping TypeName="IsTypeOf(Store.Users)">
         <MappingFragment StoreEntitySet="Users">
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="UserName" ColumnName="UserName" />
           <ScalarProperty Name="Roles" ColumnName="Roles" />
           <ScalarProperty Name="Password" ColumnName="Password" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Nodes">
+      <EntityTypeMapping TypeName="IsTypeOf(Store.Nodes)">
+        <MappingFragment StoreEntitySet="Nodes">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="NodeName" ColumnName="NodeName" />
+          <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -276,6 +337,18 @@
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
+      <Diagram DiagramId="4f988009b4ec4f8fac4cb11e132daf81" Name="Diagram1">
+        <EntityTypeShape EntityType="Store.Templates" Width="1.5" PointX="3" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Store.Fields" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Store.FieldTypes" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="Store.TemplateFieldMap" Width="1.5" PointX="5.25" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Store.Users" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="Store.FieldTypesFields" ManuallyRouted="false" />
+        <AssociationConnector Association="Store.TemplatesTemplateFieldMap" ManuallyRouted="false" />
+        <AssociationConnector Association="Store.FieldsTemplateFieldMap" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="Store.Nodes" Width="1.5" PointX="8.875" PointY="1.375" />
+        <AssociationConnector Association="Store.TemplatesNodes" />
+      </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

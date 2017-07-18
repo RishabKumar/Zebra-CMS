@@ -14,9 +14,9 @@ namespace Zebra.DataRepository.Models
     
     public partial class TemplateFieldMap
     {
-        public int MapId { get; set; }
-        public int TemplateId { get; set; }
-        public int FieldId { get; set; }
+        public System.Guid Id { get; set; }
+        public System.Guid TemplateId { get; set; }
+        public System.Guid FieldId { get; set; }
     
         public virtual Templates Template { get; set; }
         public virtual Fields Field { get; set; }

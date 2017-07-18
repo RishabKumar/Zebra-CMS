@@ -12,11 +12,12 @@ namespace Zebra.DataRepository.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Users
+    public partial class Nodes
     {
         public System.Guid Id { get; set; }
-        public string UserName { get; set; }
-        public string Roles { get; set; }
-        public string Password { get; set; }
+        public string NodeName { get; set; }
+        public System.Guid TemplateId { get; set; }
+    
+        public virtual Templates Template { get; set; }
     }
 }

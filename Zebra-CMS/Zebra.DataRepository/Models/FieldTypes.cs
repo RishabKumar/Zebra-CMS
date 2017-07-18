@@ -20,7 +20,7 @@ namespace Zebra.DataRepository.Models
             this.Fields = new HashSet<Fields>();
         }
     
-        public int TypeId { get; set; }
+        public System.Guid Id { get; set; }
         public string TypeName { get; set; }
         public string ClassPath { get; set; }
     

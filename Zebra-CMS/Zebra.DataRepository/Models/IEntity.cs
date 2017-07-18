@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Zebra.DataRepository.Models
 {
-    interface IEntity
+    public interface IEntity
     {
-        int Id { get; set; }
+        Guid Id { get; set; }
     }
 }

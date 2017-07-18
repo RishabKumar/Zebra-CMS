@@ -20,9 +20,9 @@ namespace Zebra.DataRepository.Models
             this.TemplateFieldMaps = new HashSet<TemplateFieldMap>();
         }
     
-        public int FieldId { get; set; }
+        public System.Guid Id { get; set; }
         public string FieldName { get; set; }
-        public int TypeId { get; set; }
+        public System.Guid TypeId { get; set; }
     
         public virtual FieldTypes FieldType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

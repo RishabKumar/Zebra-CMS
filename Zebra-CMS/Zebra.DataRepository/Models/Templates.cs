@@ -18,12 +18,15 @@ namespace Zebra.DataRepository.Models
         public Templates()
         {
             this.TemplateFieldMaps = new HashSet<TemplateFieldMap>();
+            this.Nodes = new HashSet<Nodes>();
         }
     
-        public int TemplateId { get; set; }
+        public System.Guid Id { get; set; }
         public string TemplateName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TemplateFieldMap> TemplateFieldMaps { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Nodes> Nodes { get; set; }
     }
 }

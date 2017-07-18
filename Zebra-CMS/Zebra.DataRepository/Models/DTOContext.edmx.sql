@@ -2,8 +2,8 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 07/10/2017 01:23:12
--- Generated from EDMX file: C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Domain\Models\TemplateFieldRelation.edmx
+-- Date Created: 07/16/2017 20:27:39
+-- Generated from EDMX file: C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.DataRepository\Models\DTOContext.edmx
 -- --------------------------------------------------
 
 SET QUOTED_IDENTIFIER OFF;
@@ -26,6 +26,9 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_FieldsTemplateFieldMap]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[TemplateFieldMaps] DROP CONSTRAINT [FK_FieldsTemplateFieldMap];
 GO
+IF OBJECT_ID(N'[dbo].[FK_TemplatesNodes]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Nodes] DROP CONSTRAINT [FK_TemplatesNodes];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
@@ -46,6 +49,9 @@ GO
 IF OBJECT_ID(N'[dbo].[Users]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Users];
 GO
+IF OBJECT_ID(N'[dbo].[Nodes]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Nodes];
+GO
 
 -- --------------------------------------------------
 -- Creating all tables
@@ -53,22 +59,22 @@ GO
 
 -- Creating table 'Templates'
 CREATE TABLE [dbo].[Templates] (
-    [TemplateId] int  NOT NULL,
+    [Id] uniqueidentifier  NOT NULL,
     [TemplateName] nvarchar(max)  NOT NULL
 );
 GO
 
 -- Creating table 'Fields'
 CREATE TABLE [dbo].[Fields] (
-    [FieldId] int  NOT NULL,
+    [Id] uniqueidentifier  NOT NULL,
     [FieldName] nvarchar(max)  NOT NULL,
-    [TypeId] int  NOT NULL
+    [TypeId] uniqueidentifier  NOT NULL
 );
 GO
 
 -- Creating table 'FieldTypes'
 CREATE TABLE [dbo].[FieldTypes] (
-    [TypeId] int  NOT NULL,
+    [Id] uniqueidentifier  NOT NULL,
     [TypeName] nvarchar(max)  NOT NULL,
     [ClassPath] nvarchar(max)  NOT NULL
 );
@@ -76,18 +82,26 @@ GO
 
 -- Creating table 'TemplateFieldMaps'
 CREATE TABLE [dbo].[TemplateFieldMaps] (
-    [MapId] int IDENTITY(1,1) NOT NULL,
-    [TemplateId] int  NOT NULL,
-    [FieldId] int  NOT NULL
+    [Id] uniqueidentifier  NOT NULL,
+    [TemplateId] uniqueidentifier  NOT NULL,
+    [FieldId] uniqueidentifier  NOT NULL
 );
 GO
 
 -- Creating table 'Users'
 CREATE TABLE [dbo].[Users] (
-    [UserId] int IDENTITY(1,1) NOT NULL,
+    [Id] uniqueidentifier  NOT NULL,
     [UserName] nvarchar(max)  NOT NULL,
     [Roles] nvarchar(max)  NOT NULL,
     [Password] nvarchar(max)  NOT NULL
+);
+GO
+
+-- Creating table 'Nodes'
+CREATE TABLE [dbo].[Nodes] (
+    [Id] uniqueidentifier  NOT NULL,
+    [NodeName] nvarchar(max)  NOT NULL,
+    [TemplateId] uniqueidentifier  NOT NULL
 );
 GO
 
@@ -95,34 +109,40 @@ GO
 -- Creating all PRIMARY KEY constraints
 -- --------------------------------------------------
 
--- Creating primary key on [TemplateId] in table 'Templates'
+-- Creating primary key on [Id] in table 'Templates'
 ALTER TABLE [dbo].[Templates]
 ADD CONSTRAINT [PK_Templates]
-    PRIMARY KEY CLUSTERED ([TemplateId] ASC);
+    PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
--- Creating primary key on [FieldId] in table 'Fields'
+-- Creating primary key on [Id] in table 'Fields'
 ALTER TABLE [dbo].[Fields]
 ADD CONSTRAINT [PK_Fields]
-    PRIMARY KEY CLUSTERED ([FieldId] ASC);
+    PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
--- Creating primary key on [TypeId] in table 'FieldTypes'
+-- Creating primary key on [Id] in table 'FieldTypes'
 ALTER TABLE [dbo].[FieldTypes]
 ADD CONSTRAINT [PK_FieldTypes]
-    PRIMARY KEY CLUSTERED ([TypeId] ASC);
+    PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
--- Creating primary key on [MapId] in table 'TemplateFieldMaps'
+-- Creating primary key on [Id] in table 'TemplateFieldMaps'
 ALTER TABLE [dbo].[TemplateFieldMaps]
 ADD CONSTRAINT [PK_TemplateFieldMaps]
-    PRIMARY KEY CLUSTERED ([MapId] ASC);
+    PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
--- Creating primary key on [UserId] in table 'Users'
+-- Creating primary key on [Id] in table 'Users'
 ALTER TABLE [dbo].[Users]
 ADD CONSTRAINT [PK_Users]
-    PRIMARY KEY CLUSTERED ([UserId] ASC);
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'Nodes'
+ALTER TABLE [dbo].[Nodes]
+ADD CONSTRAINT [PK_Nodes]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
 -- --------------------------------------------------
@@ -134,7 +154,7 @@ ALTER TABLE [dbo].[Fields]
 ADD CONSTRAINT [FK_FieldTypesFields]
     FOREIGN KEY ([TypeId])
     REFERENCES [dbo].[FieldTypes]
-        ([TypeId])
+        ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
@@ -149,7 +169,7 @@ ALTER TABLE [dbo].[TemplateFieldMaps]
 ADD CONSTRAINT [FK_TemplatesTemplateFieldMap]
     FOREIGN KEY ([TemplateId])
     REFERENCES [dbo].[Templates]
-        ([TemplateId])
+        ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
@@ -164,7 +184,7 @@ ALTER TABLE [dbo].[TemplateFieldMaps]
 ADD CONSTRAINT [FK_FieldsTemplateFieldMap]
     FOREIGN KEY ([FieldId])
     REFERENCES [dbo].[Fields]
-        ([FieldId])
+        ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
@@ -172,6 +192,21 @@ GO
 CREATE INDEX [IX_FK_FieldsTemplateFieldMap]
 ON [dbo].[TemplateFieldMaps]
     ([FieldId]);
+GO
+
+-- Creating foreign key on [TemplateId] in table 'Nodes'
+ALTER TABLE [dbo].[Nodes]
+ADD CONSTRAINT [FK_TemplatesNodes]
+    FOREIGN KEY ([TemplateId])
+    REFERENCES [dbo].[Templates]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_TemplatesNodes'
+CREATE INDEX [IX_FK_TemplatesNodes]
+ON [dbo].[Nodes]
+    ([TemplateId]);
 GO
 
 -- --------------------------------------------------
