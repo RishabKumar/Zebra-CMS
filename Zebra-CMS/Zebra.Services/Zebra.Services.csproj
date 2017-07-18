@@ -40,8 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\INodeOperations.cs" />
     <Compile Include="Interfaces\IStructureOperations.cs" />
     <Compile Include="Interfaces\IUserOperations.cs" />
+    <Compile Include="Operations\BaseOperations.cs" />
+    <Compile Include="Operations\NodeOperations.cs" />
     <Compile Include="Operations\UserOperations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

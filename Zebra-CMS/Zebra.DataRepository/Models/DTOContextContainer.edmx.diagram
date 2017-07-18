@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="06e84267d30841ac8ad1f91de928e8a2" Name="Diagram1">
+        <EntityTypeShape EntityType="ZebraDB_Model.Field" Width="1.5" PointX="0.75" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZebraDB_Model.FieldType" Width="1.5" PointX="1.5" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZebraDB_Model.Node" Width="1.5" PointX="3" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZebraDB_Model.TemplateFieldMap" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZebraDB_Model.Template" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZebraDB_Model.User" Width="1.5" PointX="5.375" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="ZebraDB_Model.FK_FieldsTemplateFieldMap" ManuallyRouted="false" />
+        <AssociationConnector Association="ZebraDB_Model.FK_FieldTypesFields" ManuallyRouted="false" />
+        <AssociationConnector Association="ZebraDB_Model.FK_TemplatesNodes" ManuallyRouted="false" />
+        <AssociationConnector Association="ZebraDB_Model.FK_TemplatesTemplateFieldMap" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

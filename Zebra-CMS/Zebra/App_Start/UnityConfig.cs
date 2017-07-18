@@ -5,6 +5,7 @@ using Zebra.Services.Operations;
 using Zebra.Services.Interfaces;
 using Zebra.DataRepository.DAL;
 using Zebra.DataRepository.Models;
+using Zebra.Core.Context;
 
 namespace Zebra.App_Start
 {
@@ -44,6 +45,8 @@ namespace Zebra.App_Start
 
             container.RegisterType(typeof(BaseRepository<>), typeof(UserRepository));
             container.RegisterType<IUserOperations, UserOperations>();
+            container.RegisterType<INodeOperations, NodeOperations>();
+            container.RegisterType<FieldContext, FieldContext>();
         }
     }
 }

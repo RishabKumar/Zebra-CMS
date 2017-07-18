@@ -11,16 +11,14 @@ namespace Zebra.DataRepository.DAL
     {
         internal DTOContextContainer _context = new DTOContextContainer();
 
-        public abstract T GetById(T t);
-
-        public virtual T GetById(System.Linq.Expressions.Expression<Func<T, bool>> predicate)
+        public virtual Template GetById(IEntity t)
         {
-            return _context.Set<T>().Where<T>(predicate).FirstOrDefault<T>();
+            return _context.Templates.Where(x => x.Id.Equals(t.Id)).FirstOrDefault();
         }
 
         public abstract T GetByName(T t);
 
-        public List<T> GetAll()
+        public virtual List<T> GetAll()
         {
             return _context.Set<T>().ToList<T>();
         }

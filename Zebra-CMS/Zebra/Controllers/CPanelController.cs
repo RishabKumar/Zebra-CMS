@@ -4,11 +4,17 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Zebra.CustomAttributes;
+using Zebra.DataRepository.Models;
+using Zebra.Services.Operations;
 
 namespace Zebra.Controllers
 {
     public class CPanelController : ZebraController
     {
+        public CPanelController(NodeOperations nodeOperations) : base(nodeOperations)
+        {
+        }
+
         // GET: CPanel
         public override ActionResult Index()
         {
@@ -19,6 +25,7 @@ namespace Zebra.Controllers
         [ZebraAuthorize(Roles ="Editor")]
         public ActionResult Editor()
         {
+            Node node = _nodeop.GetRootNode();
             return View();
         }
 

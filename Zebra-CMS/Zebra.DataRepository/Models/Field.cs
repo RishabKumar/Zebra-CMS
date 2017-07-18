@@ -12,20 +12,20 @@ namespace Zebra.DataRepository.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Fields
+    public partial class Field
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Fields()
+        public Field()
         {
             this.TemplateFieldMaps = new HashSet<TemplateFieldMap>();
         }
     
-        public int FieldId { get; set; }
+        public System.Guid Id { get; set; }
         public string FieldName { get; set; }
-        public int TypeId { get; set; }
+        public System.Guid TypeId { get; set; }
     
-        public virtual FieldTypes FieldType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TemplateFieldMap> TemplateFieldMaps { get; set; }
+        public virtual FieldType FieldType { get; set; }
     }
 }

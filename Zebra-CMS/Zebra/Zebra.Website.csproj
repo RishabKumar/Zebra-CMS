@@ -230,6 +230,10 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Zebra.Core\Zebra.Core.csproj">
+      <Project>{3222BEDE-C814-4732-BE0C-9EF0EA6283C4}</Project>
+      <Name>Zebra.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Zebra.DataRepository\Zebra.DataRepository.csproj">
       <Project>{95df0239-628c-4fc5-a6f2-01bf8ec2acbd}</Project>
       <Name>Zebra.DataRepository</Name>

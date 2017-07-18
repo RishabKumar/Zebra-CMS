@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zebra.Services", "Zebra.Ser
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zebra.DataRepository", "Zebra.DataRepository\Zebra.DataRepository.csproj", "{95DF0239-628C-4FC5-A6F2-01BF8EC2ACBD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zebra.Core", "Zebra.Core\Zebra.Core.csproj", "{3222BEDE-C814-4732-BE0C-9EF0EA6283C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{95DF0239-628C-4FC5-A6F2-01BF8EC2ACBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95DF0239-628C-4FC5-A6F2-01BF8EC2ACBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95DF0239-628C-4FC5-A6F2-01BF8EC2ACBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3222BEDE-C814-4732-BE0C-9EF0EA6283C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3222BEDE-C814-4732-BE0C-9EF0EA6283C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3222BEDE-C814-4732-BE0C-9EF0EA6283C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3222BEDE-C814-4732-BE0C-9EF0EA6283C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

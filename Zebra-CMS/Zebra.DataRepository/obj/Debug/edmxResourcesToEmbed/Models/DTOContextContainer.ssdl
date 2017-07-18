@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ZebraDB_Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Fields">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="FieldName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="TypeId" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="FieldTypes">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="TypeName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ClassPath" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Nodes">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="NodeName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="TemplateId" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TemplateFieldMaps">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="TemplateId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="FieldId" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Templates">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="TemplateName" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="UserName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Roles" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_FieldsTemplateFieldMap">
+    <End Role="Fields" Type="Self.Fields" Multiplicity="1" />
+    <End Role="TemplateFieldMaps" Type="Self.TemplateFieldMaps" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Fields">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TemplateFieldMaps">
+        <PropertyRef Name="FieldId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FieldTypesFields">
+    <End Role="FieldTypes" Type="Self.FieldTypes" Multiplicity="1" />
+    <End Role="Fields" Type="Self.Fields" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FieldTypes">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Fields">
+        <PropertyRef Name="TypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TemplatesNodes">
+    <End Role="Templates" Type="Self.Templates" Multiplicity="1" />
+    <End Role="Nodes" Type="Self.Nodes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Templates">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Nodes">
+        <PropertyRef Name="TemplateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TemplatesTemplateFieldMap">
+    <End Role="Templates" Type="Self.Templates" Multiplicity="1" />
+    <End Role="TemplateFieldMaps" Type="Self.TemplateFieldMaps" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Templates">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TemplateFieldMaps">
+        <PropertyRef Name="TemplateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ZebraDB_ModelStoreContainer">
+    <EntitySet Name="Fields" EntityType="Self.Fields" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FieldTypes" EntityType="Self.FieldTypes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Nodes" EntityType="Self.Nodes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TemplateFieldMaps" EntityType="Self.TemplateFieldMaps" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Templates" EntityType="Self.Templates" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_FieldsTemplateFieldMap" Association="Self.FK_FieldsTemplateFieldMap">
+      <End Role="Fields" EntitySet="Fields" />
+      <End Role="TemplateFieldMaps" EntitySet="TemplateFieldMaps" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FieldTypesFields" Association="Self.FK_FieldTypesFields">
+      <End Role="FieldTypes" EntitySet="FieldTypes" />
+      <End Role="Fields" EntitySet="Fields" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TemplatesNodes" Association="Self.FK_TemplatesNodes">
+      <End Role="Templates" EntitySet="Templates" />
+      <End Role="Nodes" EntitySet="Nodes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TemplatesTemplateFieldMap" Association="Self.FK_TemplatesTemplateFieldMap">
+      <End Role="Templates" EntitySet="Templates" />
+      <End Role="TemplateFieldMaps" EntitySet="TemplateFieldMaps" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

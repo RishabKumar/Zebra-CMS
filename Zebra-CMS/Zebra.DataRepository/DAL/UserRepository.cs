@@ -4,16 +4,11 @@ using Zebra.DataRepository.Models;
 
 namespace Zebra.DataRepository.DAL
 {
-    public class UserRepository : BaseRepository<Users>
+    public class UserRepository : BaseRepository<User>
     {
-        private List<Users> users = new DTOContextContainer().Users.ToList();
+        private List<User> users = new DTOContextContainer().Users.ToList();
 
-        public override Users GetById(Users t)
-        {
-            return users.Where(u => u.UserId.Equals(t.UserId)).FirstOrDefault();
-        }
-
-        public override Users GetByName(Users t)
+        public override User GetByName(User t)
         {
             return users.Where(u => u.UserName.ToLower().Equals(t.UserName.ToLower())).FirstOrDefault();
         }

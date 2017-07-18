@@ -5,21 +5,21 @@ namespace Zebra.Services.Interfaces
 {
     interface IStructureOperations
     {
-        List<Fields> GetFieldsByTemplate(Templates t);
+        List<Field> GetFieldsByTemplate(Template t);
 
-        Templates CreateTemplate(Templates t);
+        Template CreateTemplate(Template t);
 
-        bool CreateField(Fields f);
+        bool CreateField(Field f);
 
-        bool CreateField(List<Fields> lst);
+        bool CreateField(List<Field> lst);
 
-        Templates AddField(Fields f, Templates t);
+        Template AddField(Field f, Template t);
 
-        Templates UpdateTemplate(List<Fields> lst, Templates t);
+        Template UpdateTemplate(List<Field> lst, Template t);
 
-        bool DeleteTemplate(Templates t);
+        bool DeleteTemplate(Template t);
 
-        bool DeleteField(Fields f);
+        bool DeleteField(Field f);
 
     }
 }

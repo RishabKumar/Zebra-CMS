@@ -12,17 +12,20 @@ namespace Zebra.DataRepository.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Templates
+    public partial class Template
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Templates()
+        public Template()
         {
+            this.Nodes = new HashSet<Node>();
             this.TemplateFieldMaps = new HashSet<TemplateFieldMap>();
         }
     
-        public int TemplateId { get; set; }
+        public System.Guid Id { get; set; }
         public string TemplateName { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Node> Nodes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TemplateFieldMap> TemplateFieldMaps { get; set; }
     }
