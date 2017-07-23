@@ -23,6 +23,7 @@
     <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
     <Property Name="NodeName" Type="nvarchar(max)" Nullable="false" />
     <Property Name="TemplateId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="parentid" Type="uniqueidentifier" />
   </EntityType>
   <EntityType Name="TemplateFieldMaps">
     <Key>

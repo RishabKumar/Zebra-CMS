@@ -5,12 +5,14 @@ using System.Web;
 using System.Web.Mvc;
 using Zebra.CustomAttributes;
 using Zebra.DataRepository.Models;
+using Zebra.Services.Interfaces;
 using Zebra.Services.Operations;
 
 namespace Zebra.Controllers
 {
     public class CPanelController : ZebraController
     {
+        
         public CPanelController(NodeOperations nodeOperations) : base(nodeOperations)
         {
         }
@@ -25,7 +27,9 @@ namespace Zebra.Controllers
         [ZebraAuthorize(Roles ="Editor")]
         public ActionResult Editor()
         {
-            Node node = _nodeop.GetRootNode();
+            Node root = _nodeop.GetRootNode();
+            ViewBag.Root = root;
+
             return View();
         }
 

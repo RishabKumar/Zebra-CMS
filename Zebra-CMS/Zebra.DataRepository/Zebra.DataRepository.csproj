@@ -59,6 +59,7 @@
     <Compile Include="DAL\NodeRepository.cs" />
     <Compile Include="DAL\TemplateRepository.cs" />
     <Compile Include="DAL\UserRepository.cs" />
+    <Compile Include="Interfaces\INodeRepository.cs" />
     <Compile Include="Models\DTOContextContainer.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

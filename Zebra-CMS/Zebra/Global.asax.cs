@@ -1,4 +1,5 @@
-﻿using System;
+﻿//using Microsoft.Practices.Unity.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -19,7 +20,10 @@ namespace Zebra
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            UnityConfig.RegisterComponents();
         }
+
+        
 
         //protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)
         //{

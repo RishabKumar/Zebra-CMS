@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Zebra.DataRepository.DAL;
+using Zebra.DataRepository.Interfaces;
 
 namespace Zebra.Services.Operations
 {
@@ -11,6 +12,8 @@ namespace Zebra.Services.Operations
                                        where T : BaseRepository<E>
     {
         protected BaseRepository<E> _base;
+        protected dynamic _currentrepository;  
+          
         public BaseOperations(T t)
         {
             _base = t;

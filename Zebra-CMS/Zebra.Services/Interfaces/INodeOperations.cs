@@ -13,5 +13,7 @@ namespace Zebra.Services.Interfaces
 
         Node GetRootNode();
 
+        List<Node> GetChildNodes(Node node);
+
     }
 }

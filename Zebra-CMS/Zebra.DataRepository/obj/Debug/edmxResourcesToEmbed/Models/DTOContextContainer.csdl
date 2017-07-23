@@ -27,6 +27,7 @@
     <Property Name="NodeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="TemplateId" Type="Guid" Nullable="false" />
     <NavigationProperty Name="Template" Relationship="Self.FK_TemplatesNodes" FromRole="Nodes" ToRole="Templates" />
+    <Property Name="ParentId" Type="Guid" />
   </EntityType>
   <EntityType Name="TemplateFieldMap">
     <Key>

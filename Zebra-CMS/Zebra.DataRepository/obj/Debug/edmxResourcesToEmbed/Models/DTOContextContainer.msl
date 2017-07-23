@@ -22,6 +22,7 @@
     <EntitySetMapping Name="Nodes">
       <EntityTypeMapping TypeName="ZebraDB_Model.Node">
         <MappingFragment StoreEntitySet="Nodes">
+          <ScalarProperty Name="ParentId" ColumnName="parentid" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="NodeName" ColumnName="NodeName" />
           <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />

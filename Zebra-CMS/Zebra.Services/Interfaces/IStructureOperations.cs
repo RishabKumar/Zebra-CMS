@@ -3,23 +3,25 @@ using Zebra.DataRepository.Models;
 
 namespace Zebra.Services.Interfaces
 {
-    interface IStructureOperations
+    public interface IStructureOperations
     {
-        List<Field> GetFieldsByTemplate(Template t);
+        //List<Field> GetFieldsByTemplate(Template t);
 
-        Template CreateTemplate(Template t);
+        //Template CreateTemplate(Template t);
 
-        bool CreateField(Field f);
+        //bool CreateField(Field f);
 
-        bool CreateField(List<Field> lst);
+        //bool CreateField(List<Field> lst);
 
-        Template AddField(Field f, Template t);
+        //Template AddField(Field f, Template t);
 
-        Template UpdateTemplate(List<Field> lst, Template t);
+        //Template UpdateTemplate(List<Field> lst, Template t);
 
-        bool DeleteTemplate(Template t);
+        //bool DeleteTemplate(Template t);
 
-        bool DeleteField(Field f);
+        //bool DeleteField(Field f);
+
+        Node CreateNode(string nodename, string parentid, string templateid);
 
     }
 }

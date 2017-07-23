@@ -17,6 +17,7 @@ namespace Zebra.DataRepository.Models
         public System.Guid Id { get; set; }
         public string NodeName { get; set; }
         public System.Guid TemplateId { get; set; }
+        public Nullable<System.Guid> ParentId { get; set; }
     
         public virtual Template Template { get; set; }
     }
