@@ -1,17 +1,144 @@
 ﻿@{
     Layout = "~/Views/Shared/EditorLayout.cshtml";
 }
+@using Zebra.DataRepository.Models
+@model Zebra.DataRepository.Models.Node
+
+@{ 
+    Node root = ViewBag.Root;
+}
 
 <div class="editor-container">
     <div class="menu">
-
+      
     </div>
     <div class="content-tree">
-
+        <div class="content-node" data-nodeid="@root.Id" node-expanded="false">
+            <span></span>
+            <p>@root.NodeName</p>
+        </div>
     </div>
     <div class="item-container">
 
     </div>
 </div>
 
+<script src="~/bundles/jquery" type="text/javascript"></script>
+<script type="text/javascript">
 
+    $(".content-node").on('click', function () {
+        var parentid = $(event.target.parentElement).attr('data-nodeid');
+        var currentnode = $(event.target.parentElement);
+        if (currentnode.attr('node-expanded') === 'false') {
+            currentnode.attr('node-expanded', 'true');
+            GetChildNodesAndAppend(parentid, currentnode);
+        }
+        else {
+            currentnode.find('div').remove();
+            currentnode.attr('node-expanded', 'false');
+        }
+        
+    });
+
+
+    $(document).on('click', ".context-menu-option", function () {
+
+        var option = $(event.target).attr("context-menu-option");
+        switch(option)
+        {
+            case "Add Node":
+                var parentid = $(event.target).attr("data-context-nodeid");
+                var parentnode = $("[data-nodeid='" + parentid + "']");
+
+                CreateNewNode(parentid, parentnode);
+                break;
+            case "Delete Node":
+                break;
+        }
+        $(".context-menu").remove();
+    });
+
+    $(".content-node").contextmenu(function (event) {
+        event.preventDefault();
+        var nodeid = $(event.target.parentElement).attr('data-nodeid');
+        $("<div class='context-menu'><ul><li class='context-menu-option' data-context-nodeid='" + nodeid + "' context-menu-option='Add Node'>Add Node</li><li class='context-menu-option' context-menu-option='Add Node'>Delete Node</li></ul></div>").css({ top: event.pageY + "px", left: event.pageX + "px" }).appendTo("body");
+    });
+
+    function GetChildNodesAndAppend(parentid, currentnode)
+    {
+        $.ajax({
+            url: "/zebraapi/nodeservice/getchildnodes?parentid=" + parentid,
+            cache: false,
+            dataType: "json",
+            async: false,
+            success: function (json) {
+
+                json = $.parseJSON(json);
+                for (var i = 0; i < json.length; i++) {
+                    $(currentnode).append(CreateNodeString(json[i]));
+                }
+
+            }
+        });
+    }
+
+    function CreateNewNode(parentid, currentnode) {
+        var parentnode = { parentid: parentid };
+        $.ajax({
+            type: "POST",
+            url: "/zebraapi/nodeservice/createnode",
+            cache: false,
+            dataType: "json",
+            data: JSON.stringify(parentnode),
+            async: false,
+            
+            success: function (json) {
+
+                json = $.parseJSON(json);
+                //for (var i = 0; i < json.length; i++) 
+                {
+                    $(currentnode).append(CreateNodeString(json));
+                }
+
+            }
+        });
+    }
+
+
+    function CreateNodeString(json)
+    {
+        var node = "<div style='position:relative; margin:15px;' node-expanded='false' class='content-node' data-nodeid='" + json.Id + "'> <span></span> <p>" + json.NodeName + "</p> </div>";
+        return node;
+    }
+
+
+
+    $(document).bind("mousedown", function (event) {
+        if ($(event.target).attr("class") !== "context-menu-option") {
+            event.preventDefault();
+            $(".context-menu").remove();
+        }
+
+    });
+
+
+</script>
+ 
+<style>
+    .context-menu {
+        
+        border: 1px solid black;
+        z-index: 1000;
+        position: absolute;
+        background-color: #feffff;
+    }
+    .context-menu ul{
+        list-style: none;
+        margin: 0 auto;
+        padding-left: 1px;
+        padding-right: 1px
+    }
+    .context-menu li:hover{
+        background: #ced9ea;
+    }
+</style>

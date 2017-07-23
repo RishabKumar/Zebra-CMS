@@ -7,23 +7,20 @@ using Zebra.Services.Interfaces;
 
 namespace Zebra.Services.Operations
 {
-    public class UserOperations : IUserOperations
+    public class UserOperations : BaseOperations<UserRepository, User>, IUserOperations
     {
-        BaseRepository<Users> _base;
-
-        public UserOperations(UserRepository userrepo)
+        public UserOperations(UserRepository t) : base(t)
         {
-            _base = userrepo;
         }
 
-        public Users CreateUser(string username, string password, string roles)
+        public User CreateUser(string username, string password, string roles)
         {
             throw new NotImplementedException();
         }
 
-        public Users ValidateUser(Users user)
+        public User ValidateUser(User user)
         {
-            List<Users> list = _base.GetAll();
+            List<User> list = _base.GetAll();
             return list.Where(u => u.UserName.ToLower() == user.UserName.ToLower() &&
             u.Password == user.Password).FirstOrDefault();
         }

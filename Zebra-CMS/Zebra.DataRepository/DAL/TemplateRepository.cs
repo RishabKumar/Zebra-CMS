@@ -1,20 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Zebra.DataRepository.Models;
 
 namespace Zebra.DataRepository.DAL
 {
-    class TemplateRepository : BaseRepository<Templates>
+    class TemplateRepository : BaseRepository<Template>
     {
-        public override Templates GetById(Templates t)
+        public override List<Template> GetByCondition(Expression<Func<Template, bool>> selector)
         {
-           return _context.Templates.Where(x => x.TemplateId.Equals(t.TemplateId)).FirstOrDefault();
+            throw new NotImplementedException();
         }
 
-        public override Templates GetByName(Templates t)
+        public override Template GetByName(Template t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<Template> GetListById(IEntity t)
         {
             throw new NotImplementedException();
         }

@@ -23,11 +23,12 @@ namespace Zebra.CustomAttributes
                 FormsAuthenticationTicket authTicket = FormsAuthentication.Decrypt(authCookie.Value);
                 if (authTicket != null && !authTicket.Expired)
                 {
-                    var userroles = authTicket.UserData.Split(',').OfType<string>().ToList<string>();
+                    var userroles = authTicket.UserData.ToLower().Trim().Split(',').OfType<string>().ToList<string>();
                     if(string.IsNullOrWhiteSpace(Roles))
                     {
                         return;
                     }
+
                     var roles = Roles.Split(',').OfType<string>().ToList<string>();
 
                     bool flag = true;

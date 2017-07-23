@@ -10,9 +10,9 @@ namespace Zebra.Services.Interfaces
     public interface IUserOperations
     {
 
-        Users CreateUser(string username, string password, string roles);
+        User CreateUser(string username, string password, string roles);
 
-        Users ValidateUser(Users users); 
+        User ValidateUser(User users); 
 
 
     }

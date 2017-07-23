@@ -55,70 +55,76 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAL\BaseRepository.cs" />
+    <Compile Include="DAL\FieldRepository.cs" />
+    <Compile Include="DAL\NodeRepository.cs" />
     <Compile Include="DAL\TemplateRepository.cs" />
     <Compile Include="DAL\UserRepository.cs" />
-    <Compile Include="Models\DTOContext.Context.cs">
+    <Compile Include="Interfaces\INodeRepository.cs" />
+    <Compile Include="Models\DTOContextContainer.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DTOContext.Context.tt</DependentUpon>
+      <DependentUpon>DTOContextContainer.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DTOContext.cs" />
-    <Compile Include="Models\DTOContext.Designer.cs">
+    <Compile Include="Models\DTOContextContainer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DTOContext.edmx</DependentUpon>
+      <DependentUpon>DTOContextContainer.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DTOContext1.cs">
+    <Compile Include="Models\DTOContextContainer.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DTOContext.tt</DependentUpon>
+      <DependentUpon>DTOContextContainer.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\Fields.cs">
-      <DependentUpon>DTOContext.tt</DependentUpon>
+    <Compile Include="Models\Field.cs">
+      <DependentUpon>DTOContextContainer.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FieldTypes.cs">
-      <DependentUpon>DTOContext.tt</DependentUpon>
+    <Compile Include="Models\FieldType.cs">
+      <DependentUpon>DTOContextContainer.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IEntity.cs" />
+    <Compile Include="Models\Node.cs">
+      <DependentUpon>DTOContextContainer.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Template.cs">
+      <DependentUpon>DTOContextContainer.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TemplateFieldMap.cs">
-      <DependentUpon>DTOContext.tt</DependentUpon>
+      <DependentUpon>DTOContextContainer.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Templates.cs">
-      <DependentUpon>DTOContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Users.cs">
-      <DependentUpon>DTOContext.tt</DependentUpon>
+    <Compile Include="Models\User.cs">
+      <DependentUpon>DTOContextContainer.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <EntityDeploy Include="Models\DTOContext.edmx">
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <EntityDeploy Include="Models\DTOContextContainer.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>DTOContext.Designer.cs</LastGenOutput>
+      <LastGenOutput>DTOContextContainer.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="Models\DTOContext.edmx.diagram">
-      <DependentUpon>DTOContext.edmx</DependentUpon>
+    <None Include="Models\DTOContextContainer.edmx.diagram">
+      <DependentUpon>DTOContextContainer.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Models\DTO.sql" />
-    <Content Include="Models\DTOContext.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>DTOContext.Context.cs</LastGenOutput>
-      <DependentUpon>DTOContext.edmx</DependentUpon>
-    </Content>
-    <Content Include="Models\DTOContext.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>DTOContext1.cs</LastGenOutput>
-      <DependentUpon>DTOContext.edmx</DependentUpon>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Models\DTOContext.edmx.sql" />
+    <Content Include="Models\DTOContextContainer.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DTOContextContainer.edmx</DependentUpon>
+      <LastGenOutput>DTOContextContainer.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\DTOContextContainer.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DTOContextContainer.edmx</DependentUpon>
+      <LastGenOutput>DTOContextContainer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

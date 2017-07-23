@@ -29,7 +29,7 @@ namespace Zebra.Controllers
         }
 
         [HttpPost]
-        public ActionResult Validate(Users user, string returnUrl)
+        public ActionResult Validate(User user, string returnUrl)
         {
             if (ModelState.IsValid)
             {

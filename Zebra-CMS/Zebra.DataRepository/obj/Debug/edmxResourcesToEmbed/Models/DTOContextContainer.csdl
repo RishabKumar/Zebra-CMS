@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ZebraDB_Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Field">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="FieldName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="TypeId" Type="Guid" Nullable="false" />
+    <NavigationProperty Name="TemplateFieldMaps" Relationship="Self.FK_FieldsTemplateFieldMap" FromRole="Fields" ToRole="TemplateFieldMaps" />
+    <NavigationProperty Name="FieldType" Relationship="Self.FK_FieldTypesFields" FromRole="Fields" ToRole="FieldTypes" />
+  </EntityType>
+  <EntityType Name="FieldType">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="TypeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="ClassPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Fields" Relationship="Self.FK_FieldTypesFields" FromRole="FieldTypes" ToRole="Fields" />
+  </EntityType>
+  <EntityType Name="Node">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="NodeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="TemplateId" Type="Guid" Nullable="false" />
+    <NavigationProperty Name="Template" Relationship="Self.FK_TemplatesNodes" FromRole="Nodes" ToRole="Templates" />
+    <Property Name="ParentId" Type="Guid" />
+  </EntityType>
+  <EntityType Name="TemplateFieldMap">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="TemplateId" Type="Guid" Nullable="false" />
+    <Property Name="FieldId" Type="Guid" Nullable="false" />
+    <NavigationProperty Name="Field" Relationship="Self.FK_FieldsTemplateFieldMap" FromRole="TemplateFieldMaps" ToRole="Fields" />
+    <NavigationProperty Name="Template" Relationship="Self.FK_TemplatesTemplateFieldMap" FromRole="TemplateFieldMaps" ToRole="Templates" />
+  </EntityType>
+  <EntityType Name="Template">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="TemplateName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Nodes" Relationship="Self.FK_TemplatesNodes" FromRole="Templates" ToRole="Nodes" />
+    <NavigationProperty Name="TemplateFieldMaps" Relationship="Self.FK_TemplatesTemplateFieldMap" FromRole="Templates" ToRole="TemplateFieldMaps" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Roles" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_FieldsTemplateFieldMap">
+    <End Role="Fields" Type="Self.Field" Multiplicity="1" />
+    <End Role="TemplateFieldMaps" Type="Self.TemplateFieldMap" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Fields">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TemplateFieldMaps">
+        <PropertyRef Name="FieldId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FieldTypesFields">
+    <End Role="FieldTypes" Type="Self.FieldType" Multiplicity="1" />
+    <End Role="Fields" Type="Self.Field" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FieldTypes">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Fields">
+        <PropertyRef Name="TypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TemplatesNodes">
+    <End Role="Templates" Type="Self.Template" Multiplicity="1" />
+    <End Role="Nodes" Type="Self.Node" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Templates">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Nodes">
+        <PropertyRef Name="TemplateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TemplatesTemplateFieldMap">
+    <End Role="Templates" Type="Self.Template" Multiplicity="1" />
+    <End Role="TemplateFieldMaps" Type="Self.TemplateFieldMap" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Templates">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TemplateFieldMaps">
+        <PropertyRef Name="TemplateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DTOContextContainer" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Fields" EntityType="Self.Field" />
+    <EntitySet Name="FieldTypes" EntityType="Self.FieldType" />
+    <EntitySet Name="Nodes" EntityType="Self.Node" />
+    <EntitySet Name="TemplateFieldMaps" EntityType="Self.TemplateFieldMap" />
+    <EntitySet Name="Templates" EntityType="Self.Template" />
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <AssociationSet Name="FK_FieldsTemplateFieldMap" Association="Self.FK_FieldsTemplateFieldMap">
+      <End Role="Fields" EntitySet="Fields" />
+      <End Role="TemplateFieldMaps" EntitySet="TemplateFieldMaps" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FieldTypesFields" Association="Self.FK_FieldTypesFields">
+      <End Role="FieldTypes" EntitySet="FieldTypes" />
+      <End Role="Fields" EntitySet="Fields" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TemplatesNodes" Association="Self.FK_TemplatesNodes">
+      <End Role="Templates" EntitySet="Templates" />
+      <End Role="Nodes" EntitySet="Nodes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TemplatesTemplateFieldMap" Association="Self.FK_TemplatesTemplateFieldMap">
+      <End Role="Templates" EntitySet="Templates" />
+      <End Role="TemplateFieldMaps" EntitySet="TemplateFieldMaps" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
