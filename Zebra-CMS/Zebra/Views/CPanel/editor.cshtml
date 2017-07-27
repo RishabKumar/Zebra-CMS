@@ -5,25 +5,26 @@
 @model Zebra.DataRepository.Models.Node
 
 @{ 
-    Node root = ViewBag.Root;
+    List<Node> nodes = ViewBag.Root;
 }
 
 <div class="editor-container">
     <div class="menu">
       
     </div>
-    <div class="content-tree">
+    @*<div class="content-tree">
         <div class="content-node" data-nodeid="@root.Id" node-expanded="false">
             <span></span>
             <p>@root.NodeName</p>
         </div>
-    </div>
+    </div>*@
+    @{Html.RenderPartial("~/Views/CPanel/NodeTree.cshtml", nodes);}
     <div class="item-container">
 
     </div>
 </div>
 
-<script src="~/bundles/jquery" type="text/javascript"></script>
+@*<script src="~/bundles/jquery" type="text/javascript"></script>
 <script type="text/javascript">
 
     $(".content-node").on('click', function () {
@@ -47,12 +48,17 @@
         switch(option)
         {
             case "Add Node":
-                var parentid = $(event.target).attr("data-context-nodeid");
-                var parentnode = $("[data-nodeid='" + parentid + "']");
-
-                CreateNewNode(parentid, parentnode);
+                var nodename = prompt("Enter Node name", "Enter Node name");
+                if (nodename !== null && nodename !== '') {
+                    var parentid = $(event.target.parentElement).attr("data-context-nodeid");
+                    var parentnode = $("[data-nodeid='" + parentid + "']");
+                    CreateNewNode(parentid, parentnode, nodename);
+                }
                 break;
             case "Delete Node":
+                var nodeid = $(event.target.parentElement).attr("data-context-nodeid");
+                var node = $("[data-nodeid='" + nodeid + "']");
+                DeleteNode(nodeid, node);
                 break;
         }
         $(".context-menu").remove();
@@ -61,7 +67,7 @@
     $(".content-node").contextmenu(function (event) {
         event.preventDefault();
         var nodeid = $(event.target.parentElement).attr('data-nodeid');
-        $("<div class='context-menu'><ul><li class='context-menu-option' data-context-nodeid='" + nodeid + "' context-menu-option='Add Node'>Add Node</li><li class='context-menu-option' context-menu-option='Add Node'>Delete Node</li></ul></div>").css({ top: event.pageY + "px", left: event.pageX + "px" }).appendTo("body");
+        $("<div class='context-menu'><ul data-context-nodeid='" + nodeid + "'><li class='context-menu-option' context-menu-option='Add Node'>Add Node</li><li class='context-menu-option' context-menu-option='Delete Node'>Delete Node</li></ul></div>").css({ top: event.pageY + "px", left: event.pageX + "px" }).appendTo("body");
     });
 
     function GetChildNodesAndAppend(parentid, currentnode)
@@ -82,14 +88,14 @@
         });
     }
 
-    function CreateNewNode(parentid, currentnode) {
-        var parentnode = { parentid: parentid };
+    function CreateNewNode(parentid, currentnode, nodename) {
+        var nodeinfo = { parentid: parentid, nodename: nodename};
         $.ajax({
             type: "POST",
             url: "/zebraapi/nodeservice/createnode",
             cache: false,
             dataType: "json",
-            data: JSON.stringify(parentnode),
+            data: JSON.stringify(nodeinfo),
             async: false,
             
             success: function (json) {
@@ -98,6 +104,27 @@
                 //for (var i = 0; i < json.length; i++) 
                 {
                     $(currentnode).append(CreateNodeString(json));
+                    $(currentnode).attr('node-expanded', 'true');
+                }
+
+            }
+        });
+    }
+
+    function DeleteNode(nodeid, node) {
+        var nodeinfo = { nodeid: nodeid };
+        $.ajax({
+            type: "POST",
+            url: "/zebraapi/nodeservice/deletenode",
+            cache: false,
+            dataType: "json",
+            data: JSON.stringify(nodeinfo),
+            async: false,
+
+            success: function (json) {
+                if(json == true)
+                {
+                    $(node).remove();
                 }
 
             }
@@ -122,7 +149,7 @@
     });
 
 
-</script>
+</script>*@
  
 <style>
     .context-menu {
@@ -141,4 +168,21 @@
     .context-menu li:hover{
         background: #ced9ea;
     }
+
+    .content-tree{
+        display: inline-block;
+    width: 300px;
+    border-style: groove;
+    }
+
+    .menu{
+            border-style: groove;
+    height: 100px;
+    }
+
+    .item-container{
+        display: inline-block;
+    border: groove;
+    }
+
 </style>

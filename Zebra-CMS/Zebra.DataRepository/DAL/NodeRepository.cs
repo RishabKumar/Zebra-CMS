@@ -23,6 +23,40 @@ namespace Zebra.DataRepository.DAL
 
         }
 
+        public bool DeleteNode(Node node)
+        {
+            dynamic rnodes = null;
+            using (var dbt = _context.Database.BeginTransaction())
+            {
+                node = _context.Nodes.Where(x => x.Id == node.Id).FirstOrDefault();
+                List<Node> nodes = GetAllChildren(node, new List<Node>());
+                if (nodes == null)
+                    return false;
+                nodes.Add(node);
+                rnodes = _context.Nodes.RemoveRange(nodes.AsEnumerable());
+                _context.SaveChanges();
+                dbt.Commit();
+            }
+            if(rnodes != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private List<Node> GetAllChildren(Node node, List<Node> children)
+        {
+
+            var nodes = GetChildNodes(node);
+            children.AddRange(nodes);
+            foreach (var n in nodes)
+            {
+                GetAllChildren(n, children);
+            }
+
+            return children;
+        }
+
         public override List<Node> GetByCondition(Expression<Func<Node, bool>> selector)
         {
             return _context.Nodes.Where(selector).ToList();
@@ -41,6 +75,11 @@ namespace Zebra.DataRepository.DAL
         public override List<Node> GetListById(IEntity t)
         {
             return _context.Nodes.Where(x => x.Id.Equals(t.Id)).ToList();
+        }
+
+        public Node GetNode(Node node)
+        {
+            return _context.Nodes.Where(x=> x.Id == node.Id).FirstOrDefault();
         }
 
         //public override Template GetById(IEntity t)

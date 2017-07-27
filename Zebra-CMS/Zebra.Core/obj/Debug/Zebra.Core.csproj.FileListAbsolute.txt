@@ -26,4 +26,3 @@ C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Cor
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Core\bin\Debug\Newtonsoft.Json.xml
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Core\bin\Debug\System.Net.Http.Formatting.xml
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Core\bin\Debug\System.Web.Http.xml
-C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Core\obj\Debug\Zebra.Core.csprojResolveAssemblyReference.cache

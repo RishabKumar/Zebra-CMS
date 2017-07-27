@@ -7,6 +7,8 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
+  @*  <script src="~/bundles/jquery" type="text/javascript"></script>*@
+    @Scripts.Render("~/bundles/jquery")
     <title>Zebra Editor</title>
 </head>
 <body>
@@ -14,4 +16,5 @@
         @RenderBody()
     </div>
 </body>
+<script src="~/bundles/zebra-js" type="text/javascript"></script>
 </html>

@@ -11,5 +11,9 @@ namespace Zebra.DataRepository.Interfaces
     {
         List<Node> GetChildNodes(Node parentnode);
         Node CreateNode(Node node);
+
+        bool DeleteNode(Node node);
+
+        Node GetNode(Node node);
     }
 }

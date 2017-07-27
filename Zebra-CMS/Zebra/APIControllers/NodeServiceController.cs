@@ -38,14 +38,26 @@ namespace Zebra.APIControllers
             dynamic tmp = JsonConvert.DeserializeObject(json);
 
             string parentid = tmp.parentid;
-            var node = ((IStructureOperations)_ops).CreateNode("temp node", parentid, "6362B5BA-7238-43A0-B3DB-FA24A9A2F925");
+            string nodename = tmp.nodename;
+            var node = ((IStructureOperations)_ops).CreateNode(nodename, parentid, "6362B5BA-7238-43A0-B3DB-FA24A9A2F925");
             return JsonConvert.SerializeObject(node);
         }
-        
 
-       
+        [HttpPost]
+        public bool DeleteNode()
+        {
+            var json = HttpContext.Current.Request.Form[0];
+            dynamic tmp = JsonConvert.DeserializeObject(json);
 
-        
-       
+            string nodeid = tmp.nodeid;
+            var result = ((IStructureOperations)_ops).DeleteNode(nodeid);
+            return result;
+        }
+
+
+
+
+
+
     }
 }

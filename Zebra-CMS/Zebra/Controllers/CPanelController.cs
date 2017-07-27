@@ -28,9 +28,18 @@ namespace Zebra.Controllers
         public ActionResult Editor()
         {
             Node root = _nodeop.GetRootNode();
-            ViewBag.Root = root;
+            var list = new List<Node>();
+            list.Add(root);
+            ViewBag.Root = list;
 
             return View();
+        }
+
+        public ActionResult NodeTree(string nodeid)
+        {
+            var list = new List<Node>();
+            list.Add(_nodeop.GetNode(nodeid));
+            return View(list);
         }
 
         // GET: CPanel/Create

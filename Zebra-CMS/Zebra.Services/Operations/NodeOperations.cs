@@ -23,6 +23,16 @@ namespace Zebra.Services.Operations
             return ((INodeRepository)_currentrepository).CreateNode(node);
         }
 
+        public Node GetNode(string nodeid)
+        {
+            return ((INodeRepository)_currentrepository).GetNode(new Node { Id = new Guid(nodeid) });
+        }
+
+        public bool DeleteNode(string nodeid)
+        {
+            return ((INodeRepository)_currentrepository).DeleteNode(new Node() { Id = new Guid(nodeid) });
+        }
+
         public List<Node> GetAllnodes()
         {
             throw new NotImplementedException();
