@@ -12,9 +12,11 @@ namespace Zebra.Controllers
 {
     public class CPanelController : ZebraController
     {
-        
-        public CPanelController(NodeOperations nodeOperations) : base(nodeOperations)
+        private IFieldOperations _fieldOperations;
+
+        public CPanelController(NodeOperations nodeOperations, FieldOperations fieldOperations) : base(nodeOperations)
         {
+            _fieldOperations = fieldOperations;
         }
 
         // GET: CPanel
@@ -35,12 +37,25 @@ namespace Zebra.Controllers
             return View();
         }
 
-        public ActionResult NodeTree(string nodeid)
+        //Default nodeid is Template node Id
+        public ActionResult NodeTree(string nodeid= "8087FA7D-6753-40B9-9F3A-7AE62E882258")
         {
             var list = new List<Node>();
             list.Add(_nodeop.GetNode(nodeid));
             return View(list);
         }
+        
+        public ActionResult NodeBrowser(string nodeid)
+        {
+            var node = _nodeop.GetNode(nodeid);
+            var list = _fieldOperations.GetFieldsFromTemplate(node.TemplateId.ToString());
+            List<string> htmllist = new List<string>();
+            foreach (var field in list)
+            {
+                htmllist.Add(_fieldOperations.GetRenderedField(field.Id.ToString()));
+            }
+            return View(model: htmllist);
+        } 
 
         // GET: CPanel/Create
         public ActionResult Create()

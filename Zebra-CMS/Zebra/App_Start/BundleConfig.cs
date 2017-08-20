@@ -29,6 +29,8 @@ namespace Zebra
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
 
+            bundles.Add(new StyleBundle("~/Content/jquery-css").IncludeDirectory("~/Content/themes/base/", "*.css"));
+
             BundleTable.EnableOptimizations = false;
         }
     }

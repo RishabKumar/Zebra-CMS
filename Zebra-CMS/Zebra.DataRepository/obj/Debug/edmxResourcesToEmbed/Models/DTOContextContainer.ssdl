@@ -14,7 +14,7 @@
     </Key>
     <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
     <Property Name="TypeName" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="ClassPath" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ClassPath" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="Nodes">
     <Key>

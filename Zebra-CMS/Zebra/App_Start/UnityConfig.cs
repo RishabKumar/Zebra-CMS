@@ -6,6 +6,7 @@ using Zebra.Services.Interfaces;
 using Zebra.Core.Context;
 using Zebra.Services.Operations;
 using System.Web.Http;
+using Zebra.DataRepository.Interfaces;
 
 namespace Zebra
 {
@@ -20,6 +21,8 @@ namespace Zebra
 
             // e.g. container.RegisterType<ITestService, TestService>();
             container.RegisterType(typeof(BaseRepository<>), typeof(UserRepository));
+            container.RegisterType<INodeRepository, NodeRepository>();
+            container.RegisterType<ITemplateRepository, TemplateRepository>();
             container.RegisterType<IUserOperations, UserOperations>();
             container.RegisterType<INodeOperations, NodeOperations>();
             container.RegisterType<FieldContext, FieldContext>();

@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Mvc;
+using System.Web;
 using Zebra.Core.Context;
 
 namespace Zebra.Core.Types
 {
-    class SingleLineStringType
+    class FieldBuilderType
     {
         FieldContext _context;
 
-        public SingleLineStringType(FieldContext context)
+        public FieldBuilderType(FieldContext context)
         {
             _context = context;
         }
@@ -32,9 +31,10 @@ namespace Zebra.Core.Types
 
         public string DoRender()
         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("<div>").Append(_context.Name).Append("<p><input type='text' name='").Append(_context.Id).Append("' id='").Append(_context.Name).Append("'").Append(" value='"+_context.Value+"' /></p></div>");
-            return sb.ToString();
+            StringWriter sw = new StringWriter();
+            HttpContext.Current.Server.Execute("/Views/FieldBuilder.html", sw, false);
+
+            return sw.ToString();
         }
     }
 }

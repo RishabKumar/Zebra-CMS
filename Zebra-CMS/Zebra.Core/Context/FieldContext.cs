@@ -14,10 +14,11 @@ namespace Zebra.Core.Context
 
         public string Value { get; set; }
 
-        public FieldContext()
+        public FieldContext(Guid Id, string Name)
         {
-            Id = new Guid();
-            Name = "name_"+Id;
+            this.Id = Id;
+            this.Name = Name;
+            this.Value = "ABCDEFGH";
         }
     }
 }

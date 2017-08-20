@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Zebra.DataRepository.Models;
+using Zebra.Services.Type;
 
 namespace Zebra.Services.Interfaces
 {
@@ -7,13 +9,23 @@ namespace Zebra.Services.Interfaces
     {
         //List<Field> GetFieldsByTemplate(Template t);
 
-        //Template CreateTemplate(Template t);
+        Template CreateTemplate(Template t);
+
+        Template GetTemplate(string templateid);
+
+        Field CreateField(Field field);
+
+        FieldType CreateFieldType(FieldType ft);
+
+        string DetermineNodeTypeAndCreate(Node node, Guid newid);
 
         //bool CreateField(Field f);
 
         //bool CreateField(List<Field> lst);
 
         //Template AddField(Field f, Template t);
+
+        
 
         //Template UpdateTemplate(List<Field> lst, Template t);
 

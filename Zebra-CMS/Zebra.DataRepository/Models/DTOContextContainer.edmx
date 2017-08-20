@@ -19,7 +19,7 @@
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="TypeName" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="ClassPath" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ClassPath" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Nodes">
           <Key>
@@ -146,7 +146,7 @@
           </Key>
           <Property Name="Id" Type="Guid" Nullable="false" />
           <Property Name="TypeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ClassPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ClassPath" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="true" />
           <NavigationProperty Name="Fields" Relationship="Self.FK_FieldTypesFields" FromRole="FieldTypes" ToRole="Fields" />
         </EntityType>
         <EntityType Name="Node">

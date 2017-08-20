@@ -13,7 +13,7 @@ namespace Zebra.DataRepository.DAL
         internal DTOContextContainer _context = new DTOContextContainer();
         
         //need to change, return type Template needs to be generic
-        public virtual Template GetById(IEntity t)
+        public virtual dynamic GetById(IEntity t)
         {
             return _context.Templates.Where(x => x.Id.Equals(t.Id)).FirstOrDefault();
         }

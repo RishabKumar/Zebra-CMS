@@ -92,6 +92,7 @@
     <Compile Include="Context\FieldContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderers\ViewRender.cs" />
+    <Compile Include="Types\FieldBuilderType.cs" />
     <Compile Include="Types\SingleLineStringType.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -102,6 +103,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Views\FieldBuilder.html" />
     <Content Include="Views\SingleLineString.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

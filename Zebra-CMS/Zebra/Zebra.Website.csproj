@@ -179,6 +179,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ZebraHelpers\ZebraHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -263,6 +264,7 @@
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\shared\EditorLayout.cshtml" />
     <Content Include="Views\CPanel\NodeTree.cshtml" />
+    <Content Include="Views\CPanel\NodeBrowser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

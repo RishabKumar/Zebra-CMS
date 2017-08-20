@@ -39,7 +39,8 @@ namespace Zebra.APIControllers
 
             string parentid = tmp.parentid;
             string nodename = tmp.nodename;
-            var node = ((IStructureOperations)_ops).CreateNode(nodename, parentid, "6362B5BA-7238-43A0-B3DB-FA24A9A2F925");
+            string templateid = tmp.templateid;
+            var node = ((IStructureOperations)_ops).CreateNode(nodename, parentid, templateid);
             return JsonConvert.SerializeObject(node);
         }
 

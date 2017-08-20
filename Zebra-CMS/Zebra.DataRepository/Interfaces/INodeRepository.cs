@@ -15,5 +15,7 @@ namespace Zebra.DataRepository.Interfaces
         bool DeleteNode(Node node);
 
         Node GetNode(Node node);
+
+        Template GetTemplate(IEntity t);
     }
 }

@@ -19,6 +19,9 @@ C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\EntityFramework.SqlServer.dll
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Microsoft.Practices.ServiceLocation.dll
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Microsoft.Practices.Unity.Configuration.dll
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Microsoft.Practices.Unity.dll
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Microsoft.Practices.Unity.RegistrationByConvention.dll
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Microsoft.Web.Infrastructure.dll
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Newtonsoft.Json.dll
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\System.Net.Http.Formatting.dll
@@ -31,6 +34,8 @@ C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\System.Web.WebPages.Deployment.dll
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\System.Web.WebPages.dll
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\System.Web.WebPages.Razor.dll
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Unity.Mvc5.dll
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Unity.WebApi.dll
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\WebActivatorEx.dll
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\WebGrease.dll
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Zebra.Core.dll
@@ -44,6 +49,9 @@ C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Microsoft.Practices.ServiceLocation.pdb
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Microsoft.Practices.ServiceLocation.xml
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Microsoft.Practices.Unity.xml
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Microsoft.Practices.Unity.Configuration.xml
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Microsoft.Practices.Unity.RegistrationByConvention.xml
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\System.Web.Helpers.xml
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\System.Web.Mvc.xml
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\System.Web.Optimization.xml
@@ -58,11 +66,3 @@ C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\System.Web.Http.WebHost.xml
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\obj\Debug\Zebra.dll
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\obj\Debug\Zebra.pdb
-C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Microsoft.Practices.Unity.Configuration.dll
-C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Microsoft.Practices.Unity.dll
-C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Microsoft.Practices.Unity.RegistrationByConvention.dll
-C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Unity.Mvc5.dll
-C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Unity.WebApi.dll
-C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Microsoft.Practices.Unity.xml
-C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Microsoft.Practices.Unity.Configuration.xml
-C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Microsoft.Practices.Unity.RegistrationByConvention.xml

@@ -23,6 +23,11 @@ namespace Zebra.DataRepository.DAL
 
         }
 
+        public override dynamic GetById(IEntity t)
+        {
+            return _context.Nodes.Where(x => x.Id == t.Id);
+        }
+
         public bool DeleteNode(Node node)
         {
             dynamic rnodes = null;
@@ -82,14 +87,9 @@ namespace Zebra.DataRepository.DAL
             return _context.Nodes.Where(x=> x.Id == node.Id).FirstOrDefault();
         }
 
-        //public override Template GetById(IEntity t)
-        //{
-        //    return _context.Nodes.Where(x => x.Id.Equals(t.Id)).FirstOrDefault();
-        //}
-
-
-
-
-
+        public Template GetTemplate(IEntity t)
+        {
+            return _context.Nodes.Attach((Node)t).Template;
+        }
     }
 }
