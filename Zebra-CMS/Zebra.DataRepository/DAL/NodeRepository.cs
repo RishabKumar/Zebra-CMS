@@ -23,6 +23,21 @@ namespace Zebra.DataRepository.DAL
 
         }
 
+        public bool RegisterFieldsForNode(Node node, List<Field> fields)
+        {
+            using (var dbt = _context.Database.BeginTransaction())
+            {
+                foreach (var field in fields)
+                {
+                    var nodefieldmap = new NodeFieldMap() { Id = Guid.NewGuid(), FieldId = field.Id, NodeId = node.Id, NodeData = string.Empty };
+                    nodefieldmap = _context.NodeFieldMaps.Add(nodefieldmap);
+                }
+                _context.SaveChanges();
+                dbt.Commit();
+            }
+            return true;
+        }
+
         public override dynamic GetById(IEntity t)
         {
             return _context.Nodes.Where(x => x.Id == t.Id);
@@ -44,9 +59,24 @@ namespace Zebra.DataRepository.DAL
             }
             if(rnodes != null)
             {
-                return true;
+                return DeleteEntryFromNodeFieldMap(rnodes);
             }
             return false;
+        }
+
+        public bool DeleteEntryFromNodeFieldMap(List<Node> nodes)
+        {
+            using (var dbt = _context.Database.BeginTransaction())
+            {
+                foreach (var node in nodes)
+                {
+                    var entrieslist = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).ToList();
+                    _context.NodeFieldMaps.RemoveRange(entrieslist);
+                }
+                _context.SaveChanges();
+                dbt.Commit();
+            }
+            return true;
         }
 
         private List<Node> GetAllChildren(Node node, List<Node> children)
@@ -90,6 +120,48 @@ namespace Zebra.DataRepository.DAL
         public Template GetTemplate(IEntity t)
         {
             return _context.Nodes.Attach((Node)t).Template;
+        }
+
+        //creates a new nodefieldmap and saves data
+        public bool CreateAndSaveNodeData(Node node, Field field, dynamic data)
+        {
+            using (var dbt = _context.Database.BeginTransaction())
+            {
+                var nodedata = new NodeFieldMap() { Id = Guid.NewGuid(), NodeId = node.Id, FieldId = field.Id, NodeData = data.ToString() };
+                nodedata = _context.NodeFieldMaps.Add(nodedata);
+                _context.SaveChanges();
+                dbt.Commit();
+            }
+            return true;
+        }
+
+        public bool SaveNodeData(NodeFieldMap nodefieldmap)
+        {
+            using (var dbt = _context.Database.BeginTransaction())
+            {
+                var oldnodefieldmap = _context.NodeFieldMaps.Find(nodefieldmap.Id);
+                if (oldnodefieldmap != null)
+                {
+                    oldnodefieldmap.NodeData = nodefieldmap.NodeData;
+
+                    _context.SaveChanges();
+                    dbt.Commit();
+                }
+            }
+            return true;
+        }
+
+        public List<NodeFieldMap> GetNodeFieldMapData(Node node, Field field = null)
+        {
+            if(field == null)
+                return _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).ToList();
+            else
+                return _context.NodeFieldMaps.Where(x => x.NodeId == node.Id && x.FieldId == field.Id).ToList();
+        }
+
+        public NodeFieldMap GetNodeFieldMap(IEntity entity)
+        {
+            return _context.NodeFieldMaps.Find(entity.Id);
         }
     }
 }

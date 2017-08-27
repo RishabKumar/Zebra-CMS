@@ -18,6 +18,7 @@ namespace Zebra.DataRepository.Models
         public Field()
         {
             this.TemplateFieldMaps = new HashSet<TemplateFieldMap>();
+            this.NodeFieldMaps = new HashSet<NodeFieldMap>();
         }
     
         public System.Guid Id { get; set; }
@@ -27,5 +28,7 @@ namespace Zebra.DataRepository.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TemplateFieldMap> TemplateFieldMaps { get; set; }
         public virtual FieldType FieldType { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<NodeFieldMap> NodeFieldMaps { get; set; }
     }
 }

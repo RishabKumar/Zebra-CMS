@@ -22,13 +22,14 @@ namespace Zebra.Services.Operations
             _fieldrepository = (IFieldRepository)f;
         }
 
-        public Node CreateNode(string nodename, string parentid, string templateid)
+        public Node CreateNode(string nodename, string parentid, string templateid, List<Field> fields)
         {
             Guid newid = Guid.NewGuid();
             Node node = new Node() { Id = newid, NodeName = nodename, TemplateId = new Guid(templateid), ParentId = new Guid(parentid) };
             DetermineNodeTypeAndCreate(node, newid);
-
-            return ((INodeRepository)_currentrepository).CreateNode(node);
+            node = ((INodeRepository)_currentrepository).CreateNode(node);
+            ((INodeRepository)_currentrepository).RegisterFieldsForNode(node, fields);
+            return node;
         }
 
         public string GetNodeBrowser()
@@ -118,6 +119,41 @@ namespace Zebra.Services.Operations
             return _templaterepository.GetTemplate(new Template() { Id = new Guid(templateid) });
         }
 
-        
+        public bool SaveNode(Node node, dynamic data, List<Field> fields = null)
+        {
+            if (fields != null)
+            {
+                foreach (var field in fields)
+                {
+                    try
+                    {
+                        var value = data[field.Id.ToString()];
+                        _currentrepository.SaveNodeData(node, field, value);
+                    }
+                    catch { }
+                }
+            }
+            else
+            {
+                var list = ((INodeRepository)_currentrepository).GetNodeFieldMapData(node);
+                foreach(var nodefield in list)
+                {
+                    try
+                    {
+                        var value = data[nodefield.Id.ToString()];
+                        nodefield.NodeData = value.ToString();
+                        _currentrepository.SaveNodeData(nodefield);
+                    }
+                    catch { }
+                }
+            }
+
+            return true; 
+        }
+
+        public List<NodeFieldMap> GetNodeFieldMapData(string nodeid)
+        {
+            return ((INodeRepository)_currentrepository).GetNodeFieldMapData(new Node() { Id = Guid.Parse(nodeid)});
+        }
     }
 }

@@ -14,11 +14,19 @@ namespace Zebra.DataRepository.Models
     
     public partial class Node
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Node()
+        {
+            this.NodeFieldMaps = new HashSet<NodeFieldMap>();
+        }
+    
         public System.Guid Id { get; set; }
         public string NodeName { get; set; }
         public System.Guid TemplateId { get; set; }
         public Nullable<System.Guid> ParentId { get; set; }
     
         public virtual Template Template { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<NodeFieldMap> NodeFieldMaps { get; set; }
     }
 }

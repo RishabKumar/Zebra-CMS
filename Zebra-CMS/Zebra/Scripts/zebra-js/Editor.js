@@ -27,6 +27,7 @@ $(document).on('click', ".content-node", function () {
             currentnode.find('div').remove();
             currentnode.attr('node-expanded', 'false');
         }
+        LoadNodeBrowser(parentid, 'test', 'test', 'test');
     }
 });
 
@@ -47,6 +48,13 @@ function ShowModelTreePopup(nodeid, parentid, parentnode, nodename)
     $.get("./NodeTree" + query, function (data) {
         $(".model-tree-popup").append(data);
         $('.model-tree-popup').children('div.content-tree').css('width', '90%').css('margin', '5%').css('height', '80%').css('overflow', 'auto');
+    });
+}
+
+function LoadNodeBrowser(nodeid, parentid, parentnode, nodename) {
+    var query = nodeid == null || nodeid === '' ? '' : '?nodeid=' + nodeid;
+    $.get("./NodeBrowser" + query, function (data) {
+        $(".item-container").html(data);
     });
 }
 
@@ -182,3 +190,27 @@ $(document).bind("mousedown", function (event) {
     }
 
 });
+
+
+// Node browser js to save
+
+    $(document).on('click', '.zebra-save-data', function (event) {
+        alert('save data');
+        var formdata = $('.zebra-field-data-form').serializeArray();
+
+
+        var ajaxRequest = $.ajax({
+            type: "POST",
+            url: "/zebraapi/nodeservice/savenode",
+            data: formdata
+        });
+        ajaxRequest.done(function (data, textStatus, jqXHR) {
+            alert("Saved!");
+             
+        });
+
+        event.preventDefault();
+    });
+
+
+

@@ -14,9 +14,11 @@ namespace Zebra.Services.Operations
     public class FieldOperations : BaseOperations<FieldRepository, Field>, IFieldOperations
     {
         IFieldRepository _fieldrepo;
-        public FieldOperations(FieldRepository t) : base(t)
+        INodeRepository _noderepo;
+        public FieldOperations(FieldRepository t, NodeRepository n) : base(t)
         {
             _fieldrepo = t;
+            _noderepo = n;
         }
 
         public List<Field> GetAllFields()
@@ -45,14 +47,17 @@ namespace Zebra.Services.Operations
         }
 
         // Method to identify required FieldType and loads the corresponding HTML.
-        public string GetRenderedField(string fieldid)
+        public string GetRenderedField(string nodeid ,string fieldid, string fieldrenderid = null)
         {
             var type = GetFieldType(fieldid);
             var field = GetField(fieldid);
+            var node = _noderepo.GetNode(new Node() { Id = Guid.Parse(nodeid) });
+            NodeFieldMap nodefieldmap = _noderepo.GetNodeFieldMap(new NodeFieldMap() { Id = Guid.Parse(fieldrenderid)});
             if (type != null)
             {
                 var fieldtype = System.Type.GetType(type.ClassPath);
-                FieldContext _context = new FieldContext(Guid.Parse(fieldid), field.FieldName);
+                FieldContext _context = new FieldContext(Guid.Parse(fieldrenderid ?? fieldid), field.FieldName);
+                _context.Value = nodefieldmap == null ? string.Empty : nodefieldmap.NodeData;
                 var fieldobj = Activator.CreateInstance(fieldtype, _context);
                 var mi = fieldtype.GetMethod("DoRender");
                 return mi.Invoke(fieldobj, null).ToString(); 
@@ -60,6 +65,20 @@ namespace Zebra.Services.Operations
             return string.Empty;
         }
 
-         
+        public List<Field> GetAllParentFieldsFromTemplate(string templateid, List<Field> fields = null)
+        {
+            var node = _noderepo.GetNode(new Node() { Id = Guid.Parse(templateid) });
+            if(fields == null)
+            {
+                fields = new List<Field>();
+            }
+            fields.AddRange(GetFieldsFromTemplate(node.Id.ToString()));
+            if(node.Id.Equals(node.TemplateId))
+            {
+                return fields;
+            }
+            return GetAllParentFieldsFromTemplate(node.TemplateId.ToString(), fields);
+        }
+
     }
 }

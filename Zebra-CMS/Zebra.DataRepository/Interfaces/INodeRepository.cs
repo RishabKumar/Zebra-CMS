@@ -17,5 +17,13 @@ namespace Zebra.DataRepository.Interfaces
         Node GetNode(Node node);
 
         Template GetTemplate(IEntity t);
+
+        bool SaveNodeData(NodeFieldMap nodefieldmap);
+
+        bool RegisterFieldsForNode(Node node, List<Field> fields);
+
+        List<NodeFieldMap> GetNodeFieldMapData(Node node, Field field = null);
+
+        NodeFieldMap GetNodeFieldMap(IEntity entity);
     }
 }

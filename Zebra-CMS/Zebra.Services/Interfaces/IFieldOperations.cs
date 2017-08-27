@@ -17,7 +17,9 @@ namespace Zebra.Services.Interfaces
 
         List<Field> GetFieldsFromTemplate(string templateid);
 
-        string GetRenderedField(string fieldid);
+        List<Field> GetAllParentFieldsFromTemplate(string templateid, List<Field> fields = null);
+
+        string GetRenderedField(string nodeid, string fieldid, string fieldrenderid = null);
 
         Field GetField(string fieldid);
 

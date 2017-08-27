@@ -87,6 +87,9 @@
     <Compile Include="Models\Node.cs">
       <DependentUpon>DTOContextContainer.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\NodeFieldMap.cs">
+      <DependentUpon>DTOContextContainer.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Template.cs">
       <DependentUpon>DTOContextContainer.tt</DependentUpon>
     </Compile>

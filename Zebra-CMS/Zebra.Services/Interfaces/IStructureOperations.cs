@@ -33,7 +33,9 @@ namespace Zebra.Services.Interfaces
 
         //bool DeleteField(Field f);
 
-        Node CreateNode(string nodename, string parentid, string templateid);
+        Node CreateNode(string nodename, string parentid, string templateid, List<Field> fields);
         bool DeleteNode(string nodeid);
+
+        List<NodeFieldMap> GetNodeFieldMapData(string nodeid);
     }
 }

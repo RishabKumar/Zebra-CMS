@@ -39,24 +39,48 @@
             background: #ced9ea;
         }
 
+
     .content-tree {
-        display: inline-block;
-        width: 25%;
+        display: table-cell;
+        width:300px;
         border-style: groove;
     }
 
-    .menu {
-        border-style: groove;
-        height: 100px;
+   
+    body{
+        margin: 0px;
+        height: 100vh;
+    }
+
+    .editor-container{
+        display:block;
+        height:100%;
+    }
+
+    .zebra-container{
+        height:100%;
+        margin:8px;
     }
 
     .item-container {
-        display: inline-block;
+        display: table-cell;
+         /*width:50%;*/
         border: groove;
+    }
+
+    .tree-container{
+        display:table;
+        width:100%;
+        height:100%;
     }
 
     .model-dialog{
         border-style: solid;
+    }
+
+     .menu {
+        border-style: groove;
+        height: 100px;
     }
 
     .black-overlay {

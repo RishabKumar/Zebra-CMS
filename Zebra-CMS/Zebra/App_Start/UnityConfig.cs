@@ -25,6 +25,7 @@ namespace Zebra
             container.RegisterType<ITemplateRepository, TemplateRepository>();
             container.RegisterType<IUserOperations, UserOperations>();
             container.RegisterType<INodeOperations, NodeOperations>();
+            container.RegisterType<IFieldOperations, FieldOperations>();
             container.RegisterType<FieldContext, FieldContext>();
             GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));

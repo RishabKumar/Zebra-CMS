@@ -21,6 +21,15 @@
           <Property Name="TypeName" Type="nvarchar(max)" Nullable="false" />
           <Property Name="ClassPath" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="NodeFieldMaps">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="NodeId" Type="uniqueidentifier" />
+          <Property Name="FieldId" Type="uniqueidentifier" />
+          <Property Name="NodeData" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="Nodes">
           <Key>
             <PropertyRef Name="Id" />
@@ -54,6 +63,30 @@
           <Property Name="Roles" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
+        <Association Name="FK__NodeField__Field__73BA3083">
+          <End Role="Fields" Type="Self.Fields" Multiplicity="0..1" />
+          <End Role="NodeFieldMaps" Type="Self.NodeFieldMaps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fields">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NodeFieldMaps">
+              <PropertyRef Name="FieldId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__NodeField__NodeI__72C60C4A">
+          <End Role="Nodes" Type="Self.Nodes" Multiplicity="0..1" />
+          <End Role="NodeFieldMaps" Type="Self.NodeFieldMaps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Nodes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NodeFieldMaps">
+              <PropertyRef Name="NodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_FieldsTemplateFieldMap">
           <End Role="Fields" Type="Self.Fields" Multiplicity="1" />
           <End Role="TemplateFieldMaps" Type="Self.TemplateFieldMaps" Multiplicity="*" />
@@ -105,10 +138,19 @@
         <EntityContainer Name="ZebraDB_ModelStoreContainer">
           <EntitySet Name="Fields" EntityType="Self.Fields" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FieldTypes" EntityType="Self.FieldTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NodeFieldMaps" EntityType="Self.NodeFieldMaps" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Nodes" EntityType="Self.Nodes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TemplateFieldMaps" EntityType="Self.TemplateFieldMaps" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Templates" EntityType="Self.Templates" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__NodeField__Field__73BA3083" Association="Self.FK__NodeField__Field__73BA3083">
+            <End Role="Fields" EntitySet="Fields" />
+            <End Role="NodeFieldMaps" EntitySet="NodeFieldMaps" />
+          </AssociationSet>
+          <AssociationSet Name="FK__NodeField__NodeI__72C60C4A" Association="Self.FK__NodeField__NodeI__72C60C4A">
+            <End Role="Nodes" EntitySet="Nodes" />
+            <End Role="NodeFieldMaps" EntitySet="NodeFieldMaps" />
+          </AssociationSet>
           <AssociationSet Name="FK_FieldsTemplateFieldMap" Association="Self.FK_FieldsTemplateFieldMap">
             <End Role="Fields" EntitySet="Fields" />
             <End Role="TemplateFieldMaps" EntitySet="TemplateFieldMaps" />
@@ -139,6 +181,7 @@
           <Property Name="TypeId" Type="Guid" Nullable="false" />
           <NavigationProperty Name="TemplateFieldMaps" Relationship="Self.FK_FieldsTemplateFieldMap" FromRole="Fields" ToRole="TemplateFieldMaps" />
           <NavigationProperty Name="FieldType" Relationship="Self.FK_FieldTypesFields" FromRole="Fields" ToRole="FieldTypes" />
+          <NavigationProperty Name="NodeFieldMaps" Relationship="ZebraDB_Model.FK__NodeField__Field__73BA3083" FromRole="Field" ToRole="NodeFieldMap" />
         </EntityType>
         <EntityType Name="FieldType">
           <Key>
@@ -158,6 +201,7 @@
           <Property Name="TemplateId" Type="Guid" Nullable="false" />
           <NavigationProperty Name="Template" Relationship="Self.FK_TemplatesNodes" FromRole="Nodes" ToRole="Templates" />
           <Property Name="ParentId" Type="Guid" />
+          <NavigationProperty Name="NodeFieldMaps" Relationship="ZebraDB_Model.FK__NodeField__NodeI__72C60C4A" FromRole="Node" ToRole="NodeFieldMap" />
         </EntityType>
         <EntityType Name="TemplateFieldMap">
           <Key>
@@ -258,7 +302,51 @@
             <End Role="Templates" EntitySet="Templates" />
             <End Role="TemplateFieldMaps" EntitySet="TemplateFieldMaps" />
           </AssociationSet>
+          <EntitySet Name="NodeFieldMaps" EntityType="ZebraDB_Model.NodeFieldMap" />
+          <AssociationSet Name="FK__NodeField__Field__73BA3083" Association="ZebraDB_Model.FK__NodeField__Field__73BA3083">
+            <End Role="Field" EntitySet="Fields" />
+            <End Role="NodeFieldMap" EntitySet="NodeFieldMaps" />
+          </AssociationSet>
+          <AssociationSet Name="FK__NodeField__NodeI__72C60C4A" Association="ZebraDB_Model.FK__NodeField__NodeI__72C60C4A">
+            <End Role="Node" EntitySet="Nodes" />
+            <End Role="NodeFieldMap" EntitySet="NodeFieldMaps" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="NodeFieldMap">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="NodeId" Type="Guid" />
+          <Property Name="FieldId" Type="Guid" />
+          <NavigationProperty Name="Field" Relationship="ZebraDB_Model.FK__NodeField__Field__73BA3083" FromRole="NodeFieldMap" ToRole="Field" />
+          <NavigationProperty Name="Node" Relationship="ZebraDB_Model.FK__NodeField__NodeI__72C60C4A" FromRole="NodeFieldMap" ToRole="Node" />
+          <Property Name="NodeData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK__NodeField__Field__73BA3083">
+          <End Type="ZebraDB_Model.Field" Role="Field" Multiplicity="0..1" />
+          <End Type="ZebraDB_Model.NodeFieldMap" Role="NodeFieldMap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Field">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NodeFieldMap">
+              <PropertyRef Name="FieldId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__NodeField__NodeI__72C60C4A">
+          <End Type="ZebraDB_Model.Node" Role="Node" Multiplicity="0..1" />
+          <End Type="ZebraDB_Model.NodeFieldMap" Role="NodeFieldMap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Node">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NodeFieldMap">
+              <PropertyRef Name="NodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -317,6 +405,16 @@
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="Roles" ColumnName="Roles" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NodeFieldMaps">
+            <EntityTypeMapping TypeName="ZebraDB_Model.NodeFieldMap">
+              <MappingFragment StoreEntitySet="NodeFieldMaps">
+                <ScalarProperty Name="NodeData" ColumnName="NodeData" />
+                <ScalarProperty Name="FieldId" ColumnName="FieldId" />
+                <ScalarProperty Name="NodeId" ColumnName="NodeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

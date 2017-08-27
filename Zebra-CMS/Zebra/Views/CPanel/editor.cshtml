@@ -18,9 +18,11 @@
             <p>@root.NodeName</p>
         </div>
     </div>*@
-    @{Html.RenderPartial("~/Views/CPanel/NodeTree.cshtml", nodes);}
-    <div class="item-container">
+    <div class="tree-container">
+        @{Html.RenderPartial("~/Views/CPanel/NodeTree.cshtml", nodes);}
+        <div class="item-container">
 
+        </div>
     </div>
 </div>
 
@@ -177,8 +179,8 @@
     }
 
     .item-container{
-        display: inline-block;
-    border: groove;
+        
+        border: groove;
     }
 
 </style>

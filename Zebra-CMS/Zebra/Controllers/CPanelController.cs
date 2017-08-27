@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Zebra.CustomAttributes;
 using Zebra.DataRepository.Models;
+using Zebra.ModelView;
 using Zebra.Services.Interfaces;
 using Zebra.Services.Operations;
 
@@ -48,13 +49,17 @@ namespace Zebra.Controllers
         public ActionResult NodeBrowser(string nodeid)
         {
             var node = _nodeop.GetNode(nodeid);
-            var list = _fieldOperations.GetFieldsFromTemplate(node.TemplateId.ToString());
+            var list = _fieldOperations.GetAllParentFieldsFromTemplate(node.TemplateId.ToString());
             List<string> htmllist = new List<string>();
-            foreach (var field in list)
+            IEnumerable<NodeFieldMap> nodefieldmap = ((IStructureOperations)_nodeop).GetNodeFieldMapData(node.Id.ToString());
+            //   foreach (var field in list)
+            foreach(var nodefield in nodefieldmap)
             {
-                htmllist.Add(_fieldOperations.GetRenderedField(field.Id.ToString()));
+                //         htmllist.Add(_fieldOperations.GetRenderedField(field.Id.ToString()));
+                htmllist.Add(_fieldOperations.GetRenderedField(nodeid, nodefield.FieldId.ToString(), nodefield.Id.ToString()));
             }
-            return View(model: htmllist);
+            //.Select(x => x.Id).Cast<string>()
+            return View(model: new NodeBrowserModel() { fields = htmllist, nodeid = nodeid });
         } 
 
         // GET: CPanel/Create

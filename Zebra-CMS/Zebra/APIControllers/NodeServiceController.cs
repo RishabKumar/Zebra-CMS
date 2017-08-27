@@ -15,10 +15,12 @@ namespace Zebra.APIControllers
     public class NodeServiceController : ApiController
     {
         public INodeOperations _ops;
+        public IFieldOperations _fieldops;
         
-        public NodeServiceController(INodeOperations nodeops) : base()
+        public NodeServiceController(INodeOperations nodeops, IFieldOperations fieldops) : base()
         {
             _ops = nodeops;
+            _fieldops = fieldops;
         }
 
         [HttpGet]
@@ -40,7 +42,8 @@ namespace Zebra.APIControllers
             string parentid = tmp.parentid;
             string nodename = tmp.nodename;
             string templateid = tmp.templateid;
-            var node = ((IStructureOperations)_ops).CreateNode(nodename, parentid, templateid);
+            var fields = _fieldops.GetAllParentFieldsFromTemplate(templateid);
+            var node = ((IStructureOperations)_ops).CreateNode(nodename, parentid, templateid, fields);
             return JsonConvert.SerializeObject(node);
         }
 
@@ -55,7 +58,18 @@ namespace Zebra.APIControllers
             return result;
         }
 
+        [HttpPost]
+        public bool SaveNode()
+        {
+            bool result = false;
+            var form = HttpContext.Current.Request.Form;
+            var nodeid = form["nodeid"];
+            var node = _ops.GetNode(nodeid);
+            //var fields = _fieldops.GetAllParentFieldsFromTemplate(node.TemplateId.ToString());
+            _ops.SaveNode(node, form);
 
+            return result;
+        }
 
 
 

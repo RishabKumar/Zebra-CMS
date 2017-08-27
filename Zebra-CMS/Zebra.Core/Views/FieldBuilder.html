@@ -1,1 +1,42 @@
-﻿<input type="text" id="fieldbuilder"/>
+﻿<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<body>
+
+    <div class='zebra-fieldbuilder'>
+        <button class='add-field-button'>Add Field</button>
+        <form class="form-fieldbuilder">
+            <div class="field">Field Name<input type='text' />  FieldType<select><option>Dummy Field</option><option>SingleLineString</option></select></div>
+
+        </form>
+    </div>
+    <div class="field-sample">Field Name<input type='text' />  FieldType<select><option>Dummy Field</option><option>SingleLineString</option></select></div>
+</body>
+
+<script>
+
+$(document).on('click', '.add-field-button', function (e) {
+
+		$(".form-fieldbuilder").append($(".field-sample").clone().attr("class","field"));
+
+    });
+
+$(document).on('mouseup', function (e) {
+		var fields = $(".zebra-fieldbuilder .field");
+
+		for(var i = 0; i < fields.length; i++)
+		{
+			if($(fields[i]).find("input").val() == '' && $(event.target.parentElement).attr('class') != 'field'){
+				$(fields[i]).remove();
+			}
+		}
+    });
+
+</script>
+<style>
+    .field {
+        display: block;
+    }
+
+    .field-sample {
+        display: none;
+    }
+</style>

@@ -31,5 +31,6 @@ namespace Zebra.DataRepository.Models
         public virtual DbSet<TemplateFieldMap> TemplateFieldMaps { get; set; }
         public virtual DbSet<Template> Templates { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<NodeFieldMap> NodeFieldMaps { get; set; }
     }
 }
