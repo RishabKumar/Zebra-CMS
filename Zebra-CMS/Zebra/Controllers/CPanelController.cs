@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using Zebra.CustomAttributes;
@@ -23,6 +26,9 @@ namespace Zebra.Controllers
         // GET: CPanel
         public override ActionResult Index()
         {
+            NameValueCollection section = (NameValueCollection)ConfigurationManager.GetSection("ZebraUtility");
+            string userName = section["userName"];
+            string userPassword = section["userPassword"];
             return RedirectToAction("Editor");
         }
 
@@ -34,7 +40,7 @@ namespace Zebra.Controllers
             var list = new List<Node>();
             list.Add(root);
             ViewBag.Root = list;
-
+            ViewBag.Utilities = new List<string> { "Zebra.Utilities.UtilityProcessor.FieldBuilderUtility, Zebra" };
             return View();
         }
 
@@ -49,7 +55,7 @@ namespace Zebra.Controllers
         public ActionResult NodeBrowser(string nodeid)
         {
             var node = _nodeop.GetNode(nodeid);
-            var list = _fieldOperations.GetAllParentFieldsFromTemplate(node.TemplateId.ToString());
+            var list = _fieldOperations.GetInclusiveFieldsFromTemplate(node.Id.ToString());
             List<string> htmllist = new List<string>();
             IEnumerable<NodeFieldMap> nodefieldmap = ((IStructureOperations)_nodeop).GetNodeFieldMapData(node.Id.ToString());
             //   foreach (var field in list)
@@ -59,8 +65,27 @@ namespace Zebra.Controllers
                 htmllist.Add(_fieldOperations.GetRenderedField(nodeid, nodefield.FieldId.ToString(), nodefield.Id.ToString()));
             }
             //.Select(x => x.Id).Cast<string>()
-            return View(model: new NodeBrowserModel() { fields = htmllist, nodeid = nodeid });
-        } 
+            return View(model: new NodeBrowserModel() { fields = htmllist, nodeid = nodeid, templateid = node.TemplateId.ToString() });
+        }
+        
+        public ActionResult RenderUtility(string fullyqualifiedname, string method = "RenderView", object data = null)
+        {
+            var type = Type.GetType(fullyqualifiedname);
+            Assembly assembly = null;
+            if (type != null && (assembly = Assembly.GetAssembly(type)) != null)
+            {
+                var instance = Activator.CreateInstance(type, null);
+                var mi = type.GetMethod(method);
+                var path = mi.Invoke(instance, new[] { data}).ToString();
+                if (VirtualPathUtility.IsAppRelative(path))
+                {
+                    return PartialView(viewName:path);
+                }
+            }
+            return PartialView();
+        }
+        
+         
 
         // GET: CPanel/Create
         public ActionResult Create()

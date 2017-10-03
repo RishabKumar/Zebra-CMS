@@ -5,8 +5,12 @@
 } 
 @model NodeBrowserModel
 
-<button class="zebra-save-data">Save</button>
+<div class="zebra-node-details">
+    <p>Node ID: @Model.nodeid</p>
+    <p>Template ID: @Model.templateid</p>
+</div>
 
+<button class="zebra-save-data">Save</button>
 <div class="zebra-field">
     <form class="zebra-field-data-form">
         <input type="hidden" name="nodeid" id="nodeid" value="@Model.nodeid" />
@@ -17,3 +21,10 @@
 
 
  
+<style>
+    .zebra-node-details
+    {
+        border-style: groove;
+        min-height: 100px;
+    }
+</style>

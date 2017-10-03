@@ -22,6 +22,19 @@ namespace Zebra.DataRepository.DAL
             return template;
         }
 
+        public Template DeleteTemplate(IEntity entity)
+        {
+            var template = new Template() { Id = entity.Id };
+            using (var dbt = _context.Database.BeginTransaction())
+            {
+                template = _context.Templates.Find(template.Id);
+                template = _context.Templates.Remove(template);
+                _context.SaveChanges();
+                dbt.Commit();
+            }
+            return template;
+        }
+
         public override List<Template> GetByCondition(Expression<Func<Template, bool>> selector)
         {
             throw new NotImplementedException();
@@ -34,12 +47,12 @@ namespace Zebra.DataRepository.DAL
 
         public override List<Template> GetListById(IEntity t)
         {
-            throw new NotImplementedException();
+            return _context.Templates.ToList<Template>();
         }
 
-        public Template GetTemplate(Template template)
+        public Template GetTemplate(IEntity entity)
         {
-            throw new NotImplementedException();
+            return _context.Templates.Find(entity.Id);
         }
     }
 }

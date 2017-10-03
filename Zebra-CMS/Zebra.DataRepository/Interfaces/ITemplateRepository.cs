@@ -10,6 +10,7 @@ namespace Zebra.DataRepository.Interfaces
     public interface ITemplateRepository
     {
         Template CreateTemplate(Template template);
-        Template GetTemplate(Template template);
+        Template GetTemplate(IEntity entity);
+        Template DeleteTemplate(IEntity entity);
     }
 }

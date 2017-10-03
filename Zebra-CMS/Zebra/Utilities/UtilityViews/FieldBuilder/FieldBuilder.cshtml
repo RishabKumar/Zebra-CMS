@@ -1,0 +1,111 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@{
+    Layout = null;
+}
+
+<div class='zebra-fieldbuilder-container'>
+    <div class='zebra-fieldbuilder'>
+        <input type='button' class='add-field-button' value='Add Field'>
+        <div class='fields-fieldbuilder'>
+            <div class='field'>
+                Field Name<input type='text' id='fieldname1' name='fieldname1' />
+                FieldType <select id='fieldtype1' name='fieldtype1'>
+                    <option value='E675EA2D-14DC-4031-97DE-2D91E240FC06'>SingleLineString</option>
+                </select>
+            </div>
+        <input type='button' class='save-field-button' value='Save Fields'>
+        </div>
+    </div>
+    <div class='field-sample'>
+        Field Name<input type='text' /> FieldType <select><option value='E675EA2D-14DC-4031-97DE-2D91E240FC06'>SingleLineString</option></select>
+    </div>
+     
+
+    <script>
+        $(document).on('click', '.save-field-button', function (e) {
+            var typesarr = $('.fields-fieldbuilder .field > select');
+            var namesarr = $('.fields-fieldbuilder .field > input');
+            formdata = [];
+            fieldsdata = [];
+            template = {}
+            template["templatenodeid"] = $(ZebraEditor_currentnode.element).attr("data-nodeid");
+            fieldsdata.push(template);
+            for( i = 0; i < namesarr.length; i++)
+            {
+                field = {}
+                field["name"] = namesarr[i].value;
+                field["typeid"] = typesarr[i].value;
+                fieldsdata.push(field);
+            }
+            fullyqualifiedname = {};
+            fullyqualifiedname["fullyqualifiedname"] = "Zebra.Utilities.UtilityProcessor.FieldBuilderUtility,Zebra";
+            methodname = {};
+            methodname["methodname"] = "Process";
+            formdata.push(fullyqualifiedname);
+            formdata.push(methodname);
+            formdata.push(fieldsdata);
+             
+
+            console.log(formdata);
+
+            $.ajax({
+                type: "POST",
+                url: "/zebraapi/UtilityService/InvokeMethod",
+                data: { '': JSON.stringify(formdata) },
+                dataType: "json",
+                async: true,
+                success: function (json) {
+                    alert("Field Created ");
+                    console.log(json);
+                },
+                error: function(e){
+                    console.log(e);
+                }
+            });
+
+        });
+
+        $(document).on('click', '.add-field-button', function (e) {
+            $('.fields-fieldbuilder').append($('.field-sample').clone().attr('class', 'field'));
+        });
+        $(document).on('mouseup', function (e) {
+            var fields = $('.zebra-fieldbuilder .field');
+
+            for (var i = 0; i < fields.length; i++) {
+                if ($(fields[i]).find('input').val() == '' && $(event.target.parentElement).attr('class') != 'field') {
+                    $(fields[i]).remove();
+                }
+            }
+        });
+    </script>
+    <style>
+        .field {
+            display: block;
+        }
+
+        .field-sample {
+            display: none;
+        }
+
+        .fields-fieldbuilder
+        {
+            padding:5px;
+        }
+
+        .zebra-fieldbuilder-container
+        {
+            display: block;
+            position: fixed;
+            top:50%;
+            left:50%;
+            width:500px;
+            height:500px;
+            margin-top:-250px;
+            margin-left:-250px;
+            z-index:100;
+            background-color:white;
+            padding:5px;
+            overflow:scroll;
+        }
+    </style>
+</div>

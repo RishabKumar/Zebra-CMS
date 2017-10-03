@@ -23,7 +23,10 @@ namespace Zebra
             UnityConfig.RegisterComponents();
         }
 
-        
+        protected void Application_EndRequest(object sender, EventArgs e)
+        {
+
+        }
 
         //protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)
         //{

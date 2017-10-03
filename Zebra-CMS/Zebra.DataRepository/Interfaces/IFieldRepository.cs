@@ -21,6 +21,15 @@ namespace Zebra.DataRepository.Interfaces
 
         FieldType CreateFieldType(FieldType ft);
 
-        Field CreateField(Field ft);
+        Field CreateField(Field field, Template template);
+
+        Field DeleteField(Field field);
+
+        void RemoveFieldTemplateRelation(Field field);
+
+        void RemoveFieldTemplateRelation(Models.TemplateFieldMap tmp);
+
+        Models.TemplateFieldMap AddFieldToTemplate(Template template, Field field);
+
     }
 }

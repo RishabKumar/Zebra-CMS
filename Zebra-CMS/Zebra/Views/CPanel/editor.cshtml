@@ -6,11 +6,13 @@
 
 @{ 
     List<Node> nodes = ViewBag.Root;
+    List<string> utilities = ViewBag.Utilities;
 }
 
 <div class="editor-container">
     <div class="menu">
-      
+      @{Html.RenderPartial("~/Views/CPanel/Utilities.cshtml", utilities);}
+
     </div>
     @*<div class="content-tree">
         <div class="content-node" data-nodeid="@root.Id" node-expanded="false">

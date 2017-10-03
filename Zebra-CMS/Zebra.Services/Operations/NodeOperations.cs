@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Zebra.Core.Context;
 using Zebra.DataRepository.DAL;
 using Zebra.DataRepository.Interfaces;
 using Zebra.DataRepository.Models;
@@ -22,11 +24,11 @@ namespace Zebra.Services.Operations
             _fieldrepository = (IFieldRepository)f;
         }
 
-        public Node CreateNode(string nodename, string parentid, string templateid, List<Field> fields)
+        public Node CreateNode(string nodename, string parentid, string templateid, List<Field> fields, string zebratype)
         {
             Guid newid = Guid.NewGuid();
             Node node = new Node() { Id = newid, NodeName = nodename, TemplateId = new Guid(templateid), ParentId = new Guid(parentid) };
-            DetermineNodeTypeAndCreate(node, newid);
+            DetermineNodeTypeAndCreate(node.NodeName, newid, node);
             node = ((INodeRepository)_currentrepository).CreateNode(node);
             ((INodeRepository)_currentrepository).RegisterFieldsForNode(node, fields);
             return node;
@@ -34,7 +36,6 @@ namespace Zebra.Services.Operations
 
         public string GetNodeBrowser()
         {
-
             return null;
         }
 
@@ -45,6 +46,27 @@ namespace Zebra.Services.Operations
 
         public bool DeleteNode(string nodeid)
         {
+            switch(DetermineNodeType(new Node { Id = new Guid(nodeid) }))
+            {
+                case NodeType.CONTENT_TYPE:
+                    break;
+                case NodeType.TEMPLATE_TYPE:
+                    {
+                        var template = new Template() { Id = Guid.Parse(nodeid) };
+                        template = _templaterepository.GetTemplate(template);
+                        foreach (var tmp in template.TemplateFieldMaps)
+                        {
+                            _fieldrepository.RemoveFieldTemplateRelation(tmp);
+                            _fieldrepository.DeleteField(new Field() { Id = tmp.FieldId });
+                        }
+                        _templaterepository.DeleteTemplate(template);
+                    }
+                    break;
+                case NodeType.SYSTEM_TYPE:
+                    break;
+                case NodeType.FIELD_TYPE:
+                    break;
+            }
             return ((INodeRepository)_currentrepository).DeleteNode(new Node() { Id = new Guid(nodeid) });
         }
 
@@ -68,9 +90,20 @@ namespace Zebra.Services.Operations
             return _templaterepository.CreateTemplate(t);
         }
 
-        public Field CreateField(Field field)
+        public Field CreateField(Field field, Template template)
         {
-            return _fieldrepository.CreateField(field);
+            field = _fieldrepository.CreateField(field, template);
+            _fieldrepository.AddFieldToTemplate(template, field);
+            //template = _templaterepository.GetTemplate(template);  // this doesnot always retrieve all Nodes in case if browser is not refreshed after noder creation, hence its not safe.
+            var fields = new List<Field>() { field };
+            var nodes = _base.GetByCondition(x => x.TemplateId == template.Id);
+            // add the template to the ndoe list.
+            nodes.Add(new Node() { Id = template.Id }); // every template's id is same as to it corresponding Node's Id.
+            foreach (var node in nodes)
+            {
+                ((INodeRepository)_currentrepository).RegisterFieldsForNode(node, fields);
+            }
+            return field;
         }
 
         public FieldType CreateFieldType(FieldType ft)
@@ -78,30 +111,82 @@ namespace Zebra.Services.Operations
             return _fieldrepository.CreateFieldType(ft);
         }
 
-        public string DetermineNodeTypeAndCreate(Node node, Guid newid)
+        [Obsolete("",false)]
+        public void DetermineNodeTypeAndCreate(string name, Guid newid, Node node)
         {
             string type = NodeType.UNKNOWN_TYPE;
        //     node = GetBaseParent(node);
             
-            switch(node.TemplateId.ToString().ToUpper())
+            switch(node.Id.ToString().ToUpper())
             {
-                case NodeType.CONTENT_ID:
+                case NodeType.CONTENTNODE_ID:
                     type = NodeType.CONTENT_TYPE;
                     break;
-                case NodeType.TEMPLATE_ID:
+                case NodeType.TEMPLATENODE_ID:
                     type = NodeType.TEMPLATE_TYPE;
-                    CreateTemplate(new Template() {Id  = newid, TemplateName = node.NodeName});
+                    CreateTemplate(new Template() {Id  = newid, TemplateName = name });
                     break;
-                case NodeType.FIELD_ID:
+                case NodeType.FIELDNODE_ID:
                     type = NodeType.FIELD_TYPE;
            //         CreateField(new Field() { FieldName = node.NodeName, T});
                     break;
-                case NodeType.FIELDTYPE_ID:
+                case NodeType.FIELDTYPENODE_ID:
                     type = NodeType.FIELDTYPE_TYPE;
-                    CreateFieldType(new FieldType() { Id = Guid.NewGuid(), TypeName = node.NodeName });
+                    CreateFieldType(new FieldType() { Id = Guid.NewGuid(), TypeName = name });
+                    break;
+                default:
+                    DetermineNodeTypeAndCreate(name, newid, GetNode(node.ParentId.ToString()));
+                    break;
+            }
+        }
+
+        private string DetermineNodeType(Node node)
+        {
+            string type = NodeType.UNKNOWN_TYPE;
+            switch (node.Id.ToString().ToUpper())
+            {
+                case NodeType.CONTENTNODE_ID:
+                    type = NodeType.CONTENT_TYPE;
+                    break;
+                case NodeType.TEMPLATENODE_ID:
+                    type = NodeType.TEMPLATE_TYPE;
+                    
+                    break;
+                case NodeType.FIELDNODE_ID:
+                    type = NodeType.FIELD_TYPE;
+                     
+                    break;
+                case NodeType.FIELDTYPENODE_ID:
+                    type = NodeType.FIELDTYPE_TYPE;
+                     
+                    break;
+                default:
+                    node = GetNode(node.Id.ToString());
+                    type = DetermineNodeType(GetNode(node.ParentId.ToString()));
                     break;
             }
             return type;
+        }
+
+        private bool DetermineNodeTypeAndCreate(Node node, Guid newid, string zebratype)
+        {
+            switch (zebratype)
+            {
+                case ZebraType.NODE:
+                    break;
+                case ZebraType.TEMPLATE:
+                    CreateTemplate(new Template() { Id = newid, TemplateName = node.NodeName });
+                    break;
+                case ZebraType.FIELD:
+                    //         CreateField(new Field() { FieldName = node.NodeName, T});
+                    break;
+                case ZebraType.FIELDTYPE:
+                    CreateFieldType(new FieldType() { Id = Guid.NewGuid(), TypeName = node.NodeName });
+                    break;
+                default:
+                    return false;
+            }
+            return true;
         }
 
         private Node GetBaseParent(Node node)
@@ -119,18 +204,29 @@ namespace Zebra.Services.Operations
             return _templaterepository.GetTemplate(new Template() { Id = new Guid(templateid) });
         }
 
-        public bool SaveNode(Node node, dynamic data, List<Field> fields = null)
+        public bool SaveNode(Node node, dynamic rawdata, List<Field> fields = null)
         {
             if (fields != null)
             {
+                throw new Exception("SaveNodeData is not consumed in the right way!");
                 foreach (var field in fields)
                 {
                     try
                     {
-                        var value = data[field.Id.ToString()];
-                        _currentrepository.SaveNodeData(node, field, value);
+                        var value = rawdata[field.Id.ToString()];
+                        //raw data has to be processed before saving to database
+                        var fieldtype = _fieldrepository.GetFieldType(field);
+                        
+                        var type = System.Type.GetType(fieldtype.ClassPath);
+                        FieldContext _context = new FieldContext(Guid.Parse(fieldtype.Id.ToString()), field.FieldName);
+                        _context.RawData = value;
+                        var fieldobj = Activator.CreateInstance(type, _context);
+                        var mi = type.GetMethod("GetValue");
+                        var data = mi.Invoke(fieldobj, null).ToString();
+
+                        _currentrepository.SaveNodeData(node, field, data);
                     }
-                    catch { }
+                    catch(Exception e) { }
                 }
             }
             else
@@ -140,11 +236,20 @@ namespace Zebra.Services.Operations
                 {
                     try
                     {
-                        var value = data[nodefield.Id.ToString()];
-                        nodefield.NodeData = value.ToString();
+                        var value = rawdata[nodefield.Id.ToString()];
+                        //raw data has to be processed before saving to database
+                        var fieldtype = _fieldrepository.GetFieldType(nodefield.Field);
+                        var type = System.Type.GetType(fieldtype.ClassPath);
+                        FieldContext _context = new FieldContext(Guid.Parse(fieldtype.Id.ToString()), nodefield.Field.FieldName);
+                        _context.RawData = value;
+                        var fieldobj = Activator.CreateInstance(type, _context);
+                        var mi = type.GetMethod("GetValue");
+                        var data = mi.Invoke(fieldobj, null).ToString();
+
+                        nodefield.NodeData = data;
                         _currentrepository.SaveNodeData(nodefield);
                     }
-                    catch { }
+                    catch(Exception e) { }
                 }
             }
 

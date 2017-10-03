@@ -1,0 +1,41 @@
+﻿@{
+    Layout = null;
+}
+@model List<string>
+<div class="zebra-utilities">
+    <div><input type="button" class="add-utilities" value="Add" /></div>
+    @foreach (var utility in Model)
+    {
+        <div>
+            @Html.Action("RenderUtility", "CPanel", new { fullyqualifiedname = utility })
+        </div>
+    }
+    
+</div>
+
+<div class="zebra-utilities-popup">
+    Full Qualified Method Name<input type="text" />
+    <input type="button" value="Add" />
+</div>
+
+<script>
+    $(".zebra-utilities input.add-utilities").on("click", function () {
+        $('body').append("<div class='black-overlay'></div>");
+        $(".zebra-utilities-popup").css("display", "block");
+    });
+
+</script>
+<style>
+    .zebra-utilities-popup{
+        position:fixed;
+        width:400px;
+        padding:100px;
+        margin: 0 auto;
+        display: none;
+        z-index:100;
+        left:0;
+        right:0;
+        background-color:white;
+    }
+
+</style>

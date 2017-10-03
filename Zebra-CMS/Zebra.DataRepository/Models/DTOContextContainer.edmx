@@ -63,8 +63,10 @@
           <Property Name="Roles" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
-        <Association Name="FK__NodeField__Field__73BA3083">
-          <End Role="Fields" Type="Self.Fields" Multiplicity="0..1" />
+        <Association Name="FK__NodeField__Field__02FC7413">
+          <End Role="Fields" Type="Self.Fields" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="NodeFieldMaps" Type="Self.NodeFieldMaps" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Fields">
@@ -75,8 +77,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__NodeField__NodeI__72C60C4A">
-          <End Role="Nodes" Type="Self.Nodes" Multiplicity="0..1" />
+        <Association Name="FK__NodeField__NodeI__03F0984C">
+          <End Role="Nodes" Type="Self.Nodes" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="NodeFieldMaps" Type="Self.NodeFieldMaps" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Nodes">
@@ -88,7 +92,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_FieldsTemplateFieldMap">
-          <End Role="Fields" Type="Self.Fields" Multiplicity="1" />
+          <End Role="Fields" Type="Self.Fields" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="TemplateFieldMaps" Type="Self.TemplateFieldMaps" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Fields">
@@ -100,7 +106,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_FieldTypesFields">
-          <End Role="FieldTypes" Type="Self.FieldTypes" Multiplicity="1" />
+          <End Role="FieldTypes" Type="Self.FieldTypes" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Fields" Type="Self.Fields" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="FieldTypes">
@@ -112,7 +120,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_TemplatesNodes">
-          <End Role="Templates" Type="Self.Templates" Multiplicity="1" />
+          <End Role="Templates" Type="Self.Templates" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Nodes" Type="Self.Nodes" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Templates">
@@ -124,7 +134,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_TemplatesTemplateFieldMap">
-          <End Role="Templates" Type="Self.Templates" Multiplicity="1" />
+          <End Role="Templates" Type="Self.Templates" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="TemplateFieldMaps" Type="Self.TemplateFieldMaps" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Templates">
@@ -143,11 +155,11 @@
           <EntitySet Name="TemplateFieldMaps" EntityType="Self.TemplateFieldMaps" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Templates" EntityType="Self.Templates" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__NodeField__Field__73BA3083" Association="Self.FK__NodeField__Field__73BA3083">
+          <AssociationSet Name="FK__NodeField__Field__02FC7413" Association="Self.FK__NodeField__Field__02FC7413">
             <End Role="Fields" EntitySet="Fields" />
             <End Role="NodeFieldMaps" EntitySet="NodeFieldMaps" />
           </AssociationSet>
-          <AssociationSet Name="FK__NodeField__NodeI__72C60C4A" Association="Self.FK__NodeField__NodeI__72C60C4A">
+          <AssociationSet Name="FK__NodeField__NodeI__03F0984C" Association="Self.FK__NodeField__NodeI__03F0984C">
             <End Role="Nodes" EntitySet="Nodes" />
             <End Role="NodeFieldMaps" EntitySet="NodeFieldMaps" />
           </AssociationSet>

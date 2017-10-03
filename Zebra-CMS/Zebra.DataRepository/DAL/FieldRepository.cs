@@ -61,18 +61,34 @@ namespace Zebra.DataRepository.DAL
             return _context.TemplateFieldMaps.Where(x => x.TemplateId == template.Id).Select(x=>x.Field).ToList();
         }
 
+        public Models.TemplateFieldMap AddFieldToTemplate(Template template, Field field)
+        {
+            Models.TemplateFieldMap tfm = null;
+            using (var dbt = _context.Database.BeginTransaction())
+            {
+                tfm = _context.TemplateFieldMaps.Add(new Models.TemplateFieldMap() { Id = Guid.NewGuid(), FieldId = field.Id, TemplateId = template.Id });
+                _context.SaveChanges();
+                dbt.Commit();
+            }
+            return tfm;
+        }
+
         public List<FieldType> GetFieldTypeFromField(Field field)
         {
             field = _context.Fields.Find(field.Id);
+            if (field == null)
+            {
+                return null;
+            }
             return _context.FieldTypes.Where(x => x.Id == field.TypeId).ToList();
         }
 
         public FieldType GetFieldType(IEntity field)
         {
-            return _context.Fields.Find((Field)field).FieldType;
+            return _context.Fields.Find(field.Id).FieldType;
         }
 
-        public Field CreateField(Field field)
+        public Field CreateField(Field field, Template template)
         {
             using (var dbt = _context.Database.BeginTransaction())
             {
@@ -86,6 +102,57 @@ namespace Zebra.DataRepository.DAL
         public Field GetField(IEntity field)
         {
             return _context.Fields.Find(field.Id);
+        }
+
+        public Field DeleteField(Field field)
+        {
+            using (var dbt = _context.Database.BeginTransaction())
+            {
+                field = _context.Fields.Find(field.Id);
+                if (field == null)
+                {
+                    return null;
+                }
+                field = _context.Fields.Remove(field);
+                _context.SaveChanges();
+                dbt.Commit();
+            }
+            return field;
+        }
+
+        [Obsolete("Will be removed in future release")]
+        public void RemoveFieldTemplateRelation(Field field)
+        {
+            using (var dbt = _context.Database.BeginTransaction())
+            {
+                field = _context.Fields.Find(field.Id);
+                if(field == null)
+                {
+                    return;
+                }
+                var list = _context.TemplateFieldMaps.Where(x => x.FieldId == field.Id).ToList();
+                foreach(var tmp in list)
+                {
+                    _context.TemplateFieldMaps.Remove(tmp);
+                }
+                _context.SaveChanges();
+                dbt.Commit();
+            }
+        }
+
+        public void RemoveFieldTemplateRelation(Models.TemplateFieldMap tmp)
+        {
+            using (var dbt = _context.Database.BeginTransaction())
+            {
+                tmp = _context.TemplateFieldMaps.Find(tmp.Id);
+                if (tmp == null)
+                {
+                    return;
+                }
+                _context.TemplateFieldMaps.Remove(tmp);
+                _context.SaveChanges();
+                dbt.Commit();
+            }
         }
     }
 }

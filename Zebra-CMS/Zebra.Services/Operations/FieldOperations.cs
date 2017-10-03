@@ -8,6 +8,7 @@ using Zebra.DataRepository.DAL;
 using Zebra.DataRepository.Interfaces;
 using Zebra.DataRepository.Models;
 using Zebra.Services.Interfaces;
+using Zebra.Services.Type;
 
 namespace Zebra.Services.Operations
 {
@@ -26,7 +27,7 @@ namespace Zebra.Services.Operations
             throw new NotImplementedException();
         }
 
-        public List<Field> GetFieldsFromTemplate(string templateid)
+        public List<Field> GetExclusiveFieldsFromTemplate(string templateid)
         {
             return _fieldrepo.GetFieldsFromTemplate(new Template() { Id = new Guid(templateid) });
         }
@@ -65,20 +66,30 @@ namespace Zebra.Services.Operations
             return string.Empty;
         }
 
-        public List<Field> GetAllParentFieldsFromTemplate(string templateid, List<Field> fields = null)
+        public List<Field> GetInclusiveFieldsFromTemplate(string nodeid, List<Field> fields = null)
         {
-            var node = _noderepo.GetNode(new Node() { Id = Guid.Parse(templateid) });
-            if(fields == null)
+            var node = _noderepo.GetNode(new Node() { Id = Guid.Parse(nodeid) });
+         //   var template = _.GetTemplate(new Node() { Id = Guid.Parse(nodeid) });
+            if (fields == null)
             {
                 fields = new List<Field>();
             }
-            fields.AddRange(GetFieldsFromTemplate(node.Id.ToString()));
+         //   if (template == null) // must be placed after field == null check !
+            {
+          //      return fields;
+            }
+            fields.AddRange(GetExclusiveFieldsFromTemplate(node.Id.ToString()));
+            // if(string.Equals(template.Id.ToString().ToUpper(), NodeType.SIMPLETEMPLATE_ID))
             if(node.Id.Equals(node.TemplateId))
             {
                 return fields;
             }
-            return GetAllParentFieldsFromTemplate(node.TemplateId.ToString(), fields);
+            return GetInclusiveFieldsFromTemplate(node.TemplateId.ToString(), fields);
         }
 
+        public FieldType CreateFieldType(FieldType ft)
+        {
+            return _fieldrepo.CreateFieldType(ft);
+        }
     }
 }

@@ -14,11 +14,13 @@
 //    });
 //});
 
+var ZebraEditor_currentnode = {element:null, type:null};
 
 $(document).on('click', ".content-node", function () {
     if (event.target.parentElement === this) {
         var parentid = $(event.target.parentElement).attr('data-nodeid');
         var currentnode = $(event.target.parentElement);
+        ZebraEditor_currentnode.element = currentnode;
         if (currentnode.attr('node-expanded') === 'false') {
             GetChildNodesAndAppend(parentid, currentnode);
             currentnode.attr('node-expanded', 'true');
@@ -47,13 +49,13 @@ function ShowModelTreePopup(nodeid, parentid, parentnode, nodename)
     var query = nodeid == null || nodeid === '' ? '' : '?nodeid=' + nodeid;
     $.get("./NodeTree" + query, function (data) {
         $(".model-tree-popup").append(data);
-        $('.model-tree-popup').children('div.content-tree').css('width', '90%').css('margin', '5%').css('height', '80%').css('overflow', 'auto');
+        $('.model-tree-popup').children('div.content-tree').css('position', 'absolute').css('width', '100%').css('height', '100%').css('overflow', 'auto').css('text-align', 'justify').css('padding','0');
     });
 }
 
 function LoadNodeBrowser(nodeid, parentid, parentnode, nodename) {
-    var query = nodeid == null || nodeid === '' ? '' : '?nodeid=' + nodeid;
-    $.get("./NodeBrowser" + query, function (data) {
+    var query = nodeid == null || nodeid === '' ? '' : 'nodeid=' + nodeid;
+    $.get("./NodeBrowser?" + query, function (data) {
         $(".item-container").html(data);
     });
 }

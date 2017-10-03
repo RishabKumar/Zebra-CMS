@@ -23,7 +23,7 @@ namespace Zebra.DataRepository.DAL
 
         }
 
-        public bool RegisterFieldsForNode(Node node, List<Field> fields)
+        public bool RegisterFieldsForNode(IEntity node, List<Field> fields)
         {
             using (var dbt = _context.Database.BeginTransaction())
             {
@@ -43,40 +43,32 @@ namespace Zebra.DataRepository.DAL
             return _context.Nodes.Where(x => x.Id == t.Id);
         }
 
+        //deletes nodes and nodefieldmaps
         public bool DeleteNode(Node node)
         {
-            dynamic rnodes = null;
-            using (var dbt = _context.Database.BeginTransaction())
+            using ( var dbt = _context.Database.BeginTransaction())
             {
                 node = _context.Nodes.Where(x => x.Id == node.Id).FirstOrDefault();
                 List<Node> nodes = GetAllChildren(node, new List<Node>());
                 if (nodes == null)
                     return false;
                 nodes.Add(node);
-                rnodes = _context.Nodes.RemoveRange(nodes.AsEnumerable());
-                _context.SaveChanges();
-                dbt.Commit();
-            }
-            if(rnodes != null)
-            {
-                return DeleteEntryFromNodeFieldMap(rnodes);
-            }
-            return false;
-        }
-
-        public bool DeleteEntryFromNodeFieldMap(List<Node> nodes)
-        {
-            using (var dbt = _context.Database.BeginTransaction())
-            {
-                foreach (var node in nodes)
-                {
-                    var entrieslist = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).ToList();
-                    _context.NodeFieldMaps.RemoveRange(entrieslist);
-                }
+                DeleteEntryFromNodeFieldMap(nodes);
+                var rnodes = _context.Nodes.RemoveRange(nodes.AsEnumerable());
                 _context.SaveChanges();
                 dbt.Commit();
             }
             return true;
+        }
+
+        private void DeleteEntryFromNodeFieldMap(List<Node> nodes)
+        {
+            foreach (var node in nodes)
+            {
+                var entrieslist = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).ToList();
+                _context.NodeFieldMaps.RemoveRange(entrieslist);
+            }
+            _context.SaveChanges();
         }
 
         private List<Node> GetAllChildren(Node node, List<Node> children)
@@ -117,9 +109,9 @@ namespace Zebra.DataRepository.DAL
             return _context.Nodes.Where(x=> x.Id == node.Id).FirstOrDefault();
         }
 
-        public Template GetTemplate(IEntity t)
+        public Template GetTemplate(Node n)
         {
-            return _context.Nodes.Attach((Node)t).Template;
+            return _context.Nodes.Find(n.Id).Template;
         }
 
         //creates a new nodefieldmap and saves data
@@ -143,7 +135,6 @@ namespace Zebra.DataRepository.DAL
                 if (oldnodefieldmap != null)
                 {
                     oldnodefieldmap.NodeData = nodefieldmap.NodeData;
-
                     _context.SaveChanges();
                     dbt.Commit();
                 }

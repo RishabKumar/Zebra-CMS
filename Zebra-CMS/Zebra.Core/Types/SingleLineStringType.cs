@@ -27,6 +27,7 @@ namespace Zebra.Core.Types
         public string GetValue()
         {
             // -> add get value from database via a wrapper.
+            _context.Value = _context.RawData.ToString();
             return _context.Value;
         }
 

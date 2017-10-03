@@ -9,15 +9,18 @@ namespace Zebra.Services.Interfaces
     {
         //List<Field> GetFieldsByTemplate(Template t);
 
+        Node GetNode(string nodeid);
+
         Template CreateTemplate(Template t);
 
         Template GetTemplate(string templateid);
 
-        Field CreateField(Field field);
+        Field CreateField(Field field, Template template);
 
         FieldType CreateFieldType(FieldType ft);
 
-        string DetermineNodeTypeAndCreate(Node node, Guid newid);
+        [Obsolete("",true)]
+        void DetermineNodeTypeAndCreate(string name, Guid newid, Node node);
 
         //bool CreateField(Field f);
 
@@ -33,7 +36,7 @@ namespace Zebra.Services.Interfaces
 
         //bool DeleteField(Field f);
 
-        Node CreateNode(string nodename, string parentid, string templateid, List<Field> fields);
+        Node CreateNode(string nodename, string parentid, string templateid, List<Field> fields, string zebratype = ZebraType.NODE);
         bool DeleteNode(string nodeid);
 
         List<NodeFieldMap> GetNodeFieldMapData(string nodeid);

@@ -20,7 +20,7 @@ namespace Zebra.DataRepository.DAL
 
         public abstract List<T> GetListById(IEntity t);
 
-        #warning "Do not use GetByCondition() method"
+        #warning "This method will be removed in future release."
         public abstract List<T> GetByCondition(Expression<Func<T, bool>> selector); 
 
         public abstract T GetByName(T t);
