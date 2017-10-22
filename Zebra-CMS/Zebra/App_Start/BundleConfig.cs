@@ -13,7 +13,8 @@ namespace Zebra
                         "~/Scripts/jquery-{version}.js").Include("~/Scripts/jquery-ui-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/zebra-js").IncludeDirectory("~/Scripts/zebra-js/","*.js"));
-           
+            bundles.Add(new ScriptBundle("~/bundles/utilities-js").IncludeDirectory("~/Scripts/zebra-js/utilities/", "*.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 

@@ -43,14 +43,24 @@ function GetSelectedNodeInPopup()
     return document.querySelector('.model-tree-popup .content-node[node-selected="true"]');
 }
 
-function ShowModelTreePopup(nodeid, parentid, parentnode, nodename)
+function ShowModelTreePopup(nodeid, parentid, parentnode, nodename, func)
 {
-    $('body').append("<div class='black-overlay' > <div class='model-tree-popup'><div class='model-popup-buttons'><button onclick=javascript:CreateNewNode('" + parentid + "'," + null + ",'" + nodename + "') class='button.ok'>Ok</button> <button onclick='javascript:CloseModelTreePopup()' class='button.cancel'>Cancel</button> </div> </div>");
-    var query = nodeid == null || nodeid === '' ? '' : '?nodeid=' + nodeid;
+    $('body').append("<div class='black-overlay' > <div class='model-tree-popup'><div class='model-popup-buttons'><button class='button-ok'>Ok</button> <button onclick='javascript:CloseModelTreePopup()' class='button-cancel'>Cancel</button> </div> </div>");
+    var query = (nodeid == null || nodeid === '') ? '' : '?nodeid=' + nodeid;
     $.get("./NodeTree" + query, function (data) {
         $(".model-tree-popup").append(data);
         $('.model-tree-popup').children('div.content-tree').css('position', 'absolute').css('width', '100%').css('height', '100%').css('overflow', 'auto').css('text-align', 'justify').css('padding','0');
     });
+    $('.button-ok').click(function (e) {
+        func();
+        CloseModelTreePopup();
+    });
+    var nodeinfo = [];
+    nodeinfo.nodeid = nodeid;
+    nodeinfo.parentid = parentid;
+    nodeinfo.parentnode = parentnode;
+    nodeinfo.nodename = nodename;
+    console.log(nodeinfo);
 }
 
 function LoadNodeBrowser(nodeid, parentid, parentnode, nodename) {
@@ -71,7 +81,7 @@ $(document).on('click', ".context-menu-option", function () {
 
                 var parentid = $(event.target.parentElement).attr("data-context-nodeid");
                 var parentnode = $("[data-nodeid='" + parentid + "']");
-                ShowModelTreePopup(null, parentid, parentnode, nodename);
+                ShowModelTreePopup(null, parentid, parentnode, nodename, function () { CreateNewNode(parentid, parentnode, nodename) });
           //      CreateNewNode(parentid, parentnode, nodename);
             }
             break;
@@ -80,16 +90,41 @@ $(document).on('click', ".context-menu-option", function () {
             var node = $("[data-nodeid='" + nodeid + "']");
             DeleteNode(nodeid, node);
             break;
+        case "Move":
+            var nodeid = $(event.target.parentElement).attr("data-context-nodeid");
+            var node = $("[data-nodeid='" + nodeid + "']");
+            ShowModelTreePopup('00000000-0000-0000-0000-000000000000', parentid, parentnode, nodename, function () { MoveNode(nodeid) });
+            break;
     }
     $(".context-menu").remove();
 });
+
+function MoveNode(nodeid)
+{
+    newparentid = $(GetSelectedNodeInPopup()).attr('data-nodeid');
+    if (nodeid == null) {
+        return;
+    }
+    var nodeinfo = { newparentid: newparentid, nodeid: nodeid };
+    $.ajax({
+        type: "POST",
+        url: "/zebraapi/nodeservice/movenode",
+        cache: false,
+        dataType: "json",
+        data: JSON.stringify(nodeinfo),
+        async: false,
+        success: function (json) {
+                window.location.reload(true);
+        }
+    });
+}
 
 $(".content-node").contextmenu(function (event) {
     event.preventDefault();
     var nodeid = $(event.target.parentElement).attr('data-nodeid');
     if (nodeid != null) {
         setSelectedNode(event.target);
-        $("<div class='context-menu'><ul data-context-nodeid='" + nodeid + "'><li class='context-menu-option' context-menu-option='Add Node'>Add Node</li><li class='context-menu-option' context-menu-option='Delete Node'>Delete Node</li></ul></div>").css({ top: event.pageY + "px", left: event.pageX + "px" }).appendTo("body");
+        $("<div class='context-menu'><ul data-context-nodeid='" + nodeid + "'><li class='context-menu-option' context-menu-option='Add Node'>Add Node</li><li class='context-menu-option' context-menu-option='Delete Node'>Delete Node</li><li class='context-menu-option' context-menu-option='Move'>Move</li></ul></div>").css({ top: event.pageY + "px", left: event.pageX + "px" }).appendTo("body");
     }
 });
 
@@ -137,7 +172,7 @@ function CreateNewNode(parentid, currentnode, nodename) {
 
         }
     });
-    CloseModelTreePopup();
+   // CloseModelTreePopup();
 }
 
 function ToggleNode()
@@ -194,25 +229,6 @@ $(document).bind("mousedown", function (event) {
 });
 
 
-// Node browser js to save
-
-    $(document).on('click', '.zebra-save-data', function (event) {
-        alert('save data');
-        var formdata = $('.zebra-field-data-form').serializeArray();
-
-
-        var ajaxRequest = $.ajax({
-            type: "POST",
-            url: "/zebraapi/nodeservice/savenode",
-            data: formdata
-        });
-        ajaxRequest.done(function (data, textStatus, jqXHR) {
-            alert("Saved!");
-             
-        });
-
-        event.preventDefault();
-    });
 
 
 

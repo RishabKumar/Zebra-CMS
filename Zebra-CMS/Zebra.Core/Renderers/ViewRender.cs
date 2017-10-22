@@ -8,7 +8,7 @@ namespace Zebra.Core.Renderers
 {
     class ViewRender
     {
-        public string DoRender()
+        public virtual string DoRender()
         {
             return "";
         } 

@@ -27,8 +27,12 @@ namespace Zebra.Services.Operations
             throw new NotImplementedException();
         }
 
-        public List<Field> GetExclusiveFieldsFromTemplate(string templateid)
+        public List<Field> GetExclusiveFieldsOfTemplate(string templateid)
         {
+            if (string.IsNullOrWhiteSpace(templateid))
+            {
+                return null;
+            }
             return _fieldrepo.GetFieldsFromTemplate(new Template() { Id = new Guid(templateid) });
         }
          
@@ -44,7 +48,11 @@ namespace Zebra.Services.Operations
 
         public Field GetField(string fieldid)
         {
-           return _fieldrepo.GetField(new Field { Id = Guid.Parse(fieldid) });
+            if(string.IsNullOrWhiteSpace(fieldid))
+            {
+                return null;
+            }
+            return _fieldrepo.GetField(new Field { Id = Guid.Parse(fieldid) });
         }
 
         // Method to identify required FieldType and loads the corresponding HTML.
@@ -66,7 +74,7 @@ namespace Zebra.Services.Operations
             return string.Empty;
         }
 
-        public List<Field> GetInclusiveFieldsFromTemplate(string nodeid, List<Field> fields = null)
+        public List<Field> GetInclusiveFieldsOfTemplate(string nodeid, List<Field> fields = null)
         {
             var node = _noderepo.GetNode(new Node() { Id = Guid.Parse(nodeid) });
          //   var template = _.GetTemplate(new Node() { Id = Guid.Parse(nodeid) });
@@ -78,18 +86,61 @@ namespace Zebra.Services.Operations
             {
           //      return fields;
             }
-            fields.AddRange(GetExclusiveFieldsFromTemplate(node.Id.ToString()));
+            fields.AddRange(GetExclusiveFieldsOfTemplate(node.Id.ToString()));
             // if(string.Equals(template.Id.ToString().ToUpper(), NodeType.SIMPLETEMPLATE_ID))
             if(node.Id.Equals(node.TemplateId))
             {
                 return fields;
             }
-            return GetInclusiveFieldsFromTemplate(node.TemplateId.ToString(), fields);
+            return GetInclusiveFieldsOfTemplate(node.TemplateId.ToString(), fields);
         }
 
         public FieldType CreateFieldType(FieldType ft)
         {
             return _fieldrepo.CreateFieldType(ft);
+        }
+
+        public Field DeleteField(string fieldid)
+        {
+            if(string.IsNullOrWhiteSpace(fieldid))
+            {
+                return null;
+            }
+            var field = new Field() { Id = Guid.Parse(fieldid) };
+            return DeleteField(field);
+        }
+
+        public Field DeleteField(Field field)
+        {
+            if (field == null)
+            {
+                return null;
+            }
+            _fieldrepo.RemoveFieldTemplateRelation(field);
+            return _fieldrepo.DeleteField(field);
+        }
+
+        public Field UpdateField(Field field)
+        {
+            if(field == null)
+            {
+                return null;
+            }
+            return _fieldrepo.UpdateField(field);
+        }
+
+        public Field UpdateField(string fieldid, string fieldname, string typeid)
+        {
+            if(string.IsNullOrWhiteSpace(fieldid) || string.IsNullOrWhiteSpace(fieldname) || string.IsNullOrWhiteSpace(typeid))
+            {
+                return null;
+            }
+            return UpdateField(new Field() { Id = Guid.Parse(fieldid), FieldName = fieldname, TypeId = Guid.Parse(typeid) });
+        }
+
+        public List<FieldType> GetAllFieldTypes()
+        {
+            return _fieldrepo.GetAllFieldTypes();
         }
     }
 }

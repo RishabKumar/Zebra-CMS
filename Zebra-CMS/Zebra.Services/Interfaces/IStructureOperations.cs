@@ -38,7 +38,7 @@ namespace Zebra.Services.Interfaces
 
         Node CreateNode(string nodename, string parentid, string templateid, List<Field> fields, string zebratype = ZebraType.NODE);
         bool DeleteNode(string nodeid);
-
+        void MoveNode(string nodeid, string newparentid);
         List<NodeFieldMap> GetNodeFieldMapData(string nodeid);
     }
 }

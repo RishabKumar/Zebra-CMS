@@ -15,9 +15,11 @@ namespace Zebra.Services.Interfaces
 
         List<Field> GetAllFields();
 
-        List<Field> GetExclusiveFieldsFromTemplate(string templateid);
+        List<FieldType> GetAllFieldTypes();
 
-        List<Field> GetInclusiveFieldsFromTemplate(string nodeid, List<Field> fields = null);
+        List<Field> GetExclusiveFieldsOfTemplate(string templateid);
+
+        List<Field> GetInclusiveFieldsOfTemplate(string nodeid, List<Field> fields = null);
 
         string GetRenderedField(string nodeid, string fieldid, string fieldrenderid = null);
 
@@ -25,6 +27,14 @@ namespace Zebra.Services.Interfaces
 
       //  Field CreateField(Field field, Template template);
         FieldType CreateFieldType(FieldType ft);
+
+        Field DeleteField(string fieldid);
+
+        Field DeleteField(Field field);
+
+        Field UpdateField(Field field);
+
+        Field UpdateField(string fieldid, string fieldname, string typeid);
 
     }
 }

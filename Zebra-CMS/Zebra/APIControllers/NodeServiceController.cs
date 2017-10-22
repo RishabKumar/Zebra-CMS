@@ -44,13 +44,23 @@ namespace Zebra.APIControllers
             string parentid = tmp.parentid;
             string nodename = tmp.nodename;
             string templateid = tmp.templateid;
-            var fields = _fieldops.GetInclusiveFieldsFromTemplate(templateid);  //templateid should be passed instead of nodeid
+            var fields = _fieldops.GetInclusiveFieldsOfTemplate(templateid);  //templateid should be passed instead of nodeid
             var node = _structops.CreateNode(nodename, parentid, templateid, fields);
             return JsonConvert.SerializeObject(node, Formatting.Indented,
                                                 new JsonSerializerSettings
                                                 {
                                                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                                                 });
+        }
+
+        [HttpPost]
+        public void MoveNode()
+        {
+            var json = HttpContext.Current.Request.Form[0];
+            dynamic tmp = JsonConvert.DeserializeObject(json);
+            string newparentid = tmp.newparentid;
+            string nodeid = tmp.nodeid;
+            _structops.MoveNode(nodeid, newparentid);
         }
 
         [HttpPost]

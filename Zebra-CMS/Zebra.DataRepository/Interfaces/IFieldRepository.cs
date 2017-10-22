@@ -31,5 +31,7 @@ namespace Zebra.DataRepository.Interfaces
 
         Models.TemplateFieldMap AddFieldToTemplate(Template template, Field field);
 
+        Field UpdateField(Field field);
+
     }
 }

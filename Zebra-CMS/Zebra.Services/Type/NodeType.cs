@@ -13,7 +13,7 @@ namespace Zebra.Services.Type
             FIELDTYPE_TYPE = "FieldType",
             SIMPLENODE = "",
             CONTENT_TYPE = "Node",
-            MEDIA_TYPE = "",
+            MEDIA_TYPE = "Media",
             SYSTEM_TYPE = "",
             UNKNOWN_TYPE = "",
             VIEW_TYPE = "";
@@ -22,7 +22,7 @@ namespace Zebra.Services.Type
             FIELDNODE_ID = "-|_|_|_-",
             FIELDTYPENODE_ID = "F5666A86-D446-4DBD-9287-B25760C28EE6",
             CONTENTNODE_ID = "2401C12C-1CB4-48E2-B685-7891D9190D70",
-            MEDIA_ID = "",
+            MEDIA_ID = "BAFB439E-6F83-4B80-8B90-6FF45E778EC3",
             SYSTEM_ID = "",
             UNKNOWN_ID = "",
             VIEW_ID = "",

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Zebra.Core.Context;
 using Zebra.DataRepository.DAL;
 using Zebra.DataRepository.Interfaces;
@@ -17,6 +18,7 @@ namespace Zebra.Services.Operations
     {
         ITemplateRepository _templaterepository;
         IFieldRepository _fieldrepository;
+        IFileRepository _filerepository;
         public NodeOperations(NodeRepository n, TemplateRepository t, FieldRepository f) : base(n)
         {
             _currentrepository = (INodeRepository)n;
@@ -41,14 +43,20 @@ namespace Zebra.Services.Operations
 
         public Node GetNode(string nodeid)
         {
+            if (string.IsNullOrWhiteSpace(nodeid))
+            {
+                return null;
+            }
             return ((INodeRepository)_currentrepository).GetNode(new Node { Id = new Guid(nodeid) });
         }
 
         public bool DeleteNode(string nodeid)
         {
+            bool flag = false;
             switch(DetermineNodeType(new Node { Id = new Guid(nodeid) }))
             {
                 case NodeType.CONTENT_TYPE:
+                        flag = _currentrepository.DeleteNode(new Node() { Id = new Guid(nodeid) });
                     break;
                 case NodeType.TEMPLATE_TYPE:
                     {
@@ -59,15 +67,18 @@ namespace Zebra.Services.Operations
                             _fieldrepository.RemoveFieldTemplateRelation(tmp);
                             _fieldrepository.DeleteField(new Field() { Id = tmp.FieldId });
                         }
+                        flag = _currentrepository.DeleteNode(new Node() { Id = new Guid(nodeid) });
                         _templaterepository.DeleteTemplate(template);
                     }
+                    break;
+                case NodeType.MEDIA_TYPE:
                     break;
                 case NodeType.SYSTEM_TYPE:
                     break;
                 case NodeType.FIELD_TYPE:
                     break;
             }
-            return ((INodeRepository)_currentrepository).DeleteNode(new Node() { Id = new Guid(nodeid) });
+            return flag;
         }
 
         public List<Node> GetAllnodes()
@@ -134,6 +145,9 @@ namespace Zebra.Services.Operations
                     type = NodeType.FIELDTYPE_TYPE;
                     CreateFieldType(new FieldType() { Id = Guid.NewGuid(), TypeName = name });
                     break;
+                case NodeType.MEDIA_ID:
+                    type = NodeType.MEDIA_TYPE;
+                    break;
                 default:
                     DetermineNodeTypeAndCreate(name, newid, GetNode(node.ParentId.ToString()));
                     break;
@@ -158,7 +172,9 @@ namespace Zebra.Services.Operations
                     break;
                 case NodeType.FIELDTYPENODE_ID:
                     type = NodeType.FIELDTYPE_TYPE;
-                     
+                    break;
+                case NodeType.MEDIA_ID:
+                    type = NodeType.MEDIA_TYPE;
                     break;
                 default:
                     node = GetNode(node.Id.ToString());
@@ -201,6 +217,10 @@ namespace Zebra.Services.Operations
 
         public Template GetTemplate(string templateid)
         {
+            if (string.IsNullOrWhiteSpace(templateid))
+            {
+                return null;
+            }
             return _templaterepository.GetTemplate(new Template() { Id = new Guid(templateid) });
         }
 
@@ -243,8 +263,12 @@ namespace Zebra.Services.Operations
                         FieldContext _context = new FieldContext(Guid.Parse(fieldtype.Id.ToString()), nodefield.Field.FieldName);
                         _context.RawData = value;
                         var fieldobj = Activator.CreateInstance(type, _context);
+                        //invoke GetValue to get the processed value.
                         var mi = type.GetMethod("GetValue");
                         var data = mi.Invoke(fieldobj, null).ToString();
+                        //call SaveValue to save addition information. 
+                        mi = type.GetMethod("SaveValue");
+                        mi.Invoke(fieldobj, null);
 
                         nodefield.NodeData = data;
                         _currentrepository.SaveNodeData(nodefield);
@@ -253,12 +277,21 @@ namespace Zebra.Services.Operations
                 }
             }
 
-            return true; 
+            return true;
         }
 
         public List<NodeFieldMap> GetNodeFieldMapData(string nodeid)
         {
+            if (string.IsNullOrWhiteSpace(nodeid))
+            {
+                return null;
+            }
             return ((INodeRepository)_currentrepository).GetNodeFieldMapData(new Node() { Id = Guid.Parse(nodeid)});
+        }
+
+        public void MoveNode(string nodeid, string newparentid)
+        {
+            _currentrepository.MoveNode(new Node() { Id = Guid.Parse(nodeid) }, new Node() { Id = Guid.Parse(newparentid) });
         }
     }
 }

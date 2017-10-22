@@ -55,7 +55,7 @@ namespace Zebra.Controllers
         public ActionResult NodeBrowser(string nodeid)
         {
             var node = _nodeop.GetNode(nodeid);
-            var list = _fieldOperations.GetInclusiveFieldsFromTemplate(node.Id.ToString());
+            var list = _fieldOperations.GetInclusiveFieldsOfTemplate(node.Id.ToString());
             List<string> htmllist = new List<string>();
             IEnumerable<NodeFieldMap> nodefieldmap = ((IStructureOperations)_nodeop).GetNodeFieldMapData(node.Id.ToString());
             //   foreach (var field in list)
@@ -68,7 +68,7 @@ namespace Zebra.Controllers
             return View(model: new NodeBrowserModel() { fields = htmllist, nodeid = nodeid, templateid = node.TemplateId.ToString() });
         }
         
-        public ActionResult RenderUtility(string fullyqualifiedname, string method = "RenderView", object data = null)
+        public ActionResult RenderUtility(string fullyqualifiedname, string method = "RenderView", dynamic data = null)
         {
             var type = Type.GetType(fullyqualifiedname);
             Assembly assembly = null;
@@ -76,10 +76,11 @@ namespace Zebra.Controllers
             {
                 var instance = Activator.CreateInstance(type, null);
                 var mi = type.GetMethod(method);
-                var path = mi.Invoke(instance, new[] { data}).ToString();
+                object[] args = new[] { data };
+                var path = mi.Invoke(instance, args).ToString();
                 if (VirtualPathUtility.IsAppRelative(path))
                 {
-                    return PartialView(viewName:path);
+                    return PartialView(viewName:path, model: args[0]);
                 }
             }
             return PartialView();

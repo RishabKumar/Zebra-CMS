@@ -154,5 +154,20 @@ namespace Zebra.DataRepository.DAL
         {
             return _context.NodeFieldMaps.Find(entity.Id);
         }
+
+        public void MoveNode(IEntity node, IEntity newparent)
+        {
+            using (var dbt = _context.Database.BeginTransaction())
+            {
+                Node existingnode = _context.Nodes.Find(node.Id);
+                Node parent = _context.Nodes.Find(newparent.Id);
+                if (existingnode != null && parent != null && existingnode.ParentId != null && existingnode.ParentId != existingnode.Id)
+                {
+                    existingnode.ParentId = parent.Id;
+                    _context.SaveChanges();
+                    dbt.Commit();
+                }
+            }
+        }
     }
 }

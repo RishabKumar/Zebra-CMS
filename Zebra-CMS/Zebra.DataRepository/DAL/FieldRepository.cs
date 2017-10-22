@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -153,6 +154,26 @@ namespace Zebra.DataRepository.DAL
                 _context.SaveChanges();
                 dbt.Commit();
             }
+        }
+
+        public Field UpdateField(Field field)
+        {
+            Field tmp = null;
+            using (var dbt = _context.Database.BeginTransaction())
+            {
+                tmp = _context.Fields.Find(field.Id);
+                if (tmp == null)
+                {
+                    return tmp;
+                }
+                //_context.Fields.Attach(tmp);
+                tmp.FieldName = field.FieldName;
+                tmp.TypeId = field.TypeId;
+                //   _context.Entry(tmp).State = EntityState.Modified;
+                _context.SaveChanges();
+                dbt.Commit();
+            }
+            return _context.Fields.Find(tmp.Id);
         }
     }
 }

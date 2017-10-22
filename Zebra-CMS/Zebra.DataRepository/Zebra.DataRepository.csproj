@@ -43,6 +43,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -56,9 +57,13 @@
   <ItemGroup>
     <Compile Include="DAL\BaseRepository.cs" />
     <Compile Include="DAL\FieldRepository.cs" />
+    <Compile Include="DAL\FileRepository.cs" />
+    <Compile Include="Providers\FileProvider.cs" />
+    <Compile Include="Providers\MediaProvider.cs" />
     <Compile Include="DAL\NodeRepository.cs" />
     <Compile Include="DAL\TemplateRepository.cs" />
     <Compile Include="DAL\UserRepository.cs" />
+    <Compile Include="Interfaces\IFileRepository.cs" />
     <Compile Include="Interfaces\IFieldRepository.cs" />
     <Compile Include="Interfaces\INodeRepository.cs" />
     <Compile Include="Interfaces\ITemplateRepository.cs" />
@@ -102,9 +107,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
     <EntityDeploy Include="Models\DTOContextContainer.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DTOContextContainer.Designer.cs</LastGenOutput>

@@ -12,8 +12,8 @@ namespace Zebra.Utilities.UtilityProcessor
 {
     public  interface IZebraUtility
     {
-        dynamic Process(object obj = null);
+        dynamic Process(ref object obj);
 
-        string RenderView(object obj = null);
+        string RenderView(ref object obj);
     }
 }

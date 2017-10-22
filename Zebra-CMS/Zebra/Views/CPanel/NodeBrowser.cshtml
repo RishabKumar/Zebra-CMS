@@ -12,7 +12,7 @@
 
 <button class="zebra-save-data">Save</button>
 <div class="zebra-field">
-    <form class="zebra-field-data-form">
+    <form class="zebra-field-data-form" enctype="multipart/form-data">
         <input type="hidden" name="nodeid" id="nodeid" value="@Model.nodeid" />
         @Html.LoadFields(Model.fields)
     </form>
