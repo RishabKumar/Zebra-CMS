@@ -8,16 +8,24 @@ namespace Zebra.Core.Context
 {
     public class FieldContext
     {
-        public Guid Id { get; set; }
+        public Guid FieldId { get; set; }
+
+        public Guid TypeId { get; set; }
 
         public string Name { get; set; }  
 
         public string Value { get; set; }
 
-        public FieldContext()
+        public string OldValue { get; set; }
+
+        public object RawData { get; set; } 
+
+        public FieldContext(Guid fieldId, Guid typeid, string Name)
         {
-            Id = new Guid();
-            Name = "name_"+Id;
+            this.FieldId = fieldId;
+            this.TypeId = typeid;
+            this.Name = Name;
+            this.Value = string.Empty;
         }
     }
 }

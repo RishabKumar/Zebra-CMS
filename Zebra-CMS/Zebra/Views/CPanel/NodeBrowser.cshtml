@@ -1,0 +1,30 @@
+﻿@using Zebra.ZebraHelpers
+@using Zebra.ModelView
+@{
+    Layout = null;
+} 
+@model NodeBrowserModel
+
+<div class="zebra-node-details">
+    <p>Node ID: @Model.nodeid</p>
+    <p>Template ID: @Model.templateid</p>
+</div>
+
+<button class="zebra-save-data">Save</button>
+<div class="zebra-field">
+    <form class="zebra-field-data-form" enctype="multipart/form-data">
+        <input type="hidden" name="nodeid" id="nodeid" value="@Model.nodeid" />
+        @Html.LoadFields(Model.fields)
+    </form>
+</div>
+
+
+
+ 
+<style>
+    .zebra-node-details
+    {
+        border-style: groove;
+        min-height: 100px;
+    }
+</style>

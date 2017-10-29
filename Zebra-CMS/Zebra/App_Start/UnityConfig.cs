@@ -6,6 +6,8 @@ using Zebra.Services.Interfaces;
 using Zebra.Core.Context;
 using Zebra.Services.Operations;
 using System.Web.Http;
+using Zebra.DataRepository.Interfaces;
+using Zebra.Utilities.UtilityProcessor;
 
 namespace Zebra
 {
@@ -13,18 +15,43 @@ namespace Zebra
     {
         public static void RegisterComponents()
         {
-			var container = new UnityContainer();
+            var container = new UnityContainer();
 
-            // register all your components with the container here
-            // it is NOT necessary to register your controllers
-
-            // e.g. container.RegisterType<ITestService, TestService>();
             container.RegisterType(typeof(BaseRepository<>), typeof(UserRepository));
+            container.RegisterType<INodeRepository, NodeRepository>();
+            container.RegisterType<ITemplateRepository, TemplateRepository>();
             container.RegisterType<IUserOperations, UserOperations>();
             container.RegisterType<INodeOperations, NodeOperations>();
+
+            container.RegisterType<IStructureOperations, NodeOperations>();
+            container.RegisterType<IFieldOperations, FieldOperations>();
+
             container.RegisterType<FieldContext, FieldContext>();
+
+            container.RegisterType<OperationsFactory>();
+            container.RegisterInstance(container.Resolve<OperationsFactory>());
             GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
         }
     }
 }
+
+/*/
+ * 
+ * 
+ *  container.RegisterType(typeof(BaseRepository<>), typeof(UserRepository));
+            container.RegisterType<INodeRepository, NodeRepository>(new ContainerControlledLifetimeManager());
+            container.RegisterType<ITemplateRepository, TemplateRepository>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IUserOperations, UserOperations>(new ContainerControlledLifetimeManager());
+            container.RegisterType<INodeOperations, NodeOperations>(new ContainerControlledLifetimeManager());
+
+            container.RegisterType<IStructureOperations, NodeOperations>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IFieldOperations, FieldOperations>(new ContainerControlledLifetimeManager());
+
+            container.RegisterType<FieldContext, FieldContext>(new ContainerControlledLifetimeManager());
+            GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);
+            DependencyResolver.SetResolver(new UnityDependencyResolver(container));
+ * 
+ * 
+ * 
+ * */

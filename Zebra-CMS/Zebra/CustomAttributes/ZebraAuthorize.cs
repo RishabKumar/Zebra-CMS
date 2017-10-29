@@ -1,13 +1,43 @@
 ﻿using System.Linq;
 using System.Web;
+using System.Web.Http.Controllers;
 using System.Web.Mvc;
 using System.Web.Security;
 
 namespace Zebra.CustomAttributes
 {
+
+    public class ZebraWebAPIAuthorize : System.Web.Http.Filters.AuthorizationFilterAttribute
+    {
+        public override void OnAuthorization(HttpActionContext actionContext)
+        {
+            string returnUrl = HttpUtility.UrlEncode(actionContext.RequestContext.Url.Request.RequestUri.AbsoluteUri);
+            var authCookie = HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName];
+            if (authCookie != null)
+            {
+                FormsAuthenticationTicket authTicket = FormsAuthentication.Decrypt(authCookie.Value);
+                if (authTicket != null && !authTicket.Expired)
+                {
+                    var userroles = authTicket.UserData.ToLower().Trim().Split(',').OfType<string>().ToList<string>();
+                    if (userroles == null && userroles.Count < 1)
+                    {
+                        HttpContext.Current.Response.Redirect("~/CPanel/Error");
+                    }
+                }
+                else
+                {
+                    HttpContext.Current.Response.Redirect("~/Account?returnurl=" + returnUrl);
+                }
+            }
+            else
+            {
+                HttpContext.Current.Response.Redirect("~/Account?returnurl=" + returnUrl);
+            }
+        }
+    }
+
     public class ZebraAuthorize : AuthorizeAttribute
     {
-        
         public ZebraAuthorize() : base()
         {
 
@@ -15,7 +45,6 @@ namespace Zebra.CustomAttributes
 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
-
             string returnUrl = HttpUtility.UrlEncode(filterContext.HttpContext.Request.Url.AbsoluteUri);
             var authCookie = filterContext.HttpContext.Request.Cookies[FormsAuthentication.FormsCookieName];
             if (authCookie != null)
@@ -54,8 +83,6 @@ namespace Zebra.CustomAttributes
             {
                 filterContext.Result = new RedirectResult("/Account?returnurl=" + returnUrl);
             }
-
-
         }
 
         protected override bool AuthorizeCore(HttpContextBase httpContext)

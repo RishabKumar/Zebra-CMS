@@ -1,0 +1,169 @@
+﻿@using Zebra.DataRepository.Models
+@model List<Zebra.DataRepository.Models.Node>
+
+@{
+    Layout = null;
+} 
+
+    <div class="content-tree">
+        @foreach (var node in Model)
+        {
+            <div class="content-node" data-nodeid="@node.Id" node-expanded="false">
+                <span></span>
+                <p>@node.NodeName</p>
+            </div>
+
+        }
+    </div>
+
+
+
+
+
+<style>
+    .context-menu {
+        border: 1px solid black;
+        z-index: 1000;
+        position: absolute;
+        background-color: #feffff;
+    }
+
+        .context-menu ul {
+            list-style: none;
+            margin: 0 auto;
+            padding-left: 1px;
+            padding-right: 1px;
+        }
+
+        .context-menu li:hover {
+            background: #ced9ea;
+        }
+
+
+    .content-tree {
+        display: table-cell;
+        width:300px;
+        border-style: groove;
+    }
+
+   
+    body{
+        margin: 0px;
+        overflow: hidden;
+    }
+
+    header, footer{
+        height:25px;
+        width:100%;
+        background-color: black;
+    }
+   
+    .editor-container{
+        display:block;
+        height:100%;
+    }
+
+    .zebra-container{
+        height:100%;
+        margin:8px;
+    }
+
+    .item-container {
+        display: table-cell;
+         /*width:50%;*/
+        border: groove;
+    }
+
+    .tree-container{
+        display:table;
+        width:100%;
+        min-height:600px;
+        overflow: auto;
+    }
+
+    .model-dialog{
+        border-style: solid;
+    }
+
+     .menu {
+        border-style: groove;
+        height: 100px;
+    }
+
+    .black-overlay {
+        top: 0;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        z-index:10;
+        background-color: rgba(1, 0, 0, 0.4);
+        text-align:center;
+    }
+
+    .model-tree-popup {
+        border-style: solid;
+        background: white;
+        position: fixed;
+        top: 50%;
+        left:50%;
+        margin-left:-350px;
+        margin-top:-200px;
+        width: 700px;
+        height: 400px;
+        z-index:100;
+    }
+
+    .model-popup-buttons{
+        position: absolute;
+        bottom: 0;
+        margin: 25px;
+        right: 0;
+        z-index: 10;
+    }
+
+</style>
+
+<script>
+    $(function () {
+        $('a.dialog').click(function () {
+            var url = $(this).attr('href');
+            var dialog = $('<div style="display:none"></div>').appendTo('body');
+            dialog.load(url, {},
+                function (responseText, textStatus, XMLHttpRequest) {
+                    dialog.dialog({
+                        dialogClass: 'model-dialog',
+                        close: function (event, ui) {
+                            dialog.remove();
+                        }
+                    });
+                });
+            return false;
+        });
+    });
+
+    $(".content-tree").resizable({
+        autoHide: true,
+        maxHeight: $( window ).height() - 130,
+        minHeight: $(window).height() - 130,
+        minWidth : 300,
+    });
+
+    var Editor_selectedtextnode = null;
+
+    $(document).on('click', '.content-node p', function () {
+        setSelectedNode(this);
+    });
+
+    function setSelectedNode(newnode)
+    {
+        if (Editor_selectedtextnode != null)
+        {
+            $(Editor_selectedtextnode).removeAttr('style');
+            $(Editor_selectedtextnode.parentElement).removeAttr('node-selected');
+        }
+        $(newnode).css('background-color', 'darkgray').css('display', 'inline');
+        $(newnode.parentElement).attr('node-selected', 'true');
+        Editor_selectedtextnode = newnode;
+    }
+
+</script>

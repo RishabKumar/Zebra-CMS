@@ -1,0 +1,84 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@{
+    Layout = null;
+}
+@using Zebra.DataRepository.Models
+@{ 
+    
+}
+    <div class='zebra-fieldbuilder-container'>
+        <div class='zebra-fieldbuilder'>
+            <input type='button' class='add-field-button' value='Add Field'>
+            <input type='button' class='save-field-button' value='Save Fields'>
+            <input type='button' class='close-button' value='Close'>
+            <div class='fields-fieldbuilder'>
+                @foreach (var fields in  ((Dictionary<string, dynamic>)Model)["Fields"])
+                {
+                    <div class='field'>
+                        <text>Field Name<input type='text' value="@fields.FieldName" id="@fields.Id" /> 
+                        FieldType <select>
+                                @foreach (var fieldtypes in ((Dictionary<string, dynamic>)Model)["FieldTypes"])
+                                {
+                                    <option value='@fieldtypes.Id.ToString()' @if(fields.FieldType.Id == fieldtypes.Id) { <text>selected</text> }> @fieldtypes.TypeName</option>
+                                }
+                                  </select>
+                        <a href="#" class='remove-field-button'>Remove Field</a></text>
+                    </div>
+                }
+                <div class='field'>
+                    Field Name<input type='text' id='' name='fieldname1' />
+                    FieldType 
+                    <select>
+                        @foreach (var fieldtypes in ((Dictionary<string, dynamic>)Model)["FieldTypes"])
+                        {
+                            <option value='@fieldtypes.Id.ToString()'> @fieldtypes.TypeName</option>
+                        }
+                    </select>
+                    <a href="#" class='remove-field-button'>Remove Field</a>
+                </div>
+            </div>
+        </div>
+        <div class='field-sample'>
+            Field Name<input type='text' id=""/> FieldType 
+            <select>
+                @foreach (var fieldtypes in ((Dictionary<string, dynamic>)Model)["FieldTypes"])
+                {
+                    <option value='@fieldtypes.Id.ToString()'> @fieldtypes.TypeName</option>
+                }
+            </select>
+            <a href="#" class='remove-field-button' >Remove Field</a>
+        </div>
+
+
+        <script>
+           
+        </script>
+        <style>
+            .field {
+                display: block;
+            }
+
+            .field-sample {
+                display: none;
+            }
+
+            .fields-fieldbuilder {
+                padding: 5px;
+            }
+
+            .zebra-fieldbuilder-container {
+                display: block;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                width: 600px;
+                height: 500px;
+                margin-top: -250px;
+                margin-left: -300px;
+                z-index: 100;
+                background-color: white;
+                padding: 5px;
+                overflow: scroll;
+            }
+        </style>
+    </div>

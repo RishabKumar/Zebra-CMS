@@ -1,0 +1,27 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@{
+    Layout = null;
+}
+
+<input type="button" class="fieldbuilder-addfields-btn" value="Add Fields" />
+
+
+<script>
+
+    $(document).on('click', '.fieldbuilder-addfields-btn', function () {
+        var template = [];
+        var templateid = {};
+        templateid["templateid"] = $(ZebraEditor_currentnode.element).attr("data-nodeid");
+        template.push(templateid);
+        var query = "fullyqualifiedname=Zebra.Utilities.UtilityProcessor.FieldBuilderUtility,Zebra&method=RenderFieldBuilder&data=" + JSON.stringify(template);
+        $.get("./RenderUtility?" + query, function (data) {
+            $("body").append(data);
+            $('body').append("<div class='black-overlay'></div>");
+        });
+    });
+
+</script>
+<style>
+    
+
+</style>

@@ -10,17 +10,17 @@ namespace Zebra.DataRepository.DAL
 {
     public abstract class BaseRepository<T> where T : class
     {
-        internal DTOContextContainer _context = new DTOContextContainer();
-        
-        //need to change, return type Template needs to be generic
-        public virtual Template GetById(IEntity t)
+        protected DTOContextContainer _context = new DTOContextContainer();
+
+        #warning "This method will be removed in future release."
+        public virtual dynamic GetById(IEntity t)
         {
             return _context.Templates.Where(x => x.Id.Equals(t.Id)).FirstOrDefault();
         }
 
         public abstract List<T> GetListById(IEntity t);
 
-        #warning "Do not use GetByCondition() method"
+        #warning "This method will be removed in future release."
         public abstract List<T> GetByCondition(Expression<Func<T, bool>> selector); 
 
         public abstract T GetByName(T t);

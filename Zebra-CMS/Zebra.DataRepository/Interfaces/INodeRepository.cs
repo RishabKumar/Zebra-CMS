@@ -11,5 +11,21 @@ namespace Zebra.DataRepository.Interfaces
     {
         List<Node> GetChildNodes(Node parentnode);
         Node CreateNode(Node node);
+
+        bool DeleteNode(Node node);
+
+        Node GetNode(Node node);
+
+        Template GetTemplate(Node t);
+
+        bool SaveNodeData(NodeFieldMap nodefieldmap);
+
+        bool RegisterFieldsForNode(IEntity entity, List<Field> fields);
+
+        List<NodeFieldMap> GetNodeFieldMapData(Node node, Field field = null);
+
+        NodeFieldMap GetNodeFieldMap(IEntity entity);
+
+        void MoveNode(IEntity node, IEntity newparent);
     }
 }

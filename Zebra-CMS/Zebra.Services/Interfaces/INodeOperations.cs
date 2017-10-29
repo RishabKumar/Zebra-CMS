@@ -15,5 +15,8 @@ namespace Zebra.Services.Interfaces
 
         List<Node> GetChildNodes(Node node);
 
+        Node GetNode(string nodeid);
+
+        bool SaveNode(Node node, dynamic data, List<Field> fields = null);
     }
 }

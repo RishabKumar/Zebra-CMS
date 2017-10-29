@@ -15,6 +15,9 @@
         <AssociationConnector Association="ZebraDB_Model.FK_FieldTypesFields" ManuallyRouted="false" />
         <AssociationConnector Association="ZebraDB_Model.FK_TemplatesNodes" ManuallyRouted="false" />
         <AssociationConnector Association="ZebraDB_Model.FK_TemplatesTemplateFieldMap" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ZebraDB_Model.NodeFieldMap" Width="1.5" PointX="5.25" PointY="5.25" />
+        <AssociationConnector Association="ZebraDB_Model.FK__NodeField__Field__73BA3083" />
+        <AssociationConnector Association="ZebraDB_Model.FK__NodeField__NodeI__72C60C4A" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
