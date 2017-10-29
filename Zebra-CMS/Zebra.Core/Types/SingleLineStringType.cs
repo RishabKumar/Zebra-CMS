@@ -29,7 +29,7 @@ namespace Zebra.Core.Types
         public override string DoRender()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("<div>").Append(_context.Name).Append("<p><input type='text' name='").Append(_context.Id).Append("' id='").Append(_context.Id).Append("'").Append(" value='"+_context.Value+"' /></p></div>");
+            sb.Append("<div>").Append(_context.Name).Append("<p><input type='text' name='").Append(_context.FieldId).Append("' id='").Append(_context.FieldId).Append("'").Append(" value='"+_context.Value+"' /></p></div>");
             return sb.ToString();
         }
     }

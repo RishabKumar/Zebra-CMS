@@ -33,9 +33,17 @@ namespace Zebra.DataRepository.Providers
             }
         }
 
-        public void DeleteMedia(string uniquename)
+        public void SaveMedia(string filename, byte[] bytes)
         {
-            File.Delete(MediaPath + uniquename);
+            if (!string.IsNullOrWhiteSpace(filename))
+            {
+                File.WriteAllBytes(MediaPath + filename, bytes);
+            }
+        }
+
+        public void DeleteMedia(string filename)
+        {
+            File.Delete(MediaPath + filename);
         }
 
     }

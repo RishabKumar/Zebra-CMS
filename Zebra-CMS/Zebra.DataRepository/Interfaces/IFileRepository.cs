@@ -12,5 +12,9 @@ namespace Zebra.DataRepository.Interfaces
     {
         void SaveMedia(string sourcepath, string filename);
 
+        void SaveMedia(string filename, byte[] bytes);
+
+        void DeleteMedia(string filename);
+
     }
 }

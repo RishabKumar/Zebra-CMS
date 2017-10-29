@@ -65,7 +65,7 @@ namespace Zebra.Services.Operations
             if (type != null)
             {
                 var fieldtype = System.Type.GetType(type.ClassPath);
-                FieldContext _context = new FieldContext(Guid.Parse(fieldrenderid ?? fieldid), field.FieldName);
+                FieldContext _context = new FieldContext(Guid.Parse(fieldrenderid ?? fieldid), field.FieldType.Id, field.FieldName);
                 _context.Value = nodefieldmap == null ? string.Empty : nodefieldmap.NodeData;
                 var fieldobj = Activator.CreateInstance(fieldtype, _context);
                 var mi = fieldtype.GetMethod("DoRender");

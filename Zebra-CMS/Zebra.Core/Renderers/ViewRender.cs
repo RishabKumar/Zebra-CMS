@@ -13,6 +13,15 @@ namespace Zebra.Core.Renderers
             return "";
         } 
 
+        public virtual void PostRender()
+        {
+
+        }
+
+        public virtual void PostSave()
+        {
+
+        }
 
     }
 }

@@ -32,14 +32,17 @@ namespace Zebra.DataRepository.DAL
                 if (provider.GetType() == typeof(FileProvider))
                 {
                     GetMediaBytes = new delGetMediaBytes(((FileProvider)provider).GetMediaBytes);
+                    //        SaveMedia = new delSaveMedia(((FileProvider)provider).SaveMedia);
                     SaveMedia = new delSaveMedia(((FileProvider)provider).SaveMedia);
+                    DeleteMedia = new delDeleteMedia(((FileProvider)provider).DeleteMedia);
                 }
                 
             }
 
             public delegate byte[] delGetMediaBytes();
-            public delegate void delSaveMedia(string sourcepath, string filename);
-            public delegate dynamic delDeleteMedia();
+        //    public delegate void delSaveMedia(string sourcepath, string filename);
+            public delegate void delSaveMedia(string filename, byte[] bytes);
+            public delegate void delDeleteMedia(string filename);
 
             public readonly delGetMediaBytes GetMediaBytes;
             public readonly delDeleteMedia DeleteMedia;
@@ -57,9 +60,18 @@ namespace Zebra.DataRepository.DAL
 
         public void SaveMedia(string sourcepath, string filename)
         {
-            _provider.SaveMedia(sourcepath, filename);
+    //        _provider.SaveMedia(sourcepath, filename);
         }
 
+        public void SaveMedia(string filename, byte[] bytes)
+        {
+            _provider.SaveMedia(filename, bytes);
+        }
+
+        public void DeleteMedia(string filename)
+        {
+            _provider.DeleteMedia(filename);
+        }
     }
 
 
