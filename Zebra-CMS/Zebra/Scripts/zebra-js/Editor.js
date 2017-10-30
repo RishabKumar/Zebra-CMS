@@ -135,12 +135,10 @@ function GetChildNodesAndAppend(parentid, currentnode) {
         dataType: "json",
         async: false,
         success: function (json) {
-
             json = $.parseJSON(json);
             for (var i = 0; i < json.length; i++) {
                 $(currentnode).append(CreateNodeString(json[i]));
             }
-
         }
     });
 }
@@ -169,7 +167,6 @@ function CreateNewNode(parentid, currentnode, nodename) {
                 $(currentnode).append(CreateNodeString(json));
                 $(currentnode).attr('node-expanded', 'true');
             }
-
         }
     });
    // CloseModelTreePopup();
@@ -192,8 +189,6 @@ function SetNodeSelected(nodetext)
     $(nodetext).css('background-color', 'darkgray').css('display', 'inline');
 }
 
-
-
 function DeleteNode(nodeid, node) {
     var nodeinfo = { nodeid: nodeid };
     $.ajax({
@@ -203,32 +198,21 @@ function DeleteNode(nodeid, node) {
         dataType: "json",
         data: JSON.stringify(nodeinfo),
         async: false,
-
         success: function (json) {
             if (json == true) {
                 $(node).remove();
             }
-
         }
     });
 }
-
 
 function CreateNodeString(json) {
     var node = "<div style='position:relative; margin:15px;' node-expanded='false' class='content-node' data-nodeid='" + json.Id + "'> <span></span> <p>" + json.NodeName + "</p> </div>";
     return node;
 }
 
-
-
 $(document).bind("mousedown", function (event) {
     if ($(event.target).attr("class") !== "context-menu-option") {
         var ele = $(".context-menu").remove();
     }
-
 });
-
-
-
-
-

@@ -10,7 +10,7 @@ namespace Zebra.DataRepository.Interfaces
 {
     public interface IFileRepository
     {
-        void SaveMedia(string sourcepath, string filename);
+        void SaveLargeMedia(string sourcepath, string filename);
 
         void SaveMedia(string filename, byte[] bytes);
 

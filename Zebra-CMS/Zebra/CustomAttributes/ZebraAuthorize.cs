@@ -23,6 +23,13 @@ namespace Zebra.CustomAttributes
                     {
                         HttpContext.Current.Response.Redirect("~/CPanel/Error");
                     }
+                    else
+                    {
+                        authTicket = FormsAuthentication.RenewTicketIfOld(authTicket);
+                        string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
+                        authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
+                        HttpContext.Current.Response.Cookies.Add(authCookie);
+                    }
                 }
                 else
                 {
@@ -69,9 +76,15 @@ namespace Zebra.CustomAttributes
 
                     if(!flag)
                     {
-
                         filterContext.Controller.TempData["ErrorMessage"] = "You don't have sufficient rights";
                         filterContext.Result = new RedirectResult("/Error");
+                    }
+                    else //renew
+                    {
+                        authTicket = FormsAuthentication.RenewTicketIfOld(authTicket);
+                        string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
+                        authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
+                        HttpContext.Current.Response.Cookies.Add(authCookie);
                     }
                 }
                 else

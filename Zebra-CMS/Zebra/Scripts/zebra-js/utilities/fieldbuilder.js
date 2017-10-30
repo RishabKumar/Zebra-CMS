@@ -50,7 +50,9 @@ $(document).on('click', '.save-field-button', function (e) {
     });
     $(".zebra-fieldbuilder-container").remove();
     $('.black-overlay').remove();
-
+    if (ZebraEditor_currentnode.element != null) {
+        LoadNodeBrowser($(ZebraEditor_currentnode.element).attr('data-nodeid'), 'test', 'test', 'test');
+    }
 });
 
 $(document).on('click', '.add-field-button', function (e) {

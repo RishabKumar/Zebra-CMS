@@ -96,6 +96,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderers\ViewRender.cs" />
     <Compile Include="Types\FileType.cs" />
+    <Compile Include="Types\Image.cs" />
+    <Compile Include="Types\MultiLineStringType.cs" />
+    <Compile Include="Types\VideoType.cs" />
+    <Compile Include="Types\SmallFileType.cs" />
     <Compile Include="Types\SingleLineStringType.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -10,6 +10,20 @@ $(document).ajaxComplete(function () {
    
 });
 
+function showLoader()
+{
+    $(document.body).css({ 'cursor': 'wait' });
+    $('.zebra-mouse-loader').show();
+    $('body').append("<div class='black-overlay'></div>");
+}
+
+function hideLoader()
+{
+    $(document.body).css({ 'cursor': 'default' });
+    $('.zebra-mouse-loader').hide();
+    $('.black-overlay').remove();
+}
+
 
  
     var zebra_loader = document.getElementById("zebra-mouse-loader");

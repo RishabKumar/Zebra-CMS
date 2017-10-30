@@ -24,7 +24,7 @@ namespace Zebra.DataRepository.Providers
             return bytes;
         }
 
-        public void SaveMedia(string sourcepath, string filename)
+        public void SaveLargeMedia(string sourcepath, string filename)
         {
             if (!string.IsNullOrWhiteSpace(sourcepath))
             {
@@ -41,9 +41,14 @@ namespace Zebra.DataRepository.Providers
             }
         }
 
-        public void DeleteMedia(string filename)
+        public void DeleteMedia(string filepath)
         {
-            File.Delete(MediaPath + filename);
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(filepath))
+                    File.Delete(filepath);
+            }
+            catch { }
         }
 
     }
