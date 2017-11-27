@@ -44,7 +44,7 @@ namespace Zebra.Controllers
                 if (user != null)
                 {
                     FormsAuthentication.SetAuthCookie(user.UserName, false);
-                    var authTicket = new FormsAuthenticationTicket(1, user.UserName, DateTime.Now, DateTime.Now.AddMinutes(1), false, user.Roles);
+                    var authTicket = new FormsAuthenticationTicket(1, user.UserName, DateTime.Now, DateTime.Now.AddMinutes(10), false, user.Roles);
                     string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
                     var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
                     HttpContext.Response.Cookies.Add(authCookie);

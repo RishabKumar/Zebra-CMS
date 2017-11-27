@@ -10,12 +10,17 @@ namespace Zebra.Core.Renderers
     {
         public virtual string DoRender()
         {
-            return "";
+            return string.Empty;
         } 
 
         public virtual void PostRender()
         {
 
+        }
+
+        public virtual string GetProcessedValue()
+        {
+            return null;
         }
 
         public virtual void PostSave()

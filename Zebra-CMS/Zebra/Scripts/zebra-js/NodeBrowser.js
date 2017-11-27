@@ -11,7 +11,7 @@ $(document).on('click', '.zebra-save-data', function (event) {
         {
             if (ZebraEditor_currentnode.element != null)
             {
-                LoadNodeBrowser($(ZebraEditor_currentnode.element).attr('data-nodeid'), 'test', 'test', 'test');
+                LoadNodeBrowser($(ZebraEditor_currentnode.element.parentElement).attr('data-nodeid'), 'test', 'test', 'test');
             }
         }
     });

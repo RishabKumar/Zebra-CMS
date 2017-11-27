@@ -6,14 +6,20 @@
 @model NodeBrowserModel
 
 <div class="zebra-node-details">
-    <p>Node ID: @Model.nodeid</p>
-    <p>Template ID: @Model.templateid</p>
+    <p>Name : @Model.node.NodeName</p>
+    <p>Node ID: @Model.node.Id</p>
+
+    <p>Template Name: @Model.template.TemplateName</p>
+    <p>Template ID: @Model.template.Id</p>
+    @{ var nodepath = Zebra.Services.Operations.OperationsFactory.NodeOperations.GetAllParentNodes(Model.node.Id.ToString());
+    }
+    <p>Node Path: @Html.LoadNodePath(nodepath)</p>
 </div>
 
 <button class="zebra-save-data">Save</button>
 <div class="zebra-field">
     <form class="zebra-field-data-form" enctype="multipart/form-data">
-        <input type="hidden" name="nodeid" id="nodeid" value="@Model.nodeid" />
+        <input type="hidden" name="nodeid" id="nodeid" value="@Model.node.Id" />
         @Html.LoadFields(Model.fields)
     </form>
 </div>
@@ -27,4 +33,14 @@
         border-style: groove;
         min-height: 100px;
     }
+    .zebra-field{
+        max-height: calc(100vh - 310px);
+    }
+      .field {
+                margin-left:3px;
+                margin-right:3px;
+                margin-top:1px;
+                margin-bottom:3px;
+                display: block;
+            }
 </style>

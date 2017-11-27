@@ -30,6 +30,7 @@
     <NavigationProperty Name="Template" Relationship="Self.FK_TemplatesNodes" FromRole="Nodes" ToRole="Templates" />
     <Property Name="ParentId" Type="Guid" />
     <NavigationProperty Name="NodeFieldMaps" Relationship="ZebraDB_Model.FK__NodeField__NodeI__72C60C4A" FromRole="Node" ToRole="NodeFieldMap" />
+    <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
   </EntityType>
   <EntityType Name="TemplateFieldMap">
     <Key>
@@ -150,6 +151,7 @@
     <NavigationProperty Name="Field" Relationship="ZebraDB_Model.FK__NodeField__Field__73BA3083" FromRole="NodeFieldMap" ToRole="Field" />
     <NavigationProperty Name="Node" Relationship="ZebraDB_Model.FK__NodeField__NodeI__72C60C4A" FromRole="NodeFieldMap" ToRole="Node" />
     <Property Name="NodeData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
   </EntityType>
   <Association Name="FK__NodeField__Field__73BA3083">
     <End Type="ZebraDB_Model.Field" Role="Field" Multiplicity="0..1" />

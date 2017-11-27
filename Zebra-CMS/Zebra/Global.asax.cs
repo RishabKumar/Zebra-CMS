@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Security;
+using Zebra.Services.Operations;
 
 namespace Zebra
 {
@@ -21,6 +22,8 @@ namespace Zebra
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             UnityConfig.RegisterComponents();
+
+            OperationsFactory.PageOperations.Initialize();
         }
 
         protected void Application_EndRequest(object sender, EventArgs e)

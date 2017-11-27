@@ -6,17 +6,40 @@
 } 
 
     <div class="content-tree">
-        @foreach (var node in Model)
-        {
-            <div class="content-node" data-nodeid="@node.Id" node-expanded="false">
-                <span></span>
-                <p>@node.NodeName</p>
-            </div>
+        <div class="content-tree-search">
+            <input class="content-tree-search-text" type="text" placeholder="Search node..."/><i class="content-node-search-btn fa fa-search" onclick="javascript:SearchNode(this)"></i>
+        </div>
+        <div class="content-tree-search-result">
+        </div>
+        <div class="content-tree-nodes">
+            @foreach (var node in Model)
+            {
+                <div class="content-node" data-nodeid="@node.Id" node-expanded="false">
+                    <span class="node-icon-container"><i class="fa fa-plus-square-o"></i></span>
+                    <p>@node.NodeName</p>
+                </div>
 
-        }
+            }
+        </div>
     </div>
 
+<script>
+    function SearchNode(e) {
+        var txt = $(e.parentElement).find('.content-tree-search-text').val();
+        if (txt !== null && txt.length > 0) {
+            $.get("./NodeSearchResult?nameorid=" + txt, function (data) {
+                $(".content-tree-search-result").show();
+                $(".content-tree-search-result").html(data);
+                $(".content-tree-nodes").hide();
+            });
+        }
+        else {
+            $(".content-tree-search-result").hide();
+            $(".content-tree-nodes").show();
+        }
+    }
 
+</script>
 
 
 
@@ -26,6 +49,29 @@
         z-index: 1000;
         position: absolute;
         background-color: #feffff;
+    }
+
+    .content-tree-search {
+        display: flex;
+    }
+
+    .node-icon-container{
+        float: left;
+        font-size: 12px;
+        padding: 3px;
+    }
+
+    .content-tree-search-text {
+        width: 100%;
+        padding: 3px;
+    }
+
+    .content-node-search-btn {
+        position: absolute;
+        padding: 3px;
+        right: 1px;
+        background-color: white;
+        align-self: center;
     }
 
         .context-menu ul {
@@ -46,7 +92,19 @@
         border-style: groove;
     }
 
+    .content-tree-nodes{
+        min-height: calc(100vh - 190px);
+        max-height: calc(100vh - 190px);
+        overflow-x: auto; 
+    }
    
+    .content-tree-search-result{
+        display: none;
+        min-height: calc(100vh - 190px);
+        max-height: calc(100vh - 190px);
+        overflow-x: auto;
+    }
+
     body{
         margin: 0px;
         overflow: hidden;
@@ -72,13 +130,14 @@
         display: table-cell;
          /*width:50%;*/
         border: groove;
+        overflow-y: auto;
     }
 
     .tree-container{
         display:table;
         width:100%;
-        min-height:600px;
-        overflow: auto;
+        /*min-height:600px;*/
+        overflow-y: auto;
     }
 
     .model-dialog{
@@ -124,46 +183,75 @@
 </style>
 
 <script>
-    $(function () {
-        $('a.dialog').click(function () {
-            var url = $(this).attr('href');
-            var dialog = $('<div style="display:none"></div>').appendTo('body');
-            dialog.load(url, {},
-                function (responseText, textStatus, XMLHttpRequest) {
-                    dialog.dialog({
-                        dialogClass: 'model-dialog',
-                        close: function (event, ui) {
-                            dialog.remove();
-                        }
-                    });
-                });
-            return false;
-        });
+    $(document).on('click', '.close-button', function (e) {
+        $(".zebra-fieldbuilder-container").remove();
+        $('.black-overlay').remove();
     });
 
-    $(".content-tree").resizable({
-        autoHide: true,
-        maxHeight: $( window ).height() - 130,
-        minHeight: $(window).height() - 130,
-        minWidth : 300,
+    $(document).on('click', '.remove-field-button', function (e) {
+        var fielddiv = $(e.target).parent();
+        $(fielddiv).remove();
     });
 
-    var Editor_selectedtextnode = null;
-
-    $(document).on('click', '.content-node p', function () {
-        setSelectedNode(this);
-    });
-
-    function setSelectedNode(newnode)
-    {
-        if (Editor_selectedtextnode != null)
-        {
-            $(Editor_selectedtextnode).removeAttr('style');
-            $(Editor_selectedtextnode.parentElement).removeAttr('node-selected');
+    $(document).on('click', '.save-field-button', function (e) {
+        debugger;
+        var typesarr = $('.fields-fieldbuilder .field select');
+        var namesarr = $('.fields-fieldbuilder .field input');
+        formdata = [];
+        fieldsdata = [];
+        template = {}
+        template["templatenodeid"] = $(ZebraEditor_currentnode.element.parentElement).attr("data-nodeid");
+        fieldsdata.push(template);
+        for (i = 0; i < namesarr.length; i++) {
+            field = {}
+            field["name"] = namesarr[i].value;
+            field["id"] = namesarr[i].id;
+            field["typeid"] = typesarr[i].value;
+            fieldsdata.push(field);
         }
-        $(newnode).css('background-color', 'darkgray').css('display', 'inline');
-        $(newnode.parentElement).attr('node-selected', 'true');
-        Editor_selectedtextnode = newnode;
-    }
+        fullyqualifiedname = {};
+        fullyqualifiedname["fullyqualifiedname"] = "Zebra.Utilities.UtilityProcessor.FieldBuilderUtility,Zebra";
+        methodname = {};
+        methodname["methodname"] = "Process";
+        formdata.push(fullyqualifiedname);
+        formdata.push(methodname);
+        formdata.push(fieldsdata);
+
+
+        console.log(formdata);
+
+        $.ajax({
+            type: "POST",
+            url: "/zebraapi/UtilityService/InvokeMethod",
+            data: { '': JSON.stringify(formdata) },
+            dataType: "json",
+            async: true,
+            success: function (json) {
+                alert("Field Created ");
+                console.log(json);
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+        $(".zebra-fieldbuilder-container").remove();
+        $('.black-overlay').remove();
+        if (ZebraEditor_currentnode.element != null) {
+            LoadNodeBrowser($(ZebraEditor_currentnode.element.parentElement).attr('data-nodeid'), 'test', 'test', 'test');
+        }
+    });
+
+    $(document).on('click', '.add-field-button', function (e) {
+        $('.fields-fieldbuilder').append($('.field-sample').clone().attr('class', 'field'));
+    });
+    $(document).on('mouseup', function (e) {
+        var fields = $('.zebra-fieldbuilder .field');
+
+        for (var i = 0; i < fields.length; i++) {
+            if ($(fields[i]).find('input').val() == '' && $(event.target.parentElement).attr('class') != 'field') {
+                $(fields[i]).remove();
+            }
+        }
+    });
 
 </script>

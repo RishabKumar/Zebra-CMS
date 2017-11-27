@@ -27,5 +27,7 @@ namespace Zebra.DataRepository.Interfaces
         NodeFieldMap GetNodeFieldMap(IEntity entity);
 
         void MoveNode(IEntity node, IEntity newparent);
+
+        List<Node> GetNodesByType(Template t);
     }
 }

@@ -14,9 +14,9 @@ namespace Zebra.Core.Types
             _context = context;
         }
 
-        public void SaveValue()
+        public string SaveValue()
         {
-             
+            return _context.Value;
         }
 
         public string GetValue()
@@ -26,10 +26,16 @@ namespace Zebra.Core.Types
             return _context.Value;
         }
 
+        public override string GetProcessedValue()
+        {
+            return HttpUtility.HtmlDecode(_context.Value);
+        }
+
         public override string DoRender()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("<div>").Append(_context.Name).Append("<p><textarea name='").Append(_context.FieldId).Append("' id='").Append(_context.FieldId).Append("'").Append("/>"+ _context.Value + "</textarea></p></div>");
+            sb.Append("<div class='field'>").Append(_context.Name).Append("<p><textarea rows='10' cols='100' name='").Append(_context.FieldId).Append("' id='").Append(_context.FieldId).Append("'").Append(" >"+ GetProcessedValue() + "</textarea></p></div>");
+ //           sb.Append(@"<script> $('#" + _context.FieldId + @"').val('"+ _context.Value + @"');</script>");
             return sb.ToString();
         }
     }

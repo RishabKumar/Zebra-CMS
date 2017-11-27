@@ -18,5 +18,9 @@ namespace Zebra.Services.Interfaces
         Node GetNode(string nodeid);
 
         bool SaveNode(Node node, dynamic data, List<Field> fields = null);
+
+        Stack<Node> GetAllParentNodes(string nodeid);
+
+        List<Node> SearchNode(string nameorid);
     }
 }

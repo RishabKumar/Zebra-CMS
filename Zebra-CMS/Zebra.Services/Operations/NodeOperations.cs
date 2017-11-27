@@ -10,11 +10,12 @@ using Zebra.DataRepository.DAL;
 using Zebra.DataRepository.Interfaces;
 using Zebra.DataRepository.Models;
 using Zebra.Services.Interfaces;
+using Zebra.Services.Models;
 using Zebra.Services.Type;
 
 namespace Zebra.Services.Operations
 {
-    public class NodeOperations : BaseOperations<NodeRepository, Node>, INodeOperations, IStructureOperations
+    public class NodeOperations : BaseOperations<NodeRepository, Node>, INodeOperations, IStructureOperations, IPageOperations
     {
         ITemplateRepository _templaterepository;
         IFieldRepository _fieldrepository;
@@ -34,6 +35,38 @@ namespace Zebra.Services.Operations
             node = ((INodeRepository)_currentrepository).CreateNode(node);
             ((INodeRepository)_currentrepository).RegisterFieldsForNode(node, fields);
             return node;
+        }
+
+        public Stack<Node> GetAllParentNodes(string nodeid)
+        {
+            Node node = ((INodeRepository)_currentrepository).GetNode(new Node() { Id = Guid.Parse(nodeid) });
+            Stack<Node> stack = new Stack<Node>();
+            while (node.ParentId != null)
+            {
+                stack.Push(node);
+                node = ((INodeRepository)_currentrepository).GetNode(new Node() { Id = node.ParentId.Value });
+            }
+            stack.Push(node);
+            return stack;
+        }
+
+        public List<Node> SearchNode(string nameorid)
+        {
+            Guid id;
+            var list = new List<Node>();
+            if (!string.IsNullOrWhiteSpace(nameorid))
+            {
+                if (Guid.TryParse(nameorid, out id))
+                {
+                    list.Add(((INodeRepository)_currentrepository).GetNode(new Node() { Id = id }));
+                }
+                else
+                {
+                    nameorid = nameorid.ToLower();
+                    list.AddRange(_base.GetByCondition(x => x.NodeName.ToLower().Contains(nameorid) || nameorid.Contains(x.NodeName.ToLower())));
+                }
+            }
+            return list;
         }
 
         public string GetNodeBrowser()
@@ -107,14 +140,40 @@ namespace Zebra.Services.Operations
             _fieldrepository.AddFieldToTemplate(template, field);
             //template = _templaterepository.GetTemplate(template);  // this doesnot always retrieve all Nodes in case if browser is not refreshed after noder creation, hence its not safe.
             var fields = new List<Field>() { field };
-            var nodes = _base.GetByCondition(x => x.TemplateId == template.Id);
-            // add the template to the ndoe list.
+            //    var nodes = _base.GetByCondition(x => x.TemplateId == template.Id);
+            var nodes = GetAllDerivedNodesByType(template);
+
             nodes.Add(new Node() { Id = template.Id }); // every template's id is same as to it corresponding Node's Id.
             foreach (var node in nodes)
             {
                 ((INodeRepository)_currentrepository).RegisterFieldsForNode(node, fields);
             }
             return field;
+        }
+
+        public List<Node> GetNodesByType(Template template)
+        {
+            return ((NodeRepository)_currentrepository).GetNodesByType(template);
+        }
+
+        /// <summary>
+        /// Gets all the Nodes of Template t Type
+        ///
+        /// </summary>
+        /// <param name="template"></param>
+        /// <returns>List of nodes of type Template t</returns>
+        public List<Node> GetAllDerivedNodesByType(Template template)
+        {
+            var tnodes = GetNodesByType(template);
+            for(int i = 0; i < tnodes.Count; i++)
+            {
+                Template t = _templaterepository.GetTemplate(tnodes[i]);
+                if(t != null)
+                {
+                    tnodes.AddRange(GetNodesByType(t));
+                }
+            }
+            return tnodes;
         }
 
         public FieldType CreateFieldType(FieldType ft)
@@ -270,7 +329,7 @@ namespace Zebra.Services.Operations
                         var data = mi.Invoke(fieldobj, null).ToString();
                         //call SaveValue to save addition information. 
                         mi = type.GetMethod("SaveValue");
-                        mi.Invoke(fieldobj, null);
+                        data = mi.Invoke(fieldobj, null).ToString();
 
                         nodefield.NodeData = data;
                         _currentrepository.SaveNodeData(nodefield);
@@ -294,6 +353,37 @@ namespace Zebra.Services.Operations
         public void MoveNode(string nodeid, string newparentid)
         {
             _currentrepository.MoveNode(new Node() { Id = Guid.Parse(nodeid) }, new Node() { Id = Guid.Parse(newparentid) });
+        }
+
+        public void CreateContentMap()
+        {
+            var g = new Node() { Id = Guid.Parse("2401C12C-1CB4-48E2-B685-7891D9190D70") };
+            g = ((INodeRepository)_currentrepository).GetNode(g);
+            var content = _base.GetByCondition(x => x.Id == g.Id).FirstOrDefault();
+            var list = FormPathsRecursive(content);
+        }
+
+        private List<string> FormPathsRecursive(Node node, string path = "", List<string> map = null)
+        {
+            if(map == null)
+            {
+                map = new List<string>();
+            }
+            var list = ((NodeRepository)_currentrepository).GetByCondition(x => x.ParentId == node.Id);
+
+            path += node.NodeName + "/";
+            map.Add(path);
+            ContentMap.Add(path, node.Id);
+            foreach (var lnode in list)
+            {
+                map = (FormPathsRecursive(lnode, path, map));
+            }
+            return map;
+        }
+
+        public void Initialize()
+        {
+            CreateContentMap();
         }
     }
 }

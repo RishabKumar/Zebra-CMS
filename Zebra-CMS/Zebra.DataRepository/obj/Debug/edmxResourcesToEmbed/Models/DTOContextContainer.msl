@@ -22,6 +22,7 @@
     <EntitySetMapping Name="Nodes">
       <EntityTypeMapping TypeName="ZebraDB_Model.Node">
         <MappingFragment StoreEntitySet="Nodes">
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
           <ScalarProperty Name="ParentId" ColumnName="parentid" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="NodeName" ColumnName="NodeName" />
@@ -59,6 +60,7 @@
     <EntitySetMapping Name="NodeFieldMaps">
       <EntityTypeMapping TypeName="ZebraDB_Model.NodeFieldMap">
         <MappingFragment StoreEntitySet="NodeFieldMaps">
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
           <ScalarProperty Name="NodeData" ColumnName="NodeData" />
           <ScalarProperty Name="FieldId" ColumnName="FieldId" />
           <ScalarProperty Name="NodeId" ColumnName="NodeId" />

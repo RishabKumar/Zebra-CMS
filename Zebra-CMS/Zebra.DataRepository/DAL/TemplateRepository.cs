@@ -37,7 +37,7 @@ namespace Zebra.DataRepository.DAL
 
         public override List<Template> GetByCondition(Expression<Func<Template, bool>> selector)
         {
-            throw new NotImplementedException();
+            return _context.Templates.Where(selector).ToList();
         }
 
         public override Template GetByName(Template t)

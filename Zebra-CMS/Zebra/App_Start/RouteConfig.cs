@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Zebra.Handlers;
 
 namespace Zebra
 {
@@ -12,12 +13,19 @@ namespace Zebra
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
+            routes.MapRoute(
+                name: "PageResolver",
+                url: "page/{*.}",
+                defaults: new { controller = "PageResolver", action = "Index", id = UrlParameter.Optional }
+            );
+            //routes
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "CPanel", action = "Index", id = UrlParameter.Optional }
             );
+
+            
         }
     }
 }

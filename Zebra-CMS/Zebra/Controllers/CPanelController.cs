@@ -18,6 +18,11 @@ namespace Zebra.Controllers
     {
         private IFieldOperations _fieldOperations;
 
+        public void Data(string nodeid)
+        {
+            OperationsFactory.NodeOperations.GetAllParentNodes(nodeid);
+        }
+
         public CPanelController(NodeOperations nodeOperations, FieldOperations fieldOperations) : base(nodeOperations)
         {
             _fieldOperations = fieldOperations;
@@ -37,6 +42,7 @@ namespace Zebra.Controllers
         public ActionResult Editor()
         {
             Node root = _nodeop.GetRootNode();
+            ((NodeOperations)_nodeop).CreateContentMap();
             var list = new List<Node>();
             list.Add(root);
             ViewBag.Root = list;
@@ -50,6 +56,11 @@ namespace Zebra.Controllers
             var list = new List<Node>();
             list.Add(_nodeop.GetNode(nodeid));
             return View(list);
+        }
+
+        public ActionResult NodeSearchResult(string nameorid)
+        {
+            return View(_nodeop.SearchNode(nameorid));
         }
         
         public ActionResult NodeBrowser(string nodeid)
@@ -65,7 +76,7 @@ namespace Zebra.Controllers
                 htmllist.Add(_fieldOperations.GetRenderedField(nodeid, nodefield.FieldId.ToString(), nodefield.Id.ToString()));
             }
             //.Select(x => x.Id).Cast<string>()
-            return View(model: new NodeBrowserModel() { fields = htmllist, nodeid = nodeid, templateid = node.TemplateId.ToString() });
+            return View(model: new NodeBrowserModel() { fields = htmllist, node = node, template = node.Template });
         }
         
         public ActionResult RenderUtility(string fullyqualifiedname, string method = "RenderView", dynamic data = null)

@@ -18,6 +18,7 @@ namespace Zebra.Core.Types
         protected FieldContext _context;
         protected string filename;
         protected string encodedstring;
+        IFileRepository repo = new FileRepository();
 
         public ImageType(FieldContext context)
         {
@@ -29,7 +30,7 @@ namespace Zebra.Core.Types
       
 
         //called just after GetValue().
-        public void SaveValue()
+        public string SaveValue()
         {
             //to prevent decoding to fail
             if (!string.IsNullOrWhiteSpace(encodedstring))
@@ -45,7 +46,7 @@ namespace Zebra.Core.Types
                     if (bytes != null)
                     {
                         IFileRepository repo = new FileRepository();
-                        repo.SaveMedia(filename, bytes);
+                        _context.Value = repo.SaveMedia(filename, bytes);
                         if (!string.IsNullOrWhiteSpace(_context.OldValue))
                         {
                             repo.DeleteMedia(_context.OldValue);
@@ -61,6 +62,7 @@ namespace Zebra.Core.Types
 
                 }
             }
+            return _context.Value;
         }
 
         //called just before saving data.
@@ -69,7 +71,15 @@ namespace Zebra.Core.Types
             if (!string.IsNullOrWhiteSpace(_context.Value))
             {
                 // this will execute when data is being fetched from database.
-                _context.Value = "/Media/" + _context.Value;
+                try
+                {
+                    _context.Value = repo.GetMediaFilePath(_context.Value);
+                    //_context.Value = "../handlers/mediahandler.ashx?file=" + _context.Value;
+                }
+                catch(Exception e)
+                {
+                    _context.Value = "data:image/jpg;base64, " + Convert.ToBase64String(repo.GetMediaBytes(_context.Value));
+                }
             }
             else if(_context.RawData != null && !string.IsNullOrWhiteSpace(_context.RawData.ToString()))
             {
@@ -109,8 +119,8 @@ namespace Zebra.Core.Types
         public override string DoRender()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("<div>").Append(_context.Name).Append("<p><input type='file' onchange='encodefile(this)'/><input type='hidden' name='").Append(_context.FieldId).Append("' id='").Append(_context.FieldId).Append("'").Append(" value='"+_context.Value+"' /></p>");
-            sb.AppendLine("<img width='100px' src='"+ GetValue() + "'/>");
+            sb.Append("<div class='field'>").Append(_context.Name).Append("<p><input type='file' onchange='encodefile(this)'/><input type='hidden' name='").Append(_context.FieldId).Append("' id='").Append(_context.FieldId).Append("'").Append(" value='"+_context.Value+"' /></p>");
+            sb.AppendLine("<img width='250px' src='"+ GetValue() + "'/>");
             sb.AppendLine("<script type='text/javascript'>");
 
             sb.AppendLine("function encodefile(e){");

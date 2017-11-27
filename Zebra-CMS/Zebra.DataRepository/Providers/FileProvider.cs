@@ -9,39 +9,47 @@ namespace Zebra.DataRepository.Providers
 {
     class FileProvider : MediaProvider
     {
-        public FileProvider(string path) : base(path)
+        public FileProvider(string mediapath, string medialocalpath, dynamic config) : base(mediapath, medialocalpath, (object)config)
         {
         }
 
-        public byte[] GetMediaBytes()
+        public override byte[] GetMediaBytes(string filename)
         {
             byte[] bytes = null;
             try
             {
-                bytes = File.ReadAllBytes(MediaPath);
+                bytes = File.ReadAllBytes(GetMediaLocalFilePath(filename));
             }
             catch(Exception e) { }
             return bytes;
         }
 
-        public void SaveLargeMedia(string sourcepath, string filename)
+        public override string SaveLargeMedia(string sourcepath, string filename)
         {
             if (!string.IsNullOrWhiteSpace(sourcepath))
             {
-                byte[] data = File.ReadAllBytes(sourcepath);
-                File.WriteAllBytes(MediaPath + filename, data);
+                using (var readstream = File.Open(sourcepath, FileMode.Open))
+                {
+                    using (var writestream = new FileStream(GetMediaLocalFilePath(filename), FileMode.CreateNew))
+                    {
+                        readstream.CopyTo(writestream);
+                    }
+                    readstream.Close();
+                }
             }
+            return filename;
         }
 
-        public void SaveMedia(string filename, byte[] bytes)
+        public override string SaveMedia(string filename, byte[] bytes)
         {
             if (!string.IsNullOrWhiteSpace(filename))
             {
-                File.WriteAllBytes(MediaPath + filename, bytes);
+                File.WriteAllBytes(GetMediaLocalFilePath(filename), bytes);
             }
+            return filename;
         }
 
-        public void DeleteMedia(string filepath)
+        public override void DeleteMedia(string filepath)
         {
             try
             {
@@ -51,5 +59,19 @@ namespace Zebra.DataRepository.Providers
             catch { }
         }
 
+        public override byte[] GetMediaBytesByIndex(string filename, int startindex, int count)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override long GetMediaLength(string filename)
+        {
+            long length = -1;
+            using (var stream = new FileStream(GetMediaLocalFilePath(filename), FileMode.Open))
+            {
+                length = stream.Length;
+            }
+            return length;
+        }
     }
 }

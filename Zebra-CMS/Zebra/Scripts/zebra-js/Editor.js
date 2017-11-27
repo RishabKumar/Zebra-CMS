@@ -16,22 +16,80 @@
 
 var ZebraEditor_currentnode = {element:null, type:null};
 
-$(document).on('click', ".content-node", function () {
-    if (event.target.parentElement === this) {
+/*/
+ADDED NEW below
+/*/
+
+
+$(function () {
+    $('a.dialog').click(function () {
+        var url = $(this).attr('href');
+        var dialog = $('<div style="display:none"></div>').appendTo('body');
+        dialog.load(url, {},
+            function (responseText, textStatus, XMLHttpRequest) {
+                dialog.dialog({
+                    dialogClass: 'model-dialog',
+                    close: function (event, ui) {
+                        dialog.remove();
+                    }
+                });
+            });
+        return false;
+    });
+});
+
+$(".content-tree").resizable({
+    autoHide: true,
+    maxHeight: $(window).height() - 190,
+    //minHeight: $(window).height() - 130,
+    minWidth: 300,
+});
+
+var Editor_selectedtextnode = null;
+
+$(document).on('click', '.content-node p', function () {
+    setSelectedNode(this);
+    if (event.target === this) {
         var parentid = $(event.target.parentElement).attr('data-nodeid');
-        var currentnode = $(event.target.parentElement);
-        ZebraEditor_currentnode.element = currentnode;
+        LoadNodeBrowser(parentid, 'test', 'test', 'test');
+    }
+});
+
+function setSelectedNode(newnode) {
+    if (Editor_selectedtextnode != null) {
+        $(Editor_selectedtextnode).removeAttr('style');
+        $(Editor_selectedtextnode.parentElement).removeAttr('node-selected');
+    }
+    $(newnode).css('background-color', 'lightgrey').css('display', 'inline');
+    $(newnode.parentElement).attr('node-selected', 'true');
+    Editor_selectedtextnode = newnode;
+    ZebraEditor_currentnode.element = Editor_selectedtextnode;
+}
+
+
+
+$(document).on('click', ".node-icon-container", function () {
+
+    if (event.target.parentElement === this) {
+        var parentid = $(event.target.parentElement.parentElement).attr('data-nodeid');
+        var currentnode = $(event.target.parentElement.parentElement);
         if (currentnode.attr('node-expanded') === 'false') {
             GetChildNodesAndAppend(parentid, currentnode);
             currentnode.attr('node-expanded', 'true');
+            $(event.target).attr('class', 'fa fa-minus-square-o');
         }
         else if (currentnode.attr('node-expanded') === 'true') {
             currentnode.find('div').remove();
             currentnode.attr('node-expanded', 'false');
+            $(event.target).attr('class', 'fa fa-plus-square-o');
         }
-        LoadNodeBrowser(parentid, 'test', 'test', 'test');
+
     }
 });
+
+
+// ADDED new above
+
 
 function CloseModelTreePopup()
 {
@@ -186,7 +244,7 @@ function ToggleNode()
 
 function SetNodeSelected(nodetext)
 {
-    $(nodetext).css('background-color', 'darkgray').css('display', 'inline');
+    $(nodetext).css('background-color', 'lightgrey').css('display', 'inline');
 }
 
 function DeleteNode(nodeid, node) {
@@ -207,7 +265,7 @@ function DeleteNode(nodeid, node) {
 }
 
 function CreateNodeString(json) {
-    var node = "<div style='position:relative; margin:15px;' node-expanded='false' class='content-node' data-nodeid='" + json.Id + "'> <span></span> <p>" + json.NodeName + "</p> </div>";
+    var node = "<div style='position:relative; margin:15px;' node-expanded='false' class='content-node' data-nodeid='" + json.Id + "'> <span class='node-icon-container'><i class='fa fa-plus-square-o'></i></span> <p>" + json.NodeName + "</p> </div>";
     return node;
 }
 

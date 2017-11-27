@@ -18,6 +18,7 @@ namespace Zebra.DataRepository.Models
         public Nullable<System.Guid> NodeId { get; set; }
         public Nullable<System.Guid> FieldId { get; set; }
         public string NodeData { get; set; }
+        public System.DateTime CreationDate { get; set; }
     
         public virtual Field Field { get; set; }
         public virtual Node Node { get; set; }

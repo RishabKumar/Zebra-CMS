@@ -60,8 +60,10 @@
     <Compile Include="Interfaces\IFieldOperations.cs" />
     <Compile Include="Interfaces\IMediaOperations.cs" />
     <Compile Include="Interfaces\INodeOperations.cs" />
+    <Compile Include="Interfaces\IPageOperations.cs" />
     <Compile Include="Interfaces\IStructureOperations.cs" />
     <Compile Include="Interfaces\IUserOperations.cs" />
+    <Compile Include="Models\ContentMap.cs" />
     <Compile Include="Operations\BaseOperations.cs" />
     <Compile Include="Operations\FieldOperations.cs" />
     <Compile Include="Operations\NodeOperations.cs" />

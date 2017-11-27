@@ -89,12 +89,14 @@ namespace Zebra.CustomAttributes
                 }
                 else
                 {
-                    filterContext.Result = new RedirectResult("/Account?returnurl="+ returnUrl);
+                    //filterContext.Result = new RedirectResult("/Account?returnurl="+ returnUrl);
+                    HttpContext.Current.Response.Redirect("~/Account?returnurl=" + returnUrl);
                 }
             }
             else
             {
-                filterContext.Result = new RedirectResult("/Account?returnurl=" + returnUrl);
+                //filterContext.Result = new RedirectResult("/Account?returnurl=" + returnUrl);
+                HttpContext.Current.Response.Redirect("~/Account?returnurl=" + returnUrl);
             }
         }
 

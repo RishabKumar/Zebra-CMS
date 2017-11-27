@@ -24,6 +24,7 @@
     <Property Name="NodeId" Type="uniqueidentifier" />
     <Property Name="FieldId" Type="uniqueidentifier" />
     <Property Name="NodeData" Type="nvarchar(max)" />
+    <Property Name="CreationDate" Type="datetime2" Precision="7" Nullable="false" StoreGeneratedPattern="Computed" />
   </EntityType>
   <EntityType Name="Nodes">
     <Key>
@@ -33,6 +34,7 @@
     <Property Name="NodeName" Type="nvarchar(max)" Nullable="false" />
     <Property Name="TemplateId" Type="uniqueidentifier" Nullable="false" />
     <Property Name="parentid" Type="uniqueidentifier" />
+    <Property Name="CreationDate" Type="datetime2" Precision="7" Nullable="false" StoreGeneratedPattern="Computed" />
   </EntityType>
   <EntityType Name="TemplateFieldMaps">
     <Key>

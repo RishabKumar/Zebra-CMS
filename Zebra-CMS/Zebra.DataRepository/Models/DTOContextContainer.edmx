@@ -29,6 +29,7 @@
           <Property Name="NodeId" Type="uniqueidentifier" />
           <Property Name="FieldId" Type="uniqueidentifier" />
           <Property Name="NodeData" Type="nvarchar(max)" />
+          <Property Name="CreationDate" Type="datetime2" Precision="7" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="Nodes">
           <Key>
@@ -38,6 +39,7 @@
           <Property Name="NodeName" Type="nvarchar(max)" Nullable="false" />
           <Property Name="TemplateId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="parentid" Type="uniqueidentifier" />
+          <Property Name="CreationDate" Type="datetime2" Precision="7" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="TemplateFieldMaps">
           <Key>
@@ -214,6 +216,7 @@
           <NavigationProperty Name="Template" Relationship="Self.FK_TemplatesNodes" FromRole="Nodes" ToRole="Templates" />
           <Property Name="ParentId" Type="Guid" />
           <NavigationProperty Name="NodeFieldMaps" Relationship="ZebraDB_Model.FK__NodeField__NodeI__72C60C4A" FromRole="Node" ToRole="NodeFieldMap" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="TemplateFieldMap">
           <Key>
@@ -334,6 +337,7 @@
           <NavigationProperty Name="Field" Relationship="ZebraDB_Model.FK__NodeField__Field__73BA3083" FromRole="NodeFieldMap" ToRole="Field" />
           <NavigationProperty Name="Node" Relationship="ZebraDB_Model.FK__NodeField__NodeI__72C60C4A" FromRole="NodeFieldMap" ToRole="Node" />
           <Property Name="NodeData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <Association Name="FK__NodeField__Field__73BA3083">
           <End Type="ZebraDB_Model.Field" Role="Field" Multiplicity="0..1" />
@@ -386,6 +390,7 @@
           <EntitySetMapping Name="Nodes">
             <EntityTypeMapping TypeName="ZebraDB_Model.Node">
               <MappingFragment StoreEntitySet="Nodes">
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
                 <ScalarProperty Name="ParentId" ColumnName="parentid" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="NodeName" ColumnName="NodeName" />
@@ -423,6 +428,7 @@
           <EntitySetMapping Name="NodeFieldMaps">
             <EntityTypeMapping TypeName="ZebraDB_Model.NodeFieldMap">
               <MappingFragment StoreEntitySet="NodeFieldMaps">
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
                 <ScalarProperty Name="NodeData" ColumnName="NodeData" />
                 <ScalarProperty Name="FieldId" ColumnName="FieldId" />
                 <ScalarProperty Name="NodeId" ColumnName="NodeId" />

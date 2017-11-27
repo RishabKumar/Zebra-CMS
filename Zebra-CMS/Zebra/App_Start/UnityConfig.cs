@@ -22,7 +22,7 @@ namespace Zebra
             container.RegisterType<ITemplateRepository, TemplateRepository>();
             container.RegisterType<IUserOperations, UserOperations>();
             container.RegisterType<INodeOperations, NodeOperations>();
-
+            container.RegisterType<IPageOperations, NodeOperations>();
             container.RegisterType<IStructureOperations, NodeOperations>();
             container.RegisterType<IFieldOperations, FieldOperations>();
 

@@ -24,6 +24,7 @@ namespace Zebra.DataRepository.Models
         public string NodeName { get; set; }
         public System.Guid TemplateId { get; set; }
         public Nullable<System.Guid> ParentId { get; set; }
+        public System.DateTime CreationDate { get; set; }
     
         public virtual Template Template { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

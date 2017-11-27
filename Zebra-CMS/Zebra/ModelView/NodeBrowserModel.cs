@@ -10,7 +10,7 @@ namespace Zebra.ModelView
     {
         public List<string> fields;
         public IEnumerable<string> nodefieldids;
-        public string nodeid;
-        public string templateid;
+        public Node node;
+        public Template template;
     }
 }

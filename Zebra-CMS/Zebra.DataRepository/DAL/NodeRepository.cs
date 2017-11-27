@@ -84,6 +84,11 @@ namespace Zebra.DataRepository.DAL
             return children;
         }
 
+        public List<Node> GetNodesByType(Template t)
+        {
+            return _context.Nodes.Where(x => x.TemplateId == t.Id).OrderBy(x=>x.CreationDate).ToList();
+        }
+
         public override List<Node> GetByCondition(Expression<Func<Node, bool>> selector)
         {
             return _context.Nodes.Where(selector).ToList();
@@ -96,12 +101,12 @@ namespace Zebra.DataRepository.DAL
 
         public List<Node> GetChildNodes(Node parent)
         {
-            return _context.Nodes.Where(x => x.ParentId == parent.Id).ToList();
+            return _context.Nodes.Where(x => x.ParentId == parent.Id).OrderBy(x=>x.CreationDate).ToList();
         }
 
         public override List<Node> GetListById(IEntity t)
         {
-            return _context.Nodes.Where(x => x.Id.Equals(t.Id)).ToList();
+            return _context.Nodes.Where(x => x.Id.Equals(t.Id)).OrderBy(x=>x.CreationDate).ToList();
         }
 
         public Node GetNode(Node node)
@@ -144,10 +149,18 @@ namespace Zebra.DataRepository.DAL
 
         public List<NodeFieldMap> GetNodeFieldMapData(Node node, Field field = null)
         {
-            if(field == null)
-                return _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).ToList();
+            if (field == null)
+                return _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).OrderBy(x=>x.CreationDate).ToList();
             else
-                return _context.NodeFieldMaps.Where(x => x.NodeId == node.Id && x.FieldId == field.Id).ToList();
+            {
+               return _context.NodeFieldMaps.Where(x => x.NodeId == node.Id && x.FieldId == field.Id).OrderBy(x => x.CreationDate).ToList();
+            }
+        }
+
+        public string GetNodeFieldMapData(Node node, string fieldname)
+        {
+            var nodefieldmap = (from s in _context.NodeFieldMaps join sa in _context.Fields on s.FieldId equals sa.Id where s.NodeId == node.Id && sa.FieldName == fieldname select s).FirstOrDefault();
+            return nodefieldmap.NodeData;
         }
 
         public NodeFieldMap GetNodeFieldMap(IEntity entity)
@@ -169,5 +182,6 @@ namespace Zebra.DataRepository.DAL
                 }
             }
         }
+
     }
 }

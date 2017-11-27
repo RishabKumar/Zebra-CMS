@@ -38,9 +38,34 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MongoDB.Bson, Version=2.4.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Bson.2.4.4\lib\net45\MongoDB.Bson.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=2.4.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.2.4.4\lib\net45\MongoDB.Driver.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MongoDB.Driver.Core, Version=2.4.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.Core.2.4.4\lib\net45\MongoDB.Driver.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MongoDB.Driver.GridFS, Version=2.4.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.GridFS.2.4.4\lib\net45\MongoDB.Driver.GridFS.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.0.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web" />
@@ -58,6 +83,28 @@
     <Compile Include="DAL\BaseRepository.cs" />
     <Compile Include="DAL\FieldRepository.cs" />
     <Compile Include="DAL\FileRepository.cs" />
+    <Compile Include="Models\Field.cs">
+      <DependentUpon>DTOContextContainer.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FieldType.cs">
+      <DependentUpon>DTOContextContainer.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Node.cs">
+      <DependentUpon>DTOContextContainer.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\NodeFieldMap.cs">
+      <DependentUpon>DTOContextContainer.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Template.cs">
+      <DependentUpon>DTOContextContainer.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TemplateFieldMap.cs">
+      <DependentUpon>DTOContextContainer.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\User.cs">
+      <DependentUpon>DTOContextContainer.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProviderModels\MediaProviderSetting.cs" />
     <Compile Include="Providers\FileProvider.cs" />
     <Compile Include="Providers\MediaProvider.cs" />
     <Compile Include="DAL\NodeRepository.cs" />
@@ -82,35 +129,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DTOContextContainer.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\Field.cs">
-      <DependentUpon>DTOContextContainer.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\FieldType.cs">
-      <DependentUpon>DTOContextContainer.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\IEntity.cs" />
-    <Compile Include="Models\Node.cs">
-      <DependentUpon>DTOContextContainer.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\NodeFieldMap.cs">
-      <DependentUpon>DTOContextContainer.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Template.cs">
-      <DependentUpon>DTOContextContainer.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\TemplateFieldMap.cs">
-      <DependentUpon>DTOContextContainer.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\User.cs">
-      <DependentUpon>DTOContextContainer.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\MongodbProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="Models\DTOContextContainer.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DTOContextContainer.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="App.config" />
     <None Include="Models\DTOContextContainer.edmx.diagram">
       <DependentUpon>DTOContextContainer.edmx</DependentUpon>
     </None>

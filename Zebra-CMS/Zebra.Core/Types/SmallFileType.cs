@@ -27,7 +27,7 @@ namespace Zebra.Core.Types
         }
 
         //called just after GetValue().
-        public void SaveValue()
+        public string SaveValue()
         {
             //to prevent decoding to fail
             if (!string.IsNullOrWhiteSpace(encodedstring))
@@ -46,7 +46,7 @@ namespace Zebra.Core.Types
                         repo.SaveMedia(filename, bytes);
                         if (!string.IsNullOrWhiteSpace(_context.OldValue))
                         {
-                            repo.DeleteMedia(((FileRepository)repo).MediaLocalPath + _context.OldValue);
+                            repo.DeleteMedia(FileRepository.MediaLocalPath + _context.OldValue);
                         }
                     }
                 }
@@ -59,6 +59,7 @@ namespace Zebra.Core.Types
 
                 }
             }
+            return _context.Value;
         }
 
         //called just before saving data.
