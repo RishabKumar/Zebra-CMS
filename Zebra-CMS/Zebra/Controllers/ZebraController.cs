@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Zebra.Application;
 using Zebra.CustomAttributes;
 using Zebra.DataRepository.DAL;
 using Zebra.Services.Interfaces;
@@ -14,9 +15,10 @@ namespace Zebra.Controllers
     public abstract class ZebraController : Controller
     {
         public INodeOperations _nodeop;
-        public ZebraController (NodeOperations nodeOperations)
+        public ZebraController (INodeOperations nodeOperations, bool EditorMode = false)
         {
             _nodeop = nodeOperations;
+            ZebraContext.IsEditorMode = EditorMode;
         }
         // GET: Zebra
         public abstract ActionResult Index();

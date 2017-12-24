@@ -15,7 +15,6 @@ namespace Zebra.Core.Types
 {
     class SmallFileType : ViewRender
     {
-        protected FieldContext _context;
         protected string filename;
         protected string encodedstring;
 
@@ -27,7 +26,7 @@ namespace Zebra.Core.Types
         }
 
         //called just after GetValue().
-        public string SaveValue()
+        public override string SaveValue()
         {
             //to prevent decoding to fail
             if (!string.IsNullOrWhiteSpace(encodedstring))
@@ -63,7 +62,7 @@ namespace Zebra.Core.Types
         }
 
         //called just before saving data.
-        public string GetValue()
+        public override string GetValue()
         {
             if (!string.IsNullOrWhiteSpace(_context.Value))
             {

@@ -15,7 +15,6 @@ namespace Zebra.Core.Types
 {
     class ImageType : ViewRender
     {
-        protected FieldContext _context;
         protected string filename;
         protected string encodedstring;
         IFileRepository repo = new FileRepository();
@@ -27,10 +26,10 @@ namespace Zebra.Core.Types
             encodedstring = string.Empty;
         }
 
-      
+
 
         //called just after GetValue().
-        public string SaveValue()
+        public override string SaveValue()
         {
             //to prevent decoding to fail
             if (!string.IsNullOrWhiteSpace(encodedstring))
@@ -66,7 +65,7 @@ namespace Zebra.Core.Types
         }
 
         //called just before saving data.
-        public string GetValue()
+        public override string GetValue()
         {
             if (!string.IsNullOrWhiteSpace(_context.Value))
             {

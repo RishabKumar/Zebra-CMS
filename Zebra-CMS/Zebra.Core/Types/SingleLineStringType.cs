@@ -7,22 +7,25 @@ namespace Zebra.Core.Types
 {
     class SingleLineStringType : ViewRender
     {
-        FieldContext _context;
-
         public SingleLineStringType(FieldContext context)
         {
             _context = context;
         }
 
-        public string SaveValue()
+        public override string SaveValue()
         {
             return _context.Value;
         }
 
-        public string GetValue()
+        public override string GetValue()
         {
             // -> add get value from database via a wrapper.
             _context.Value = HttpUtility.HtmlEncode(_context.RawData.ToString());
+            return _context.Value;
+        }
+
+        public override string GetProcessedValue()
+        {
             return _context.Value;
         }
 

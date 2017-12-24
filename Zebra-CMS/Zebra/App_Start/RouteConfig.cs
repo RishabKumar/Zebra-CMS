@@ -15,7 +15,7 @@ namespace Zebra
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.MapRoute(
                 name: "PageResolver",
-                url: "page/{*.}",
+                url: "zebrapage/{*.}",
                 defaults: new { controller = "PageResolver", action = "Index", id = UrlParameter.Optional }
             );
             //routes

@@ -47,12 +47,15 @@ $(".content-tree").resizable({
 
 var Editor_selectedtextnode = null;
 
-$(document).on('click', '.content-node p', function () {
-    setSelectedNode(this);
+$(document).on('click', '.tree-container .content-node p', function () {
     if (event.target === this) {
         var parentid = $(event.target.parentElement).attr('data-nodeid');
         LoadNodeBrowser(parentid, 'test', 'test', 'test');
     }
+});
+
+$(document).on('click', '.content-node p', function () {
+    setSelectedNode(this);
 });
 
 function setSelectedNode(newnode) {
@@ -151,7 +154,7 @@ $(document).on('click', ".context-menu-option", function () {
         case "Move":
             var nodeid = $(event.target.parentElement).attr("data-context-nodeid");
             var node = $("[data-nodeid='" + nodeid + "']");
-            ShowModelTreePopup('00000000-0000-0000-0000-000000000000', parentid, parentnode, nodename, function () { MoveNode(nodeid) });
+            ShowModelTreePopup('11111111-1111-1111-1111-111111111111', parentid, parentnode, nodename, function () { MoveNode(nodeid) });
             break;
     }
     $(".context-menu").remove();

@@ -7,19 +7,17 @@ namespace Zebra.Core.Types
 {
     class MultiLineStringType : ViewRender
     {
-        FieldContext _context;
-
         public MultiLineStringType(FieldContext context)
         {
             _context = context;
         }
 
-        public string SaveValue()
+        public override string SaveValue()
         {
             return _context.Value;
         }
 
-        public string GetValue()
+        public override string GetValue()
         {
             // -> add get value from database via a wrapper.
             _context.Value = HttpUtility.HtmlEncode(_context.RawData.ToString());

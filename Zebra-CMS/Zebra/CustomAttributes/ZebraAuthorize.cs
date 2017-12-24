@@ -90,7 +90,8 @@ namespace Zebra.CustomAttributes
                 else
                 {
                     //filterContext.Result = new RedirectResult("/Account?returnurl="+ returnUrl);
-                    HttpContext.Current.Response.Redirect("~/Account?returnurl=" + returnUrl);
+                    if(!HttpContext.Current.Response.HeadersWritten)
+                        HttpContext.Current.Response.Redirect("~/Account?returnurl=" + returnUrl);
                 }
             }
             else

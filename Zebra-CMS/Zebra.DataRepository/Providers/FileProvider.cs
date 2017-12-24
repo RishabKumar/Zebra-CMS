@@ -54,14 +54,28 @@ namespace Zebra.DataRepository.Providers
             try
             {
                 if (!string.IsNullOrWhiteSpace(filepath))
-                    File.Delete(filepath);
+                {
+                    if(File.Exists(GetMediaLocalFilePath(filepath)))
+                        File.Delete(GetMediaLocalFilePath(filepath));
+                }
             }
             catch { }
         }
 
         public override byte[] GetMediaBytesByIndex(string filename, int startindex, int count)
         {
-            throw new NotImplementedException();
+            byte[] bytes = new byte[count];
+            var path = GetMediaLocalFilePath(filename);
+            if (!string.IsNullOrWhiteSpace(filename) && File.Exists(path))
+            {
+                using (var stream = new FileStream(path, FileMode.Open))
+                    if (stream.CanSeek)
+                    {
+                        stream.Seek(startindex, SeekOrigin.Begin);
+                        stream.Read(bytes, 0, count);
+                    }
+            }
+            return bytes ?? new byte[1];
         }
 
         public override long GetMediaLength(string filename)
@@ -72,6 +86,11 @@ namespace Zebra.DataRepository.Providers
                 length = stream.Length;
             }
             return length;
+        }
+
+        public override string GetMediaFilePath(string filename)
+        {
+            return "../handlers/videohandler.ashx?file=" + filename;
         }
     }
 }

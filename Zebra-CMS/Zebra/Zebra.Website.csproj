@@ -173,6 +173,7 @@
     <Compile Include="APIControllers\MediaServiceController.cs" />
     <Compile Include="APIControllers\NodeServiceController.cs" />
     <Compile Include="APIControllers\UtilityServiceController.cs" />
+    <Compile Include="Application\ZebraContext.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -183,6 +184,7 @@
     <Compile Include="Controllers\CPanelController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\PageResolverController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\ZebraController.cs" />
     <Compile Include="CustomAttributes\ZebraAuthorize.cs" />
     <Compile Include="Global.asax.cs">
@@ -195,6 +197,7 @@
       <DependentUpon>MediaHandler.ashx</DependentUpon>
     </Compile>
     <Compile Include="ModelView\NodeBrowserModel.cs" />
+    <Compile Include="ModelView\PageModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
@@ -279,6 +282,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\zebra-js\utilities\fieldbuilder.js" />
+    <Content Include="Scripts\zebra-js\utility-menu.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -290,7 +294,6 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Views\Web.config" />
-    <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\CPanel\Editor.cshtml" />
     <Content Include="Views\shared\_Layout.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
@@ -304,13 +307,17 @@
     <Content Include="Utilities\UtilityViews\FieldBuilder\FieldBuilderMenu.cshtml" />
     <Content Include="ZebraConfig\mediaprovider.json" />
     <Content Include="Views\CPanel\NodeSearchResult.cshtml" />
+    <Content Include="Views\Test\Index.cshtml" />
+    <Content Include="Views\PageResolver\Index.cshtml" />
+    <Content Include="Views\shared\TestLayout.cshtml" />
+    <Content Include="Views\Test\Details.cshtml" />
+    <Content Include="Views\Test\Heading.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\images\" />
     <Folder Include="Media\" />
     <Folder Include="Temp_Data\temp_upload\" />
-    <Folder Include="Views\PageResolver\" />
     <Folder Include="Views\Zebra\" />
   </ItemGroup>
   <ItemGroup>

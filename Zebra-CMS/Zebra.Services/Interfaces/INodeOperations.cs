@@ -22,5 +22,9 @@ namespace Zebra.Services.Interfaces
         Stack<Node> GetAllParentNodes(string nodeid);
 
         List<Node> SearchNode(string nameorid);
+
+        string GetValueForField(string nodeid, string fieldid);
+
+        string GetValueForField(NodeFieldMap nodefieldmap);
     }
 }

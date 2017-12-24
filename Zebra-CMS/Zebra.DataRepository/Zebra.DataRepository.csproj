@@ -81,8 +81,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAL\BaseRepository.cs" />
+    <Compile Include="DAL\ContentMapRepository.cs" />
     <Compile Include="DAL\FieldRepository.cs" />
     <Compile Include="DAL\FileRepository.cs" />
+    <Compile Include="ModelsExtension\Node.cs" />
+    <Compile Include="Models\ContentMap.cs" />
     <Compile Include="Models\Field.cs">
       <DependentUpon>DTOContextContainer.tt</DependentUpon>
     </Compile>

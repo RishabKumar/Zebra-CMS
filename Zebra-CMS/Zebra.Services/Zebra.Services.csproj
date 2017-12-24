@@ -63,11 +63,12 @@
     <Compile Include="Interfaces\IPageOperations.cs" />
     <Compile Include="Interfaces\IStructureOperations.cs" />
     <Compile Include="Interfaces\IUserOperations.cs" />
-    <Compile Include="Models\ContentMap.cs" />
+    <Compile Include="Extensions\NodeExtension.cs" />
     <Compile Include="Operations\BaseOperations.cs" />
     <Compile Include="Operations\FieldOperations.cs" />
     <Compile Include="Operations\NodeOperations.cs" />
     <Compile Include="Operations\OperationsFactory.cs" />
+    <Compile Include="Operations\PageOperations.cs" />
     <Compile Include="Operations\UserOperations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Type\NodeType.cs" />

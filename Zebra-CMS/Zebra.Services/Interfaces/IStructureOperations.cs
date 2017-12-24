@@ -20,7 +20,7 @@ namespace Zebra.Services.Interfaces
         FieldType CreateFieldType(FieldType ft);
 
         [Obsolete("",true)]
-        void DetermineNodeTypeAndCreate(string name, Guid newid, Node node);
+        bool DetermineNodeTypeAndCreate(string name, Guid newid, Node node);
 
         //bool CreateField(Field f);
 

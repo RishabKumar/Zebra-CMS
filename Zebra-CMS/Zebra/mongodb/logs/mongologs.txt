@@ -1,0 +1,29 @@
+2017-12-18T11:51:57.173+0530 I CONTROL  [main] Trying to start Windows service 'MongoDB'
+2017-12-18T11:51:58.543+0530 I CONTROL  [initandlisten] MongoDB starting : pid=6432 port=27017 dbpath=C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\mongodb 64-bit host=RISHABH
+2017-12-18T11:51:58.543+0530 I CONTROL  [initandlisten] targetMinOS: Windows 7/Windows Server 2008 R2
+2017-12-18T11:51:58.543+0530 I CONTROL  [initandlisten] db version v3.4.10
+2017-12-18T11:51:58.543+0530 I CONTROL  [initandlisten] git version: 078f28920cb24de0dd479b5ea6c66c644f6326e9
+2017-12-18T11:51:59.813+0530 I CONTROL  [initandlisten] OpenSSL version: OpenSSL 1.0.1u-fips  22 Sep 2016
+2017-12-18T11:52:06.851+0530 I CONTROL  [initandlisten] allocator: tcmalloc
+2017-12-18T11:52:27.818+0530 I CONTROL  [initandlisten] modules: none
+2017-12-18T11:52:29.744+0530 I CONTROL  [initandlisten] build environment:
+2017-12-18T11:52:32.683+0530 I CONTROL  [initandlisten]     distmod: 2008plus-ssl
+2017-12-18T11:52:34.311+0530 I CONTROL  [initandlisten]     distarch: x86_64
+2017-12-18T11:52:35.614+0530 I CONTROL  [initandlisten]     target_arch: x86_64
+2017-12-18T11:52:37.451+0530 I CONTROL  [initandlisten] options: { service: true, storage: { dbPath: "C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\mongodb" }, systemLog: { destination: "file", path: "C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\mongodb\logs\mongologs.txt" } }
+2017-12-18T11:52:40.396+0530 I -        [initandlisten] Detected data files in C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\mongodb created by the 'wiredTiger' storage engine, so setting the active storage engine to 'wiredTiger'.
+2017-12-18T11:52:42.104+0530 I STORAGE  [initandlisten] wiredtiger_open config: create,cache_size=3541M,session_max=20000,eviction=(threads_min=4,threads_max=4),config_base=false,statistics=(fast),log=(enabled=true,archive=true,path=journal,compressor=snappy),file_manager=(close_idle_time=100000),checkpoint=(wait=60,log_size=2GB),statistics_log=(wait=0),
+2017-12-18T11:52:54.629+0530 I CONTROL  [initandlisten] 
+2017-12-18T11:52:55.040+0530 I CONTROL  [initandlisten] ** WARNING: Access control is not enabled for the database.
+2017-12-18T11:52:58.474+0530 I CONTROL  [initandlisten] **          Read and write access to data and configuration is unrestricted.
+2017-12-18T11:52:59.296+0530 I CONTROL  [initandlisten] 
+2017-12-18T11:53:07.705+0530 I FTDC     [initandlisten] Initializing full-time diagnostic data capture with directory 'C:/Users/Rishabh/Documents/Visual Studio 2015/Projects/Zebra/Zebra-CMS/Zebra/mongodb/diagnostic.data'
+2017-12-18T11:53:08.699+0530 I STORAGE  [initandlisten] Service running
+2017-12-18T11:53:08.724+0530 I NETWORK  [thread1] waiting for connections on port 27017
+2017-12-24T17:17:59.209+0530 I NETWORK  [thread1] connection accepted from 127.0.0.1:21616 #1 (1 connection now open)
+2017-12-24T17:17:59.346+0530 I NETWORK  [conn1] received client metadata from 127.0.0.1:21616 conn1: { driver: { name: "mongo-csharp-driver", version: "2.4.4.0" }, os: { type: "Windows", name: "Microsoft Windows 10.0.14393", architecture: "x86_32", version: "10.0.14393" }, platform: ".NET Framework 4.0.0.0" }
+2017-12-24T17:17:59.916+0530 I NETWORK  [thread1] connection accepted from 127.0.0.1:21617 #2 (2 connections now open)
+2017-12-24T17:17:59.920+0530 I NETWORK  [conn2] received client metadata from 127.0.0.1:21617 conn2: { driver: { name: "mongo-csharp-driver", version: "2.4.4.0" }, os: { type: "Windows", name: "Microsoft Windows 10.0.14393", architecture: "x86_32", version: "10.0.14393" }, platform: ".NET Framework 4.0.0.0" }
+2017-12-24T17:18:00.262+0530 I COMMAND  [conn2] command zebramedia.fs.chunks command: find { find: "fs.chunks", filter: { files_id: ObjectId('5a198b6c31bc36313848fb15'), n: 0 }, limit: 1, singleBatch: true } planSummary: IXSCAN { files_id: 1, n: 1 } keysExamined:1 docsExamined:1 cursorExhausted:1 numYields:1 nreturned:1 reslen:261293 locks:{ Global: { acquireCount: { r: 4 } }, Database: { acquireCount: { r: 2 } }, Collection: { acquireCount: { r: 2 } } } protocol:op_query 203ms
+2017-12-24T17:20:08.223+0530 I -        [conn1] end connection 127.0.0.1:21616 (2 connections now open)
+2017-12-24T17:20:08.224+0530 I -        [conn2] end connection 127.0.0.1:21617 (2 connections now open)

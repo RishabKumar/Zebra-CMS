@@ -23,7 +23,7 @@ namespace Zebra.Controllers
             OperationsFactory.NodeOperations.GetAllParentNodes(nodeid);
         }
 
-        public CPanelController(NodeOperations nodeOperations, FieldOperations fieldOperations) : base(nodeOperations)
+        public CPanelController(NodeOperations nodeOperations, FieldOperations fieldOperations) : base(nodeOperations, true)
         {
             _fieldOperations = fieldOperations;
         }
@@ -42,7 +42,7 @@ namespace Zebra.Controllers
         public ActionResult Editor()
         {
             Node root = _nodeop.GetRootNode();
-            ((NodeOperations)_nodeop).CreateContentMap();
+           // ((NodeOperations)_nodeop).CreateContentMap();
             var list = new List<Node>();
             list.Add(root);
             ViewBag.Root = list;

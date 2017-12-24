@@ -1,0 +1,16 @@
+﻿
+@using Zebra.DataRepository.Models
+@model List<Node>
+@{
+    Layout = null;
+}
+<div>
+    @foreach (var node in Model)
+            {
+        <div class="content-node" data-nodeid="@node.Id" node-expanded="false">
+            <span class="node-icon-container"><i class="fa fa-circle-thin"></i></span>
+            <p>@node.NodeName</p>
+        </div>
+
+    }
+</div>

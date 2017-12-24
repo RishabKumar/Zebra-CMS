@@ -1,0 +1,27 @@
+﻿{
+  "mediaprovidersettings": [
+    {
+      "name": "FileProvider",
+      "type": "Zebra.DataRepository.Providers.FileProvider, Zebra.DataRepository",
+      "active": false,
+      "mediapath": "/media/",
+      "config": [ {  }]
+    },
+
+     {
+      "name": "MongodbProvider",
+      "type": "Zebra.DataRepository.Providers.MongodbProvider, Zebra.DataRepository",
+      "active": true,
+      "mediapath": "/mongodb/",
+      "config": [
+        {
+          "host": "mongodb://127.0.0.1",
+          "port": "27017",
+          "db": "zebramedia"
+        }
+      ]
+    }
+
+  ]
+
+}

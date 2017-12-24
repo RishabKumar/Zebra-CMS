@@ -15,7 +15,6 @@ namespace Zebra.Core.Types
 {
     class FileType : ViewRender
     {
-        protected FieldContext _context;
         protected string filename;
         protected string encodedstring;
         IFileRepository repo = new FileRepository();
@@ -26,7 +25,7 @@ namespace Zebra.Core.Types
         }
 
         //called just after GetValue().
-        public string SaveValue()
+        public override string SaveValue()
         {
             string filename = _context.RawData.ToString();
             string id = string.Empty;
@@ -46,7 +45,7 @@ namespace Zebra.Core.Types
         }
 
         //called just before saving data.
-        public string GetValue()
+        public override string GetValue()
         {
             // -> add get value from database via a wrapper.
             string filename = _context.RawData == null ? string.Empty: _context.RawData.ToString();

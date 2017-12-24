@@ -10,12 +10,12 @@ using Zebra.DataRepository.DAL;
 using Zebra.DataRepository.Interfaces;
 using Zebra.DataRepository.Models;
 using Zebra.Services.Interfaces;
-using Zebra.Services.Models;
+
 using Zebra.Services.Type;
 
 namespace Zebra.Services.Operations
 {
-    public class NodeOperations : BaseOperations<NodeRepository, Node>, INodeOperations, IStructureOperations, IPageOperations
+    public class NodeOperations : BaseOperations<NodeRepository, Node>, INodeOperations, IStructureOperations
     {
         ITemplateRepository _templaterepository;
         IFieldRepository _fieldrepository;
@@ -31,9 +31,13 @@ namespace Zebra.Services.Operations
         {
             Guid newid = Guid.NewGuid();
             Node node = new Node() { Id = newid, NodeName = nodename, TemplateId = new Guid(templateid), ParentId = new Guid(parentid) };
-            DetermineNodeTypeAndCreate(node.NodeName, newid, node);
             node = ((INodeRepository)_currentrepository).CreateNode(node);
-            ((INodeRepository)_currentrepository).RegisterFieldsForNode(node, fields);
+            if (!DetermineNodeTypeAndCreate(node.NodeName, newid, node))
+            {
+                DeleteNode(node.Id.ToString());
+                return null;
+            }     
+           ((INodeRepository)_currentrepository).RegisterFieldsForNode(node, fields);
             return node;
         }
 
@@ -80,6 +84,11 @@ namespace Zebra.Services.Operations
             {
                 return null;
             }
+            var Id = new Guid(nodeid);
+            if (Guid.Empty.Equals(Id))
+            {
+                return null;
+            }
             return ((INodeRepository)_currentrepository).GetNode(new Node { Id = new Guid(nodeid) });
         }
 
@@ -89,6 +98,7 @@ namespace Zebra.Services.Operations
             switch(DetermineNodeType(new Node { Id = new Guid(nodeid) }))
             {
                 case NodeType.CONTENT_TYPE:
+                case NodeType.RENDER_TYPE:
                         flag = _currentrepository.DeleteNode(new Node() { Id = new Guid(nodeid) });
                     break;
                 case NodeType.TEMPLATE_TYPE:
@@ -105,6 +115,14 @@ namespace Zebra.Services.Operations
                     }
                     break;
                 case NodeType.MEDIA_TYPE:
+                    var node = GetNode(nodeid);
+                    var filerepo = new FileRepository();
+                    //ugly way of removing media files
+                    foreach (var nodefieldmap in node.NodeFieldMaps)
+                    {
+                        filerepo.DeleteMedia(nodefieldmap.NodeData);
+                    }
+                    flag = _currentrepository.DeleteNode(node);
                     break;
                 case NodeType.SYSTEM_TYPE:
                     break;
@@ -151,6 +169,27 @@ namespace Zebra.Services.Operations
             return field;
         }
 
+        public string GetValueForField(string nodeid, string fieldid)
+        {
+            var node = GetNode(nodeid);
+            var field = new Field() { Id = Guid.Parse(fieldid) };
+            var nodefieldmap = ((NodeRepository)_currentrepository).GetNodeFieldMapData(node, field).FirstOrDefault();
+            return GetValueForField(nodefieldmap);
+        }
+
+        public string GetValueForField(NodeFieldMap nodefieldmap)
+        {
+            var fieldtype = _fieldrepository.GetFieldType(nodefieldmap.Field);
+            var type = System.Type.GetType(fieldtype.ClassPath);
+            FieldContext _context = new FieldContext(nodefieldmap.Field.Id, fieldtype.Id, nodefieldmap.Field.FieldName);
+            _context.Value = nodefieldmap.NodeData;
+            var fieldobj = Activator.CreateInstance(type, _context);
+            //invoke GetValue to get the processed value.
+            var mi = type.GetMethod("GetProcessedValue");
+            var data = mi.Invoke(fieldobj, null).ToString();
+            return data;
+        }
+
         public List<Node> GetNodesByType(Template template)
         {
             return ((NodeRepository)_currentrepository).GetNodesByType(template);
@@ -168,7 +207,7 @@ namespace Zebra.Services.Operations
             for(int i = 0; i < tnodes.Count; i++)
             {
                 Template t = _templaterepository.GetTemplate(tnodes[i]);
-                if(t != null)
+                if(t != null && t.Id != template.Id)
                 {
                     tnodes.AddRange(GetNodesByType(t));
                 }
@@ -182,7 +221,7 @@ namespace Zebra.Services.Operations
         }
 
         [Obsolete("",false)]
-        public void DetermineNodeTypeAndCreate(string name, Guid newid, Node node)
+        public bool DetermineNodeTypeAndCreate(string name, Guid newid, Node node)
         {
             string type = NodeType.UNKNOWN_TYPE;
        //     node = GetBaseParent(node);
@@ -191,25 +230,33 @@ namespace Zebra.Services.Operations
             {
                 case NodeType.CONTENTNODE_ID:
                     type = NodeType.CONTENT_TYPE;
-                    break;
+                    return true; 
+                    
+                case NodeType.RENDERNODE_ID:
+                    type = NodeType.RENDER_TYPE;
+                    return true;
+                    
                 case NodeType.TEMPLATENODE_ID:
                     type = NodeType.TEMPLATE_TYPE;
                     CreateTemplate(new Template() {Id  = newid, TemplateName = name });
-                    break;
+                    return true;
+                    
                 case NodeType.FIELDNODE_ID:
                     type = NodeType.FIELD_TYPE;
-           //         CreateField(new Field() { FieldName = node.NodeName, T});
-                    break;
+                    //         CreateField(new Field() { FieldName = node.NodeName, T});
+                    return true;
+                    
                 case NodeType.FIELDTYPENODE_ID:
                     type = NodeType.FIELDTYPE_TYPE;
                     CreateFieldType(new FieldType() { Id = Guid.NewGuid(), TypeName = name });
-                    break;
+                    return true;
+                    
                 case NodeType.MEDIA_ID:
                     type = NodeType.MEDIA_TYPE;
-                    break;
+                    return true;
                 default:
-                    DetermineNodeTypeAndCreate(name, newid, GetNode(node.ParentId.ToString()));
-                    break;
+                    return DetermineNodeTypeAndCreate(name, newid, GetNode(node.ParentId.ToString()));
+                    
             }
         }
 
@@ -220,6 +267,9 @@ namespace Zebra.Services.Operations
             {
                 case NodeType.CONTENTNODE_ID:
                     type = NodeType.CONTENT_TYPE;
+                    break;
+                case NodeType.RENDERNODE_ID:
+                    type = NodeType.RENDER_TYPE;
                     break;
                 case NodeType.TEMPLATENODE_ID:
                     type = NodeType.TEMPLATE_TYPE;
@@ -267,7 +317,7 @@ namespace Zebra.Services.Operations
         private Node GetBaseParent(Node node)
         {
             node = _base.GetByCondition(x => x.Id == node.ParentId).FirstOrDefault();
-            if(node.ParentId.ToString().Equals("00000000-0000-0000-0000-000000000000"))
+            if(node.ParentId.ToString().Equals(NodeType.ROOT_ID))
             {
                 return node;
             }
@@ -355,35 +405,5 @@ namespace Zebra.Services.Operations
             _currentrepository.MoveNode(new Node() { Id = Guid.Parse(nodeid) }, new Node() { Id = Guid.Parse(newparentid) });
         }
 
-        public void CreateContentMap()
-        {
-            var g = new Node() { Id = Guid.Parse("2401C12C-1CB4-48E2-B685-7891D9190D70") };
-            g = ((INodeRepository)_currentrepository).GetNode(g);
-            var content = _base.GetByCondition(x => x.Id == g.Id).FirstOrDefault();
-            var list = FormPathsRecursive(content);
-        }
-
-        private List<string> FormPathsRecursive(Node node, string path = "", List<string> map = null)
-        {
-            if(map == null)
-            {
-                map = new List<string>();
-            }
-            var list = ((NodeRepository)_currentrepository).GetByCondition(x => x.ParentId == node.Id);
-
-            path += node.NodeName + "/";
-            map.Add(path);
-            ContentMap.Add(path, node.Id);
-            foreach (var lnode in list)
-            {
-                map = (FormPathsRecursive(lnode, path, map));
-            }
-            return map;
-        }
-
-        public void Initialize()
-        {
-            CreateContentMap();
-        }
     }
 }
