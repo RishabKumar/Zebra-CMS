@@ -20,14 +20,22 @@ namespace Zebra.DataRepository.Interfaces
 
         bool SaveNodeData(NodeFieldMap nodefieldmap);
 
-        bool RegisterFieldsForNode(IEntity entity, List<Field> fields);
+        bool RegisterFieldsForNode(IEntity entity, List<Field> fields, IEntity language);
 
-        List<NodeFieldMap> GetNodeFieldMapData(Node node, Field field = null);
+        List<NodeFieldMap> GetNodeFieldMapData(Node node);
+
+        List<NodeFieldMap> GetNodeFieldMapData(Node node, Field field);
+
+        List<NodeFieldMap> GetNodeFieldMapData(Node node, Field field, Language language);
+
+        List<NodeFieldMap> GetNodeFieldMapData(Node node, Language language);
 
         NodeFieldMap GetNodeFieldMap(IEntity entity);
 
         void MoveNode(IEntity node, IEntity newparent);
 
         List<Node> GetNodesByType(Template t);
+
+        bool CreateAndSaveNodeData(Node node, Field field, Language language, dynamic data);
     }
 }

@@ -7,7 +7,7 @@ using Zebra.Core.Context;
 using Zebra.Services.Operations;
 using System.Web.Http;
 using Zebra.DataRepository.Interfaces;
-using Zebra.Utilities.UtilityProcessor;
+using Zebra.Globalization;
 
 namespace Zebra
 {
@@ -19,6 +19,7 @@ namespace Zebra
 
             container.RegisterType(typeof(BaseRepository<>), typeof(UserRepository));
             container.RegisterType<INodeRepository, NodeRepository>();
+            container.RegisterType<ILanguageRepository, LanguageRepository>();
             container.RegisterType<ITemplateRepository, TemplateRepository>();
             container.RegisterType<IUserOperations, UserOperations>();
             container.RegisterType<INodeOperations, NodeOperations>();
@@ -30,6 +31,7 @@ namespace Zebra
 
             container.RegisterType<OperationsFactory>();
             container.RegisterInstance(container.Resolve<OperationsFactory>());
+            container.RegisterInstance(container.Resolve<LanguageManager>());
             GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
         }

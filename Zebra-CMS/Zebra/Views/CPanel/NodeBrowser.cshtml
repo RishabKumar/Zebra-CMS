@@ -17,6 +17,12 @@
 </div>
 
 <button class="zebra-save-data">Save</button>
+<select>
+    @foreach (var lang in Model.alllanguages)
+    {
+        <option value="@lang.Id">@lang.CultureName</option>
+    }
+</select>
 <div class="zebra-field">
     <form class="zebra-field-data-form" enctype="multipart/form-data">
         <input type="hidden" name="nodeid" id="nodeid" value="@Model.node.Id" />

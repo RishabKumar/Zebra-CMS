@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Zebra.DataRepository.Models;
+using Zebra.Models;
 using Zebra.Services.Type;
 
 namespace Zebra.Services.Interfaces
@@ -40,5 +41,8 @@ namespace Zebra.Services.Interfaces
         bool DeleteNode(string nodeid);
         void MoveNode(string nodeid, string newparentid);
         List<NodeFieldMap> GetNodeFieldMapData(string nodeid);
+        List<NodeFieldMap> GetNodeFieldMapData(string nodeid, string languageid);
+
+        bool RegisterFieldsForNode(IEntity node, List<Field> fields, Language language);
     }
 }

@@ -18,6 +18,8 @@
         <EntityTypeShape EntityType="ZebraDB_Model.NodeFieldMap" Width="1.5" PointX="5.25" PointY="5.25" />
         <AssociationConnector Association="ZebraDB_Model.FK__NodeField__Field__73BA3083" />
         <AssociationConnector Association="ZebraDB_Model.FK__NodeField__NodeI__72C60C4A" />
+        <EntityTypeShape EntityType="ZebraDB_Model.Language" Width="1.5" PointX="7.375" PointY="0.875" />
+        <AssociationConnector Association="ZebraDB_Model.FK__NodeField__Langu__2CF2ADDF" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

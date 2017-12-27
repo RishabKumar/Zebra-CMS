@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Http;
 using Zebra.CustomAttributes;
 using Zebra.DataRepository.Models;
+using Zebra.Globalization;
 using Zebra.Services.Interfaces;
 using Zebra.Services.Operations;
 
@@ -51,6 +52,24 @@ namespace Zebra.APIControllers
                                                 {
                                                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                                                 });
+        }
+
+        [HttpPost]
+        public void RegisterLocaleForNode()
+        {
+            var json = HttpContext.Current.Request.Form[0];
+            dynamic node = JsonConvert.DeserializeObject(json);
+            string nodeid = node.id;
+            string languageid = node.languageid;
+            var list = _structops.GetNodeFieldMapData(nodeid, languageid);
+            if(list != null && list.Count() == 0)
+            {
+                var tmplist = _structops.GetNodeFieldMapData(nodeid, LanguageManager.GetDefaultLanguage().Id.ToString());
+                foreach(var nodefield in tmplist)
+                {
+                    _structops.RegisterFieldsForNode(new Node() { Id = nodefield.NodeId.Value }, new List<Field>() { new Field() { Id = nodefield.FieldId.Value } }, LanguageManager.GetLanguageById(languageid));
+                }
+            }
         }
 
         [HttpPost]

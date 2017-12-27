@@ -16,7 +16,8 @@ namespace Zebra.Services.Type
             MEDIA_TYPE = "Media",
             SYSTEM_TYPE = "",
             UNKNOWN_TYPE = "",
-            RENDER_TYPE = "Render";
+            RENDER_TYPE = "Render",
+            LANGUAGE_TYPE = "Language";
 
         public const string TEMPLATENODE_ID = "8087FA7D-6753-40B9-9F3A-7AE62E882258",
             FIELDNODE_ID = "-|_|_|_-",
@@ -28,6 +29,7 @@ namespace Zebra.Services.Type
             UNKNOWN_ID = "",
             VIEW_ID = "",
             SIMPLETEMPLATE_ID = "AAAAAAAA-7238-43A0-B3DB-AA2BA9B2FB25",
-            ROOT_ID = "11111111-1111-1111-1111-111111111111";
+            ROOT_ID = "11111111-1111-1111-1111-111111111111",
+            LANGUAGE_ID = "682C759B-8651-44C1-9F7A-DBE7C3E32287";
     }
 }

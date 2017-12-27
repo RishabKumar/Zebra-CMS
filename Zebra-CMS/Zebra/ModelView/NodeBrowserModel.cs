@@ -12,5 +12,7 @@ namespace Zebra.ModelView
         public IEnumerable<string> nodefieldids;
         public Node node;
         public Template template;
+        public Language language;
+        public IEnumerable<Language> alllanguages;
     }
 }

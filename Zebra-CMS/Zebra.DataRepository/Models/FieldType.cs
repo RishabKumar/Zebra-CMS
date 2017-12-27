@@ -12,7 +12,7 @@ namespace Zebra.DataRepository.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class FieldType : IEntity
+    public partial class FieldType
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public FieldType()

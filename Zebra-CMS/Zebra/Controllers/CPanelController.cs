@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
-using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using Zebra.CustomAttributes;
 using Zebra.DataRepository.Models;
+using Zebra.Globalization;
 using Zebra.ModelView;
 using Zebra.Services.Interfaces;
 using Zebra.Services.Operations;
@@ -63,12 +63,14 @@ namespace Zebra.Controllers
             return View(_nodeop.SearchNode(nameorid));
         }
         
-        public ActionResult NodeBrowser(string nodeid)
+        public ActionResult NodeBrowser(string nodeid, string languageid = "B45089D2-CF01-4351-B6A6-40FBFFD64DC3")
         {
             var node = _nodeop.GetNode(nodeid);
+            var language = LanguageManager.GetLanguageById(languageid);
+            var languages = LanguageManager.GetAllLanguages();
             var list = _fieldOperations.GetInclusiveFieldsOfTemplate(node.Id.ToString());
             List<string> htmllist = new List<string>();
-            IEnumerable<NodeFieldMap> nodefieldmap = ((IStructureOperations)_nodeop).GetNodeFieldMapData(node.Id.ToString());
+            IEnumerable<NodeFieldMap> nodefieldmap = ((IStructureOperations)_nodeop).GetNodeFieldMapData(node.Id.ToString(), language.Id.ToString());
             //   foreach (var field in list)
             foreach(var nodefield in nodefieldmap)
             {
@@ -76,7 +78,7 @@ namespace Zebra.Controllers
                 htmllist.Add(_fieldOperations.GetRenderedField(nodeid, nodefield.FieldId.ToString(), nodefield.Id.ToString()));
             }
             //.Select(x => x.Id).Cast<string>()
-            return View(model: new NodeBrowserModel() { fields = htmllist, node = node, template = node.Template });
+            return View(model: new NodeBrowserModel() { fields = htmllist, node = node, template = node.Template, language = language, alllanguages = languages });
         }
         
         public ActionResult RenderUtility(string fullyqualifiedname, string method = "RenderView", dynamic data = null)

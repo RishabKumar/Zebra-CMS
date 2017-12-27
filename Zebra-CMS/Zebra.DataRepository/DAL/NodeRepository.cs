@@ -23,13 +23,13 @@ namespace Zebra.DataRepository.DAL
 
         }
 
-        public bool RegisterFieldsForNode(IEntity node, List<Field> fields)
+        public bool RegisterFieldsForNode(IEntity node, List<Field> fields, IEntity language)
         {
             using (var dbt = _context.Database.BeginTransaction())
             {
                 foreach (var field in fields)
                 {
-                    var nodefieldmap = new NodeFieldMap() { Id = Guid.NewGuid(), FieldId = field.Id, NodeId = node.Id, NodeData = string.Empty };
+                    var nodefieldmap = new NodeFieldMap() { Id = Guid.NewGuid(), FieldId = field.Id, NodeId = node.Id, NodeData = string.Empty, LanguageId = language.Id };
                     nodefieldmap = _context.NodeFieldMaps.Add(nodefieldmap);
                 }
                 _context.SaveChanges();
@@ -120,11 +120,11 @@ namespace Zebra.DataRepository.DAL
         }
 
         //creates a new nodefieldmap and saves data
-        public bool CreateAndSaveNodeData(Node node, Field field, dynamic data)
+        public bool CreateAndSaveNodeData(Node node, Field field, Language language, dynamic data)
         {
             using (var dbt = _context.Database.BeginTransaction())
             {
-                var nodedata = new NodeFieldMap() { Id = Guid.NewGuid(), NodeId = node.Id, FieldId = field.Id, NodeData = data.ToString() };
+                var nodedata = new NodeFieldMap() { Id = Guid.NewGuid(), NodeId = node.Id, FieldId = field.Id, NodeData = data.ToString(), LanguageId = language.Id };
                 nodedata = _context.NodeFieldMaps.Add(nodedata);
                 _context.SaveChanges();
                 dbt.Commit();
@@ -147,14 +147,24 @@ namespace Zebra.DataRepository.DAL
             return true;
         }
 
-        public List<NodeFieldMap> GetNodeFieldMapData(Node node, Field field = null)
+        public List<NodeFieldMap> GetNodeFieldMapData(Node node)
+        { 
+            return _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).OrderBy(x=>x.CreationDate).ToList();  
+        }
+
+        public List<NodeFieldMap> GetNodeFieldMapData(Node node, Language language)
         {
-            if (field == null)
-                return _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).OrderBy(x=>x.CreationDate).ToList();
-            else
-            {
-               return _context.NodeFieldMaps.Where(x => x.NodeId == node.Id && x.FieldId == field.Id).OrderBy(x => x.CreationDate).ToList();
-            }
+            return _context.NodeFieldMaps.Where(x => x.NodeId == node.Id && x.LanguageId == language.Id).OrderBy(x => x.CreationDate).ToList();
+        }
+
+        public List<NodeFieldMap> GetNodeFieldMapData(Node node, Field field)
+        {
+            return _context.NodeFieldMaps.Where(x => x.NodeId == node.Id && x.FieldId == field.Id).OrderBy(x => x.CreationDate).ToList();
+        }
+
+        public List<NodeFieldMap> GetNodeFieldMapData(Node node, Field field, Language language)
+        {
+            return _context.NodeFieldMaps.Where(x => x.NodeId == node.Id && x.FieldId == field.Id && x.LanguageId == language.Id).OrderBy(x => x.CreationDate).ToList();
         }
 
         public string GetNodeFieldMapData(Node node, string fieldname)

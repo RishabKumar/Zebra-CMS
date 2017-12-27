@@ -1,16 +1,12 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 using Zebra.Core.Context;
 using Zebra.DataRepository.DAL;
 using Zebra.DataRepository.Interfaces;
 using Zebra.DataRepository.Models;
+using Zebra.Globalization;
 using Zebra.Services.Interfaces;
-
 using Zebra.Services.Type;
 
 namespace Zebra.Services.Operations
@@ -37,7 +33,7 @@ namespace Zebra.Services.Operations
                 DeleteNode(node.Id.ToString());
                 return null;
             }     
-           ((INodeRepository)_currentrepository).RegisterFieldsForNode(node, fields);
+           RegisterFieldsForNode(node, fields, LanguageManager.GetDefaultLanguage());
             return node;
         }
 
@@ -164,10 +160,16 @@ namespace Zebra.Services.Operations
             nodes.Add(new Node() { Id = template.Id }); // every template's id is same as to it corresponding Node's Id.
             foreach (var node in nodes)
             {
-                ((INodeRepository)_currentrepository).RegisterFieldsForNode(node, fields);
+                RegisterFieldsForNode(node, fields, LanguageManager.GetDefaultLanguage());
             }
             return field;
         }
+
+        public bool RegisterFieldsForNode(IEntity node, List<Field> fields, Language language)
+        {
+            return ((INodeRepository)_currentrepository).RegisterFieldsForNode(node, fields, language);
+        }
+
 
         public string GetValueForField(string nodeid, string fieldid)
         {
@@ -248,13 +250,19 @@ namespace Zebra.Services.Operations
                     
                 case NodeType.FIELDTYPENODE_ID:
                     type = NodeType.FIELDTYPE_TYPE;
-                    CreateFieldType(new FieldType() { Id = Guid.NewGuid(), TypeName = name });
+                    CreateFieldType(new FieldType() { Id = newid, TypeName = name });
                     return true;
-                    
+
+                case NodeType.LANGUAGE_ID:
+                    type = NodeType.LANGUAGE_TYPE;
+                    LanguageManager.CreateEmptyLanguage(newid);
+                    return true;
+
                 case NodeType.MEDIA_ID:
                     type = NodeType.MEDIA_TYPE;
                     return true;
                 default:
+                    node = GetNode(node.Id.ToString());
                     return DetermineNodeTypeAndCreate(name, newid, GetNode(node.ParentId.ToString()));
                     
             }
@@ -284,6 +292,9 @@ namespace Zebra.Services.Operations
                     break;
                 case NodeType.MEDIA_ID:
                     type = NodeType.MEDIA_TYPE;
+                    break;
+                case NodeType.LANGUAGE_ID:
+                    type = NodeType.LANGUAGE_TYPE;
                     break;
                 default:
                     node = GetNode(node.Id.ToString());
@@ -353,7 +364,7 @@ namespace Zebra.Services.Operations
                         var fieldobj = Activator.CreateInstance(type, _context);
                         var mi = type.GetMethod("GetValue");
                         var data = mi.Invoke(fieldobj, null).ToString();
-
+                        //node.LanguageId = LanguageManager.GetDefaultLanguage().Id;
                         _currentrepository.SaveNodeData(node, field, data);
                     }
                     catch(Exception e) { }
@@ -362,6 +373,7 @@ namespace Zebra.Services.Operations
             else
             {
                 var list = ((INodeRepository)_currentrepository).GetNodeFieldMapData(node);
+                var processedlist = new List<NodeFieldMap>();
                 foreach(var nodefield in list)
                 {
                     try
@@ -382,14 +394,32 @@ namespace Zebra.Services.Operations
                         data = mi.Invoke(fieldobj, null).ToString();
 
                         nodefield.NodeData = data;
+                        nodefield.LanguageId = LanguageManager.GetDefaultLanguage().Id;
                         _currentrepository.SaveNodeData(nodefield);
+                        processedlist.Add(nodefield);
                     }
                     catch(Exception e) { }
                 }
+                PerformUpdates(processedlist, node);
             }
-
             return true;
         }
+
+        private async void PerformUpdates(List<NodeFieldMap> list, Node node)
+        {
+            var type = DetermineNodeType(new Node() { Id = node.Id });
+            switch(type)
+            {
+                case NodeType.LANGUAGE_TYPE:
+                    var displayname = list.Where(x => x.Field.FieldName == "Display Name").FirstOrDefault().NodeData;
+                    var languagecode = list.Where(x => x.Field.FieldName == "Language Code").FirstOrDefault().NodeData;
+                    var countrycode = list.Where(x => x.Field.FieldName == "Country Code").FirstOrDefault().NodeData;
+                    LanguageManager.UpdateLanguage(node.Id, displayname, countrycode, languagecode);
+                    break;
+                case NodeType.TEMPLATE_TYPE:
+                    break;
+            }
+        }   
 
         public List<NodeFieldMap> GetNodeFieldMapData(string nodeid)
         {
@@ -405,5 +435,13 @@ namespace Zebra.Services.Operations
             _currentrepository.MoveNode(new Node() { Id = Guid.Parse(nodeid) }, new Node() { Id = Guid.Parse(newparentid) });
         }
 
+        public List<NodeFieldMap> GetNodeFieldMapData(string nodeid, string language)
+        {
+            if (string.IsNullOrWhiteSpace(nodeid) || string.IsNullOrWhiteSpace(language))
+            {
+                return null;
+            }
+            return ((INodeRepository)_currentrepository).GetNodeFieldMapData(new Node() { Id = Guid.Parse(nodeid) }, new Language() { Id = Guid.Parse(language)});
+        }
     }
 }

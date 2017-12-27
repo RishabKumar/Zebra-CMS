@@ -12,7 +12,7 @@ namespace Zebra.DataRepository.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class TemplateFieldMap : IEntity
+    public partial class TemplateFieldMap
     {
         public System.Guid Id { get; set; }
         public System.Guid TemplateId { get; set; }

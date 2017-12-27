@@ -16,6 +16,16 @@
     <Property Name="TypeName" Type="nvarchar(max)" Nullable="false" />
     <Property Name="ClassPath" Type="nvarchar" MaxLength="50" />
   </EntityType>
+  <EntityType Name="Languages">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CultureName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="LanguageCode" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CountryCode" Type="nvarchar(max)" />
+  </EntityType>
   <EntityType Name="NodeFieldMaps">
     <Key>
       <PropertyRef Name="Id" />
@@ -25,6 +35,7 @@
     <Property Name="FieldId" Type="uniqueidentifier" />
     <Property Name="NodeData" Type="nvarchar(max)" />
     <Property Name="CreationDate" Type="datetime2" Precision="7" Nullable="false" StoreGeneratedPattern="Computed" />
+    <Property Name="LanguageId" Type="uniqueidentifier" />
   </EntityType>
   <EntityType Name="Nodes">
     <Key>
@@ -71,6 +82,20 @@
       </Principal>
       <Dependent Role="NodeFieldMaps">
         <PropertyRef Name="FieldId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__NodeField__Langu__2CF2ADDF">
+    <End Role="Languages" Type="Self.Languages" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="NodeFieldMaps" Type="Self.NodeFieldMaps" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Languages">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="NodeFieldMaps">
+        <PropertyRef Name="LanguageId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -147,6 +172,7 @@
   <EntityContainer Name="ZebraDB_ModelStoreContainer">
     <EntitySet Name="Fields" EntityType="Self.Fields" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FieldTypes" EntityType="Self.FieldTypes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Languages" EntityType="Self.Languages" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="NodeFieldMaps" EntityType="Self.NodeFieldMaps" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Nodes" EntityType="Self.Nodes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TemplateFieldMaps" EntityType="Self.TemplateFieldMaps" Schema="dbo" store:Type="Tables" />
@@ -154,6 +180,10 @@
     <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK__NodeField__Field__02FC7413" Association="Self.FK__NodeField__Field__02FC7413">
       <End Role="Fields" EntitySet="Fields" />
+      <End Role="NodeFieldMaps" EntitySet="NodeFieldMaps" />
+    </AssociationSet>
+    <AssociationSet Name="FK__NodeField__Langu__2CF2ADDF" Association="Self.FK__NodeField__Langu__2CF2ADDF">
+      <End Role="Languages" EntitySet="Languages" />
       <End Role="NodeFieldMaps" EntitySet="NodeFieldMaps" />
     </AssociationSet>
     <AssociationSet Name="FK__NodeField__NodeI__03F0984C" Association="Self.FK__NodeField__NodeI__03F0984C">

@@ -12,7 +12,7 @@ namespace Zebra.DataRepository.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class User : IEntity
+    public partial class User
     {
         public System.Guid Id { get; set; }
         public string UserName { get; set; }

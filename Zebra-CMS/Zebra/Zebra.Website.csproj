@@ -340,6 +340,10 @@
       <Project>{95df0239-628c-4fc5-a6f2-01bf8ec2acbd}</Project>
       <Name>Zebra.DataRepository</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Zebra.Essentials\Zebra.Essentials.csproj">
+      <Project>{63AAF883-A2F7-4C89-948A-60EDFA5D2A2E}</Project>
+      <Name>Zebra.Essentials</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Zebra.Services\Zebra.Services.csproj">
       <Project>{9d44be00-08e8-4d3f-a605-a88f9791ce55}</Project>
       <Name>Zebra.Services</Name>

@@ -84,12 +84,24 @@
     <Compile Include="DAL\ContentMapRepository.cs" />
     <Compile Include="DAL\FieldRepository.cs" />
     <Compile Include="DAL\FileRepository.cs" />
+    <Compile Include="DAL\LanguageRepository.cs" />
+    <Compile Include="Interfaces\ILanguageRepository.cs" />
+    <Compile Include="ModelsExtension\User.cs" />
+    <Compile Include="ModelsExtension\FieldType.cs" />
+    <Compile Include="ModelsExtension\TemplateFieldMap.cs" />
+    <Compile Include="ModelsExtension\Template.cs" />
+    <Compile Include="ModelsExtension\NodeFieldMap.cs" />
+    <Compile Include="ModelsExtension\Language.cs" />
+    <Compile Include="ModelsExtension\Field.cs" />
     <Compile Include="ModelsExtension\Node.cs" />
     <Compile Include="Models\ContentMap.cs" />
     <Compile Include="Models\Field.cs">
       <DependentUpon>DTOContextContainer.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FieldType.cs">
+      <DependentUpon>DTOContextContainer.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Language.cs">
       <DependentUpon>DTOContextContainer.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Node.cs">
