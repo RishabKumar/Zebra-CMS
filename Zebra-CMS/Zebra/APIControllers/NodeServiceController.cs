@@ -55,21 +55,23 @@ namespace Zebra.APIControllers
         }
 
         [HttpPost]
+        [Obsolete("remove list and add new table", true)]
         public void RegisterLocaleForNode()
         {
             var json = HttpContext.Current.Request.Form[0];
             dynamic node = JsonConvert.DeserializeObject(json);
-            string nodeid = node.id;
+            string nodeid = node.nodeid;
             string languageid = node.languageid;
-            var list = _structops.GetNodeFieldMapData(nodeid, languageid);
-            if(list != null && list.Count() == 0)
+            _structops.LocalizeNode(nodeid, languageid);
+         //   var list = _structops.GetNodeFieldMapData(nodeid, languageid);
+            // list needs to be removed....add new table for nodelanguagemap.
+             
+            var tmplist = _structops.GetNodeFieldMapData(nodeid, LanguageManager.GetDefaultLanguage().Id.ToString());
+            foreach(var nodefield in tmplist)
             {
-                var tmplist = _structops.GetNodeFieldMapData(nodeid, LanguageManager.GetDefaultLanguage().Id.ToString());
-                foreach(var nodefield in tmplist)
-                {
-                    _structops.RegisterFieldsForNode(new Node() { Id = nodefield.NodeId.Value }, new List<Field>() { new Field() { Id = nodefield.FieldId.Value } }, LanguageManager.GetLanguageById(languageid));
-                }
+                _structops.RegisterFieldsForNode(new Node() { Id = nodefield.NodeId.Value }, new Field() { Id = nodefield.FieldId.Value }, LanguageManager.GetLanguageById(languageid));
             }
+            
         }
 
         [HttpPost]

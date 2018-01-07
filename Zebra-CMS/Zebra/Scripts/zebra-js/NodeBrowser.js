@@ -21,3 +21,29 @@ $(document).on('click', '.zebra-save-data', function (event) {
     event.preventDefault();
 });
 
+//js to add new locale to a node
+
+$(document).on('change','.zebra-language-selector',function () {
+    var languageid = this.value;
+    var nodeid = $(this).attr("data-nodeid");
+    LoadNodeBrowser(nodeid, null, null, null, languageid);
+});
+
+$(document).on("click", ".zebra-add-locale", function () {
+    var sel = $(".zebra-language-selector");
+    var nodeid = $(sel).attr("data-nodeid");
+    var languageid = $(sel).val();
+    var info = { nodeid: nodeid, languageid: languageid };
+    $.ajax({
+        type: "POST",
+        url: "/zebraapi/nodeservice/RegisterLocaleForNode",
+        cache: false,
+        dataType: "json",
+        data: JSON.stringify(info),
+        async: false,
+        success: function (json) {
+            LoadNodeBrowser(nodeid, null, null, null, languageid);
+        }
+    });
+
+});

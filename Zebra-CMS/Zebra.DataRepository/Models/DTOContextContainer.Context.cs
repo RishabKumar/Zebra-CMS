@@ -33,5 +33,6 @@ namespace Zebra.DataRepository.Models
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<NodeFieldMap> NodeFieldMaps { get; set; }
         public virtual DbSet<Language> Languages { get; set; }
+        public virtual DbSet<NodeLanguageMap> NodeLanguageMaps { get; set; }
     }
 }

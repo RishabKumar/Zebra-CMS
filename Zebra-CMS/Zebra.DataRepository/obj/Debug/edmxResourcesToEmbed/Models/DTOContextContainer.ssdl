@@ -7,6 +7,7 @@
     <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
     <Property Name="FieldName" Type="nvarchar(max)" Nullable="false" />
     <Property Name="TypeId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="IsStatic" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="FieldTypes">
     <Key>
@@ -35,6 +36,14 @@
     <Property Name="FieldId" Type="uniqueidentifier" />
     <Property Name="NodeData" Type="nvarchar(max)" />
     <Property Name="CreationDate" Type="datetime2" Precision="7" Nullable="false" StoreGeneratedPattern="Computed" />
+    <Property Name="LanguageId" Type="uniqueidentifier" />
+  </EntityType>
+  <EntityType Name="NodeLanguageMaps">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="NodeId" Type="uniqueidentifier" />
     <Property Name="LanguageId" Type="uniqueidentifier" />
   </EntityType>
   <EntityType Name="Nodes">
@@ -113,6 +122,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK__NodeLangu__Langu__31B762FC">
+    <End Role="Languages" Type="Self.Languages" Multiplicity="0..1" />
+    <End Role="NodeLanguageMaps" Type="Self.NodeLanguageMaps" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Languages">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="NodeLanguageMaps">
+        <PropertyRef Name="LanguageId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__NodeLangu__NodeI__30C33EC3">
+    <End Role="Nodes" Type="Self.Nodes" Multiplicity="0..1" />
+    <End Role="NodeLanguageMaps" Type="Self.NodeLanguageMaps" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Nodes">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="NodeLanguageMaps">
+        <PropertyRef Name="NodeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_FieldsTemplateFieldMap">
     <End Role="Fields" Type="Self.Fields" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -174,6 +207,7 @@
     <EntitySet Name="FieldTypes" EntityType="Self.FieldTypes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Languages" EntityType="Self.Languages" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="NodeFieldMaps" EntityType="Self.NodeFieldMaps" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="NodeLanguageMaps" EntityType="Self.NodeLanguageMaps" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Nodes" EntityType="Self.Nodes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TemplateFieldMaps" EntityType="Self.TemplateFieldMaps" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Templates" EntityType="Self.Templates" Schema="dbo" store:Type="Tables" />
@@ -189,6 +223,14 @@
     <AssociationSet Name="FK__NodeField__NodeI__03F0984C" Association="Self.FK__NodeField__NodeI__03F0984C">
       <End Role="Nodes" EntitySet="Nodes" />
       <End Role="NodeFieldMaps" EntitySet="NodeFieldMaps" />
+    </AssociationSet>
+    <AssociationSet Name="FK__NodeLangu__Langu__31B762FC" Association="Self.FK__NodeLangu__Langu__31B762FC">
+      <End Role="Languages" EntitySet="Languages" />
+      <End Role="NodeLanguageMaps" EntitySet="NodeLanguageMaps" />
+    </AssociationSet>
+    <AssociationSet Name="FK__NodeLangu__NodeI__30C33EC3" Association="Self.FK__NodeLangu__NodeI__30C33EC3">
+      <End Role="Nodes" EntitySet="Nodes" />
+      <End Role="NodeLanguageMaps" EntitySet="NodeLanguageMaps" />
     </AssociationSet>
     <AssociationSet Name="FK_FieldsTemplateFieldMap" Association="Self.FK_FieldsTemplateFieldMap">
       <End Role="Fields" EntitySet="Fields" />

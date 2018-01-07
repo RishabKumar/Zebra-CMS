@@ -16,7 +16,7 @@ namespace Zebra.Core.Types
 
         public override string GetValue()
         {
-            _context.Value = _context.RawData.ToString();
+            _context.Value = _context.RawData == null ? string.Empty : _context.RawData.ToString();
             return _context.Value;
         }
 
@@ -24,7 +24,7 @@ namespace Zebra.Core.Types
         {
             var tmp = _context.Value;
             var id = tmp.Split(',');
-            if(id.Length > 0)
+            if(id.Length > 1)
             {
                 return id[1].Trim();
             }

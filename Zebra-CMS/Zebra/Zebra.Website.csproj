@@ -187,6 +187,7 @@
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\ZebraController.cs" />
     <Compile Include="CustomAttributes\ZebraAuthorize.cs" />
+    <Compile Include="Extensions\NodeExtension.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

@@ -45,7 +45,12 @@ namespace Zebra.Utilities.UtilityProcessor
                                 existingfield.TypeId = Guid.Parse((string)data[i]["typeid"]);
                                 updateflag = true;
                             }
-                            if(updateflag)
+                            if (!existingfield.IsStatic.Equals(bool.Parse((string)data[i]["isstatic"])))
+                            {
+                                existingfield.IsStatic = bool.Parse((string)data[i]["isstatic"]);
+                                updateflag = true;
+                            }
+                            if (updateflag)
                             {
                                 OperationsFactory.FieldOperations.UpdateField(existingfield);
                             }
@@ -53,7 +58,7 @@ namespace Zebra.Utilities.UtilityProcessor
                         }
                         continue;
                     }
-                    var field = new Field() { Id = Guid.NewGuid(), FieldName = data[i]["name"], TypeId = data[i]["typeid"] };
+                    var field = new Field() { Id = Guid.NewGuid(), FieldName = data[i]["name"], TypeId = data[i]["typeid"], IsStatic = bool.Parse((string)data[i]["isstatic"]) };
                     //var template = new Template() { Id = Guid.Parse(nodeid) };  // as Node id and template id both are same in respective tables.
                     var newfield = OperationsFactory.StructureOperations.CreateField(field, template);   
                 }

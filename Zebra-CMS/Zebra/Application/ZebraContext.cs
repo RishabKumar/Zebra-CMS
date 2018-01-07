@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Zebra.DataRepository.Models;
+using Zebra.Globalization;
 using Zebra.Services.Interfaces;
 using Zebra.Services.Operations;
 
@@ -19,7 +21,18 @@ namespace Zebra.Application
             string pagepath = HttpContext.Current.Request.Url.AbsolutePath.Replace("zebrapage/", startnode);
 
             Url = new PageUrl(HttpContext.Current.Request.Url, pagepath);
-            
+
+            var urlparts = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+            foreach(var part in urlparts)
+            {
+                CurrentLanguage = LanguageManager.GetLanguage(part);
+                if(CurrentLanguage != null)
+                {
+                    pagepath = pagepath.Replace("/" + part, "");
+                    break;
+                }
+            }
+
             var pagenode = OperationsFactory.PageOperations.GetPageNode(pagepath[pagepath.Length - 1] == '/' ? pagepath : pagepath + "/");
             string layoutid = null;
             List<Guid> actions = new List<Guid>();
@@ -92,6 +105,8 @@ namespace Zebra.Application
             public readonly Uri AbsolutePageUrl;
             public readonly string PageNodeUrl;
         }
+
+        public Language CurrentLanguage { get; set; }  
 
         public void Dispose()
         {

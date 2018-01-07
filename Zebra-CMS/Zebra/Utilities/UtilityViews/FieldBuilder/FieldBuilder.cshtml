@@ -15,18 +15,19 @@
                 @foreach (var fields in  ((Dictionary<string, dynamic>)Model)["Fields"])
                 {
                     <div class='field'>
-                        <text>Field Name<input type='text' value="@fields.FieldName" id="@fields.Id" /> 
+                        <text>Field Name<input class="fieldname" type='text' value="@fields.FieldName" id="@fields.Id" /> 
                         FieldType <select>
                                 @foreach (var fieldtypes in ((Dictionary<string, dynamic>)Model)["FieldTypes"])
                                 {
                                     <option value='@fieldtypes.Id.ToString()' @if(fields.FieldType.Id == fieldtypes.Id) { <text>selected</text> }> @fieldtypes.TypeName</option>
                                 }
                                   </select>
+                        <input type="checkbox" class="fieldproperty" value="@fields.IsStatic" />
                         <a href="#" class='remove-field-button'>Remove Field</a></text>
                     </div>
                 }
                 <div class='field'>
-                    Field Name<input type='text' id='' name='fieldname1' />
+                    Field Name<input class="fieldname" type='text' id='' name='fieldname1' />
                     FieldType 
                     <select>
                         @foreach (var fieldtypes in ((Dictionary<string, dynamic>)Model)["FieldTypes"])
@@ -34,6 +35,7 @@
                             <option value='@fieldtypes.Id.ToString()'> @fieldtypes.TypeName</option>
                         }
                     </select>
+                    <input type="checkbox" class="fieldproperty" value="false" />
                     <a href="#" class='remove-field-button'>Remove Field</a>
                 </div>
             </div>

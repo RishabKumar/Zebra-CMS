@@ -24,6 +24,7 @@ namespace Zebra.DataRepository.Models
         public System.Guid Id { get; set; }
         public string FieldName { get; set; }
         public System.Guid TypeId { get; set; }
+        public bool IsStatic { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TemplateFieldMap> TemplateFieldMaps { get; set; }

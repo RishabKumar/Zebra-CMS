@@ -17,19 +17,27 @@
 </div>
 
 <button class="zebra-save-data">Save</button>
-<select>
+<select data-nodeid="@Model.node.Id" class="zebra-language-selector">
     @foreach (var lang in Model.alllanguages)
     {
-        <option value="@lang.Id">@lang.CultureName</option>
+        <option @(Model.currentlanguage.Id==lang.Id ? "selected" : "") value="@lang.Id">@lang.CultureName</option>
     }
 </select>
 <div class="zebra-field">
     <form class="zebra-field-data-form" enctype="multipart/form-data">
         <input type="hidden" name="nodeid" id="nodeid" value="@Model.node.Id" />
+        <input type="hidden" name="nodelanguageid" id="nodelanguageid" value="@Model.currentlanguage.Id" />
+       @if(Model.allnodelanguages.Count(x=>x.Id == Model.currentlanguage.Id) == 0)
+        {
+            <input type="button" class="zebra-add-locale" value="Add Locale"/>
+        }
         @Html.LoadFields(Model.fields)
     </form>
 </div>
 
+<script>
+   
+</script>
 
 
  

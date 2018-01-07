@@ -12,6 +12,7 @@
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="FieldName" Type="nvarchar(max)" Nullable="false" />
           <Property Name="TypeId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="IsStatic" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="FieldTypes">
           <Key>
@@ -40,6 +41,14 @@
           <Property Name="FieldId" Type="uniqueidentifier" />
           <Property Name="NodeData" Type="nvarchar(max)" />
           <Property Name="CreationDate" Type="datetime2" Precision="7" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LanguageId" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="NodeLanguageMaps">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="NodeId" Type="uniqueidentifier" />
           <Property Name="LanguageId" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="Nodes">
@@ -118,6 +127,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__NodeLangu__Langu__31B762FC">
+          <End Role="Languages" Type="Self.Languages" Multiplicity="0..1" />
+          <End Role="NodeLanguageMaps" Type="Self.NodeLanguageMaps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Languages">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NodeLanguageMaps">
+              <PropertyRef Name="LanguageId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__NodeLangu__NodeI__30C33EC3">
+          <End Role="Nodes" Type="Self.Nodes" Multiplicity="0..1" />
+          <End Role="NodeLanguageMaps" Type="Self.NodeLanguageMaps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Nodes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NodeLanguageMaps">
+              <PropertyRef Name="NodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_FieldsTemplateFieldMap">
           <End Role="Fields" Type="Self.Fields" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -179,6 +212,7 @@
           <EntitySet Name="FieldTypes" EntityType="Self.FieldTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Languages" EntityType="Self.Languages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NodeFieldMaps" EntityType="Self.NodeFieldMaps" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NodeLanguageMaps" EntityType="Self.NodeLanguageMaps" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Nodes" EntityType="Self.Nodes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TemplateFieldMaps" EntityType="Self.TemplateFieldMaps" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Templates" EntityType="Self.Templates" Schema="dbo" store:Type="Tables" />
@@ -194,6 +228,14 @@
           <AssociationSet Name="FK__NodeField__NodeI__03F0984C" Association="Self.FK__NodeField__NodeI__03F0984C">
             <End Role="Nodes" EntitySet="Nodes" />
             <End Role="NodeFieldMaps" EntitySet="NodeFieldMaps" />
+          </AssociationSet>
+          <AssociationSet Name="FK__NodeLangu__Langu__31B762FC" Association="Self.FK__NodeLangu__Langu__31B762FC">
+            <End Role="Languages" EntitySet="Languages" />
+            <End Role="NodeLanguageMaps" EntitySet="NodeLanguageMaps" />
+          </AssociationSet>
+          <AssociationSet Name="FK__NodeLangu__NodeI__30C33EC3" Association="Self.FK__NodeLangu__NodeI__30C33EC3">
+            <End Role="Nodes" EntitySet="Nodes" />
+            <End Role="NodeLanguageMaps" EntitySet="NodeLanguageMaps" />
           </AssociationSet>
           <AssociationSet Name="FK_FieldsTemplateFieldMap" Association="Self.FK_FieldsTemplateFieldMap">
             <End Role="Fields" EntitySet="Fields" />
@@ -226,6 +268,7 @@
           <NavigationProperty Name="TemplateFieldMaps" Relationship="Self.FK_FieldsTemplateFieldMap" FromRole="Fields" ToRole="TemplateFieldMaps" />
           <NavigationProperty Name="FieldType" Relationship="Self.FK_FieldTypesFields" FromRole="Fields" ToRole="FieldTypes" />
           <NavigationProperty Name="NodeFieldMaps" Relationship="ZebraDB_Model.FK__NodeField__Field__73BA3083" FromRole="Field" ToRole="NodeFieldMap" />
+          <Property Name="IsStatic" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="FieldType">
           <Key>
@@ -247,6 +290,7 @@
           <Property Name="ParentId" Type="Guid" />
           <NavigationProperty Name="NodeFieldMaps" Relationship="ZebraDB_Model.FK__NodeField__NodeI__72C60C4A" FromRole="Node" ToRole="NodeFieldMap" />
           <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Computed" Precision="7" />
+          <NavigationProperty Name="NodeLanguageMaps" Relationship="ZebraDB_Model.FK__NodeLangu__NodeI__30C33EC3" FromRole="Node" ToRole="NodeLanguageMap" />
         </EntityType>
         <EntityType Name="TemplateFieldMap">
           <Key>
@@ -361,6 +405,15 @@
             <End Role="Language" EntitySet="Languages" />
             <End Role="NodeFieldMap" EntitySet="NodeFieldMaps" />
           </AssociationSet>
+          <EntitySet Name="NodeLanguageMaps" EntityType="ZebraDB_Model.NodeLanguageMap" />
+          <AssociationSet Name="FK__NodeLangu__Langu__31B762FC" Association="ZebraDB_Model.FK__NodeLangu__Langu__31B762FC">
+            <End Role="Language" EntitySet="Languages" />
+            <End Role="NodeLanguageMap" EntitySet="NodeLanguageMaps" />
+          </AssociationSet>
+          <AssociationSet Name="FK__NodeLangu__NodeI__30C33EC3" Association="ZebraDB_Model.FK__NodeLangu__NodeI__30C33EC3">
+            <End Role="Node" EntitySet="Nodes" />
+            <End Role="NodeLanguageMap" EntitySet="NodeLanguageMaps" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="NodeFieldMap">
           <Key>
@@ -410,6 +463,7 @@
           <Property Name="LanguageCode" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CountryCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="NodeFieldMaps" Relationship="ZebraDB_Model.FK__NodeField__Langu__2CF2ADDF" FromRole="Language" ToRole="NodeFieldMap" />
+          <NavigationProperty Name="NodeLanguageMaps" Relationship="ZebraDB_Model.FK__NodeLangu__Langu__31B762FC" FromRole="Language" ToRole="NodeLanguageMap" />
         </EntityType>
         <Association Name="FK__NodeField__Langu__2CF2ADDF">
           <End Type="ZebraDB_Model.Language" Role="Language" Multiplicity="0..1">
@@ -425,6 +479,40 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="NodeLanguageMap">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="NodeId" Type="Guid" />
+          <Property Name="LanguageId" Type="Guid" />
+          <NavigationProperty Name="Language" Relationship="ZebraDB_Model.FK__NodeLangu__Langu__31B762FC" FromRole="NodeLanguageMap" ToRole="Language" />
+          <NavigationProperty Name="Node" Relationship="ZebraDB_Model.FK__NodeLangu__NodeI__30C33EC3" FromRole="NodeLanguageMap" ToRole="Node" />
+        </EntityType>
+        <Association Name="FK__NodeLangu__Langu__31B762FC">
+          <End Type="ZebraDB_Model.Language" Role="Language" Multiplicity="0..1" />
+          <End Type="ZebraDB_Model.NodeLanguageMap" Role="NodeLanguageMap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Language">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NodeLanguageMap">
+              <PropertyRef Name="LanguageId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__NodeLangu__NodeI__30C33EC3">
+          <End Type="ZebraDB_Model.Node" Role="Node" Multiplicity="0..1" />
+          <End Type="ZebraDB_Model.NodeLanguageMap" Role="NodeLanguageMap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Node">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NodeLanguageMap">
+              <PropertyRef Name="NodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -434,6 +522,7 @@
           <EntitySetMapping Name="Fields">
             <EntityTypeMapping TypeName="ZebraDB_Model.Field">
               <MappingFragment StoreEntitySet="Fields">
+                <ScalarProperty Name="IsStatic" ColumnName="IsStatic" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="FieldName" ColumnName="FieldName" />
                 <ScalarProperty Name="TypeId" ColumnName="TypeId" />
@@ -506,6 +595,15 @@
                 <ScalarProperty Name="LanguageCode" ColumnName="LanguageCode" />
                 <ScalarProperty Name="CultureName" ColumnName="CultureName" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NodeLanguageMaps">
+            <EntityTypeMapping TypeName="ZebraDB_Model.NodeLanguageMap">
+              <MappingFragment StoreEntitySet="NodeLanguageMaps">
+                <ScalarProperty Name="LanguageId" ColumnName="LanguageId" />
+                <ScalarProperty Name="NodeId" ColumnName="NodeId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

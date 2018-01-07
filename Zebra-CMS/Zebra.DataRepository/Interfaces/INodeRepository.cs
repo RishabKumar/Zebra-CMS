@@ -20,7 +20,15 @@ namespace Zebra.DataRepository.Interfaces
 
         bool SaveNodeData(NodeFieldMap nodefieldmap);
 
-        bool RegisterFieldsForNode(IEntity entity, List<Field> fields, IEntity language);
+        bool RegisterFieldsForNode(IEntity entity, Field field, IEntity language);
+
+        /// <summary>
+        /// Registers fields for node in all the 'locales' that are already registered for that node.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="fields"></param>
+        /// <returns></returns>
+        bool RegisterFieldsForNode(IEntity entity, Field field);
 
         List<NodeFieldMap> GetNodeFieldMapData(Node node);
 
@@ -37,5 +45,11 @@ namespace Zebra.DataRepository.Interfaces
         List<Node> GetNodesByType(Template t);
 
         bool CreateAndSaveNodeData(Node node, Field field, Language language, dynamic data);
+
+        bool AddLanguageToNode(Node node, Language language);
+
+        List<Language> GetNodeLanguages(IEntity node);
+
+        NodeLanguageMap GetNodeLanguageMap(NodeLanguageMap nlmap);
     }
 }

@@ -94,6 +94,7 @@ $(document).on('click', ".node-icon-container", function () {
 // ADDED new above
 
 
+
 function CloseModelTreePopup()
 {
     $('div.black-overlay').remove();
@@ -124,8 +125,12 @@ function ShowModelTreePopup(nodeid, parentid, parentnode, nodename, func)
     console.log(nodeinfo);
 }
 
-function LoadNodeBrowser(nodeid, parentid, parentnode, nodename) {
+function LoadNodeBrowser(nodeid, parentid, parentnode, nodename, languageid) {
     var query = nodeid == null || nodeid === '' ? '' : 'nodeid=' + nodeid;
+    if (languageid !== null && languageid !== '' && languageid !== undefined)
+    {
+        query += "&languageid=" + languageid;
+    }
     $.get("./NodeBrowser?" + query, function (data) {
         $(".item-container").html(data);
     });

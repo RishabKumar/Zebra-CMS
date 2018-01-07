@@ -4,7 +4,7 @@
     
 });
 
-$(document).ajaxComplete(function () {
+$(document).ajaxComplete(function (event, xhr, settings) {
     $(document.body).css({ 'cursor': 'default' });
     $('.zebra-mouse-loader').hide();
    

@@ -17,6 +17,7 @@ namespace Zebra.Services.Interfaces
         Template GetTemplate(string templateid);
 
         Field CreateField(Field field, Template template);
+        Field CreateField(Field field, Template template, Language language);
 
         FieldType CreateFieldType(FieldType ft);
 
@@ -42,7 +43,9 @@ namespace Zebra.Services.Interfaces
         void MoveNode(string nodeid, string newparentid);
         List<NodeFieldMap> GetNodeFieldMapData(string nodeid);
         List<NodeFieldMap> GetNodeFieldMapData(string nodeid, string languageid);
-
-        bool RegisterFieldsForNode(IEntity node, List<Field> fields, Language language);
+        bool LocalizeNode(string nodeid, string languageid);
+        List<Language> GetNodeLanguages(string nodeid);
+        bool RegisterFieldsForNode(IEntity node, Field field);
+        bool RegisterFieldsForNode(IEntity node, Field field, Language language);
     }
 }

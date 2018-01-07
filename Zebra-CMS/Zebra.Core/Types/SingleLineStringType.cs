@@ -20,7 +20,7 @@ namespace Zebra.Core.Types
         public override string GetValue()
         {
             // -> add get value from database via a wrapper.
-            _context.Value = HttpUtility.HtmlEncode(_context.RawData.ToString());
+            _context.Value = _context.RawData == null ? string.Empty : HttpUtility.HtmlEncode(_context.RawData.ToString());
             return _context.Value;
         }
 

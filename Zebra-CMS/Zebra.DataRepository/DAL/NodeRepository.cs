@@ -23,17 +23,56 @@ namespace Zebra.DataRepository.DAL
 
         }
 
-        public bool RegisterFieldsForNode(IEntity node, List<Field> fields, IEntity language)
+        public bool AddLanguageToNode(Node node, Language language)
         {
             using (var dbt = _context.Database.BeginTransaction())
             {
-                foreach (var field in fields)
+                _context.NodeLanguageMaps.Add(new NodeLanguageMap() { Id = Guid.NewGuid(), NodeId = node.Id, LanguageId = language.Id });
+                _context.SaveChanges();
+                dbt.Commit();
+                dbt.Dispose();
+            }
+            return true;
+        }
+
+        public List<Language> GetNodeLanguages(IEntity node)
+        {
+            return _context.NodeLanguageMaps.Where(x => x.NodeId == node.Id).Select(y => y.Language).ToList();
+        }
+
+        public NodeLanguageMap GetNodeLanguageMap(NodeLanguageMap nlmap)
+        {
+            return _context.NodeLanguageMaps.Where(x => x.Id == nlmap.Id).FirstOrDefault();
+        }
+
+        public bool RegisterFieldsForNode(IEntity node, Field field, IEntity language)
+        {
+            var nodefieldmap = new NodeFieldMap() { Id = Guid.NewGuid(), FieldId = field.Id, NodeId = node.Id, NodeData = string.Empty, LanguageId = language.Id };
+            nodefieldmap = _context.NodeFieldMaps.Add(nodefieldmap);
+            _context.SaveChanges();
+            return true;
+        }
+        /// <summary>
+        /// Registers fields for node in all the 'locales' that are already registered for that node.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="fields"></param>
+        /// <returns></returns>
+        public bool RegisterFieldsForNode(IEntity node, Field field)
+        {
+            using (var dbt = _context.Database.BeginTransaction())
+            {
+                //var t = from nodefieldmap in _context.NodeFieldMaps where nodefieldmap.NodeId == node.Id group nodefieldmap.LanguageId by nodefieldmap.LanguageId;
+                //var nodefieldmaps1 = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).GroupBy(y => y.LanguageId).Select(s => s.Key).ToList();
+                //var languages = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).Select(y=>y.LanguageId).Distinct().ToList();
+                var languages = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).Select(y => y.LanguageId);
+                foreach (var lang in languages)
                 {
-                    var nodefieldmap = new NodeFieldMap() { Id = Guid.NewGuid(), FieldId = field.Id, NodeId = node.Id, NodeData = string.Empty, LanguageId = language.Id };
-                    nodefieldmap = _context.NodeFieldMaps.Add(nodefieldmap);
+                    RegisterFieldsForNode(node, field, new Language() { Id = lang.Value });
                 }
                 _context.SaveChanges();
                 dbt.Commit();
+                dbt.Dispose();
             }
             return true;
         }
@@ -154,7 +193,7 @@ namespace Zebra.DataRepository.DAL
 
         public List<NodeFieldMap> GetNodeFieldMapData(Node node, Language language)
         {
-            return _context.NodeFieldMaps.Where(x => x.NodeId == node.Id && x.LanguageId == language.Id).OrderBy(x => x.CreationDate).ToList();
+            return _context.NodeFieldMaps.Where(x => x.NodeId == node.Id && (x.LanguageId == language.Id || x.Field.IsStatic)).OrderBy(x => x.CreationDate).ToList();
         }
 
         public List<NodeFieldMap> GetNodeFieldMapData(Node node, Field field)

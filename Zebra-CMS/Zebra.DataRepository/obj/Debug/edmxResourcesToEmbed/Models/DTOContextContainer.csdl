@@ -10,6 +10,7 @@
     <NavigationProperty Name="TemplateFieldMaps" Relationship="Self.FK_FieldsTemplateFieldMap" FromRole="Fields" ToRole="TemplateFieldMaps" />
     <NavigationProperty Name="FieldType" Relationship="Self.FK_FieldTypesFields" FromRole="Fields" ToRole="FieldTypes" />
     <NavigationProperty Name="NodeFieldMaps" Relationship="ZebraDB_Model.FK__NodeField__Field__73BA3083" FromRole="Field" ToRole="NodeFieldMap" />
+    <Property Name="IsStatic" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="FieldType">
     <Key>
@@ -31,6 +32,7 @@
     <Property Name="ParentId" Type="Guid" />
     <NavigationProperty Name="NodeFieldMaps" Relationship="ZebraDB_Model.FK__NodeField__NodeI__72C60C4A" FromRole="Node" ToRole="NodeFieldMap" />
     <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Computed" Precision="7" />
+    <NavigationProperty Name="NodeLanguageMaps" Relationship="ZebraDB_Model.FK__NodeLangu__NodeI__30C33EC3" FromRole="Node" ToRole="NodeLanguageMap" />
   </EntityType>
   <EntityType Name="TemplateFieldMap">
     <Key>
@@ -145,6 +147,15 @@
       <End Role="Language" EntitySet="Languages" />
       <End Role="NodeFieldMap" EntitySet="NodeFieldMaps" />
     </AssociationSet>
+    <EntitySet Name="NodeLanguageMaps" EntityType="ZebraDB_Model.NodeLanguageMap" />
+    <AssociationSet Name="FK__NodeLangu__Langu__31B762FC" Association="ZebraDB_Model.FK__NodeLangu__Langu__31B762FC">
+      <End Role="Language" EntitySet="Languages" />
+      <End Role="NodeLanguageMap" EntitySet="NodeLanguageMaps" />
+    </AssociationSet>
+    <AssociationSet Name="FK__NodeLangu__NodeI__30C33EC3" Association="ZebraDB_Model.FK__NodeLangu__NodeI__30C33EC3">
+      <End Role="Node" EntitySet="Nodes" />
+      <End Role="NodeLanguageMap" EntitySet="NodeLanguageMaps" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="NodeFieldMap">
     <Key>
@@ -194,6 +205,7 @@
     <Property Name="LanguageCode" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="CountryCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="NodeFieldMaps" Relationship="ZebraDB_Model.FK__NodeField__Langu__2CF2ADDF" FromRole="Language" ToRole="NodeFieldMap" />
+    <NavigationProperty Name="NodeLanguageMaps" Relationship="ZebraDB_Model.FK__NodeLangu__Langu__31B762FC" FromRole="Language" ToRole="NodeLanguageMap" />
   </EntityType>
   <Association Name="FK__NodeField__Langu__2CF2ADDF">
     <End Type="ZebraDB_Model.Language" Role="Language" Multiplicity="0..1">
@@ -206,6 +218,40 @@
       </Principal>
       <Dependent Role="NodeFieldMap">
         <PropertyRef Name="LanguageId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="NodeLanguageMap">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="NodeId" Type="Guid" />
+    <Property Name="LanguageId" Type="Guid" />
+    <NavigationProperty Name="Language" Relationship="ZebraDB_Model.FK__NodeLangu__Langu__31B762FC" FromRole="NodeLanguageMap" ToRole="Language" />
+    <NavigationProperty Name="Node" Relationship="ZebraDB_Model.FK__NodeLangu__NodeI__30C33EC3" FromRole="NodeLanguageMap" ToRole="Node" />
+  </EntityType>
+  <Association Name="FK__NodeLangu__Langu__31B762FC">
+    <End Type="ZebraDB_Model.Language" Role="Language" Multiplicity="0..1" />
+    <End Type="ZebraDB_Model.NodeLanguageMap" Role="NodeLanguageMap" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Language">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="NodeLanguageMap">
+        <PropertyRef Name="LanguageId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__NodeLangu__NodeI__30C33EC3">
+    <End Type="ZebraDB_Model.Node" Role="Node" Multiplicity="0..1" />
+    <End Type="ZebraDB_Model.NodeLanguageMap" Role="NodeLanguageMap" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Node">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="NodeLanguageMap">
+        <PropertyRef Name="NodeId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

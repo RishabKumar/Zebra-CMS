@@ -51,6 +51,7 @@ namespace Zebra.Controllers
         }
 
         //Default nodeid is Template node Id
+        [ZebraAuthorize(Roles = "Editor")]
         public ActionResult NodeTree(string nodeid= "8087FA7D-6753-40B9-9F3A-7AE62E882258")
         {
             var list = new List<Node>();
@@ -58,11 +59,13 @@ namespace Zebra.Controllers
             return View(list);
         }
 
+        [ZebraAuthorize(Roles = "Editor")]
         public ActionResult NodeSearchResult(string nameorid)
         {
             return View(_nodeop.SearchNode(nameorid));
         }
-        
+
+        [ZebraAuthorize(Roles = "Editor")]
         public ActionResult NodeBrowser(string nodeid, string languageid = "B45089D2-CF01-4351-B6A6-40FBFFD64DC3")
         {
             var node = _nodeop.GetNode(nodeid);
@@ -78,7 +81,8 @@ namespace Zebra.Controllers
                 htmllist.Add(_fieldOperations.GetRenderedField(nodeid, nodefield.FieldId.ToString(), nodefield.Id.ToString()));
             }
             //.Select(x => x.Id).Cast<string>()
-            return View(model: new NodeBrowserModel() { fields = htmllist, node = node, template = node.Template, language = language, alllanguages = languages });
+            var presentlanguages = ((IStructureOperations)_nodeop).GetNodeLanguages(node.Id.ToString());
+            return View(model: new NodeBrowserModel() { fields = htmllist, node = node, template = node.Template, currentlanguage = language, alllanguages = languages, allnodelanguages = presentlanguages });
         }
         
         public ActionResult RenderUtility(string fullyqualifiedname, string method = "RenderView", dynamic data = null)

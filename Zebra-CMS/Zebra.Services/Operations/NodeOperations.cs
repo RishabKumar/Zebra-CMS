@@ -28,12 +28,16 @@ namespace Zebra.Services.Operations
             Guid newid = Guid.NewGuid();
             Node node = new Node() { Id = newid, NodeName = nodename, TemplateId = new Guid(templateid), ParentId = new Guid(parentid) };
             node = ((INodeRepository)_currentrepository).CreateNode(node);
+            ((INodeRepository)_currentrepository).AddLanguageToNode(node, LanguageManager.GetDefaultLanguage());
             if (!DetermineNodeTypeAndCreate(node.NodeName, newid, node))
             {
                 DeleteNode(node.Id.ToString());
                 return null;
-            }     
-           RegisterFieldsForNode(node, fields, LanguageManager.GetDefaultLanguage());
+            }
+            foreach (var field in fields)
+            {
+                ((INodeRepository)_currentrepository).RegisterFieldsForNode(node, field, LanguageManager.GetDefaultLanguage());
+            }
             return node;
         }
 
@@ -148,26 +152,78 @@ namespace Zebra.Services.Operations
             return _templaterepository.CreateTemplate(t);
         }
 
+        public Field CreateField(Field field, Template template, Language language)
+        {
+            field = _fieldrepository.CreateField(field, template);
+            _fieldrepository.AddFieldToTemplate(template, field);
+            //template = _templaterepository.GetTemplate(template);  // this doesnot always retrieve all Nodes in case if browser is not refreshed after noder creation, hence its not safe.
+            //    var nodes = _base.GetByCondition(x => x.TemplateId == template.Id);
+            var nodes = GetAllDerivedNodesByType(template);
+
+            nodes.Add(new Node() { Id = template.Id }); // every template's id is same as to it corresponding Node's Id.
+            var lang = language ?? LanguageManager.GetDefaultLanguage();
+            foreach (var node in nodes)
+            {
+                RegisterFieldsForNode(node, field, lang);
+            }
+            return field;
+        }
+
         public Field CreateField(Field field, Template template)
         {
             field = _fieldrepository.CreateField(field, template);
             _fieldrepository.AddFieldToTemplate(template, field);
             //template = _templaterepository.GetTemplate(template);  // this doesnot always retrieve all Nodes in case if browser is not refreshed after noder creation, hence its not safe.
-            var fields = new List<Field>() { field };
             //    var nodes = _base.GetByCondition(x => x.TemplateId == template.Id);
             var nodes = GetAllDerivedNodesByType(template);
 
             nodes.Add(new Node() { Id = template.Id }); // every template's id is same as to it corresponding Node's Id.
+            
             foreach (var node in nodes)
             {
-                RegisterFieldsForNode(node, fields, LanguageManager.GetDefaultLanguage());
+                RegisterFieldsForNode(node, field);
             }
             return field;
         }
 
-        public bool RegisterFieldsForNode(IEntity node, List<Field> fields, Language language)
+        public List<Language> GetNodeLanguages(string nodeid)
         {
-            return ((INodeRepository)_currentrepository).RegisterFieldsForNode(node, fields, language);
+            var node = GetNode(nodeid);
+            return ((INodeRepository)_currentrepository).GetNodeLanguages(node);
+        }
+
+        public bool LocalizeNode(string nodeid, string languageid)
+        {
+            var node = GetNode(nodeid);
+            var language = LanguageManager.GetLanguageById(languageid);
+            return ((INodeRepository)_currentrepository).AddLanguageToNode(node, language);
+        }
+
+        public bool RegisterFieldsForNode(IEntity node, Field field, Language language)
+        {
+            field = _fieldrepository.GetField(field);
+            if (field.IsStatic)
+            {
+                return false;
+            }
+            else
+            {
+                return ((INodeRepository)_currentrepository).RegisterFieldsForNode(node, field, language);
+            } 
+            
+        }
+
+        public bool RegisterFieldsForNode(IEntity node, Field field)
+        {
+            field = _fieldrepository.GetField(field);
+            if (field.IsStatic)
+            {
+                return false;
+            }
+            else
+            {
+                return ((INodeRepository)_currentrepository).RegisterFieldsForNode(node, field);
+            }
         }
 
 
@@ -346,6 +402,13 @@ namespace Zebra.Services.Operations
 
         public bool SaveNode(Node node, dynamic rawdata, List<Field> fields = null)
         {
+            var languageid = rawdata["nodelanguageid"];
+            Language language = null;
+            if (string.IsNullOrWhiteSpace(languageid) || (language = LanguageManager.GetLanguageById(languageid)) == null)
+            {
+                return false;
+            }
+            
             if (fields != null)
             {
                 throw new Exception("SaveNodeData is not consumed in the right way!");
@@ -372,7 +435,7 @@ namespace Zebra.Services.Operations
             }
             else
             {
-                var list = ((INodeRepository)_currentrepository).GetNodeFieldMapData(node);
+                var list = ((INodeRepository)_currentrepository).GetNodeFieldMapData(node, language);
                 var processedlist = new List<NodeFieldMap>();
                 foreach(var nodefield in list)
                 {
@@ -394,7 +457,7 @@ namespace Zebra.Services.Operations
                         data = mi.Invoke(fieldobj, null).ToString();
 
                         nodefield.NodeData = data;
-                        nodefield.LanguageId = LanguageManager.GetDefaultLanguage().Id;
+                        nodefield.LanguageId = language.Id;
                         _currentrepository.SaveNodeData(nodefield);
                         processedlist.Add(nodefield);
                     }

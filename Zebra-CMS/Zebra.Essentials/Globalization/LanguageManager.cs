@@ -72,7 +72,7 @@ namespace Zebra.Globalization
         public static Language GetLanguage(string culturename)
         {
             var tmp = culturename.Split('-');
-            if ((tmp.Length > 2 && tmp[0].Length > 1 && tmp[1].Length > 1) || culturename.Length == 2)
+            if ((tmp.Length > 1 && tmp[0].Length > 1 && tmp[1].Length > 1) || culturename.Length == 2)
             {
                 var lang = new Language();
                 lang = _langrepo.GetLanguage(culturename);
@@ -80,7 +80,7 @@ namespace Zebra.Globalization
             }
             else
             {
-                throw new Exception("Invalid Culture Name");
+                return null;
             }
         }
 

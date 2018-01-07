@@ -22,6 +22,7 @@ namespace Zebra.CustomAttributes
                     if (userroles == null && userroles.Count < 1)
                     {
                         HttpContext.Current.Response.Redirect("~/CPanel/Error");
+                        return;
                     }
                     else
                     {
@@ -33,12 +34,14 @@ namespace Zebra.CustomAttributes
                 }
                 else
                 {
-                    HttpContext.Current.Response.Redirect("~/Account?returnurl=" + returnUrl);
+                    RedirectHelper.RedirectToLogin(returnUrl);
+                    return;
                 }
             }
             else
             {
-                HttpContext.Current.Response.Redirect("~/Account?returnurl=" + returnUrl);
+                RedirectHelper.RedirectToLogin(returnUrl);
+                return;
             }
         }
     }
@@ -60,7 +63,7 @@ namespace Zebra.CustomAttributes
                 if (authTicket != null && !authTicket.Expired)
                 {
                     var userroles = authTicket.UserData.ToLower().Trim().Split(',').OfType<string>().ToList<string>();
-                    if(string.IsNullOrWhiteSpace(Roles))
+                    if (string.IsNullOrWhiteSpace(Roles))
                     {
                         return;
                     }
@@ -68,13 +71,13 @@ namespace Zebra.CustomAttributes
                     var roles = Roles.Split(',').OfType<string>().ToList<string>();
 
                     bool flag = true;
-                    
-                    roles.ForEach(x=>
+
+                    roles.ForEach(x =>
                     {
                         flag &= userroles.Contains(x.ToLower());
                     });
 
-                    if(!flag)
+                    if (!flag)
                     {
                         filterContext.Controller.TempData["ErrorMessage"] = "You don't have sufficient rights";
                         filterContext.Result = new RedirectResult("/Error");
@@ -90,14 +93,18 @@ namespace Zebra.CustomAttributes
                 else
                 {
                     //filterContext.Result = new RedirectResult("/Account?returnurl="+ returnUrl);
-                    if(!HttpContext.Current.Response.HeadersWritten)
-                        HttpContext.Current.Response.Redirect("~/Account?returnurl=" + returnUrl);
+                    if (!HttpContext.Current.Response.HeadersWritten)
+                    {
+                        RedirectHelper.RedirectToLogin(returnUrl);
+                        return;
+                    }
                 }
             }
             else
             {
                 //filterContext.Result = new RedirectResult("/Account?returnurl=" + returnUrl);
-                HttpContext.Current.Response.Redirect("~/Account?returnurl=" + returnUrl);
+                RedirectHelper.RedirectToLogin(returnUrl);
+                return;
             }
         }
 
@@ -113,6 +120,18 @@ namespace Zebra.CustomAttributes
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
 
+        }
+    }
+
+    static class RedirectHelper
+    {
+        public static void RedirectToLogin(string returnurl = "")
+        {
+            try
+            {
+                HttpContext.Current.Response.Redirect("~/Account?returnurl=" + returnurl);
+            }
+            catch { }
         }
     }
 }

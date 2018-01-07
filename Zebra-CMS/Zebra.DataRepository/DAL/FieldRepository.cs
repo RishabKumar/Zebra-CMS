@@ -169,6 +169,7 @@ namespace Zebra.DataRepository.DAL
                 //_context.Fields.Attach(tmp);
                 tmp.FieldName = field.FieldName;
                 tmp.TypeId = field.TypeId;
+                tmp.IsStatic = field.IsStatic;
                 //   _context.Entry(tmp).State = EntityState.Modified;
                 _context.SaveChanges();
                 dbt.Commit();
