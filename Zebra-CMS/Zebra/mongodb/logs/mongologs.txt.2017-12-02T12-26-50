@@ -1,0 +1,26 @@
+2017-11-29T10:25:42.134+0530 I CONTROL  [main] Trying to start Windows service 'MongoDB'
+2017-11-29T10:25:51.509+0530 I CONTROL  [initandlisten] MongoDB starting : pid=7180 port=27017 dbpath=C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\mongodb 64-bit host=RISHABH
+2017-11-29T10:25:51.509+0530 I CONTROL  [initandlisten] targetMinOS: Windows 7/Windows Server 2008 R2
+2017-11-29T10:25:51.510+0530 I CONTROL  [initandlisten] db version v3.4.10
+2017-11-29T10:25:51.510+0530 I CONTROL  [initandlisten] git version: 078f28920cb24de0dd479b5ea6c66c644f6326e9
+2017-11-29T10:26:15.574+0530 I CONTROL  [initandlisten] OpenSSL version: OpenSSL 1.0.1u-fips  22 Sep 2016
+2017-11-29T10:27:01.702+0530 I CONTROL  [initandlisten] allocator: tcmalloc
+2017-11-29T10:27:11.214+0530 I CONTROL  [initandlisten] modules: none
+2017-11-29T10:27:18.928+0530 I CONTROL  [initandlisten] build environment:
+2017-11-29T10:27:21.465+0530 I CONTROL  [initandlisten]     distmod: 2008plus-ssl
+2017-11-29T10:27:23.911+0530 I CONTROL  [initandlisten]     distarch: x86_64
+2017-11-29T10:27:28.557+0530 I CONTROL  [initandlisten]     target_arch: x86_64
+2017-11-29T10:27:35.874+0530 I CONTROL  [initandlisten] options: { service: true, storage: { dbPath: "C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\mongodb" }, systemLog: { destination: "file", path: "C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\mongodb\logs\mongologs.txt" } }
+2017-11-29T10:27:40.958+0530 W -        [initandlisten] Detected unclean shutdown - C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\mongodb\mongod.lock is not empty.
+2017-11-29T10:27:47.088+0530 I -        [initandlisten] Detected data files in C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\mongodb created by the 'wiredTiger' storage engine, so setting the active storage engine to 'wiredTiger'.
+2017-11-29T10:27:49.524+0530 W STORAGE  [initandlisten] Recovering data from the last clean checkpoint.
+2017-11-29T10:27:53.235+0530 I STORAGE  [initandlisten] wiredtiger_open config: create,cache_size=3541M,session_max=20000,eviction=(threads_min=4,threads_max=4),config_base=false,statistics=(fast),log=(enabled=true,archive=true,path=journal,compressor=snappy),file_manager=(close_idle_time=100000),checkpoint=(wait=60,log_size=2GB),statistics_log=(wait=0),
+2017-11-29T10:29:01.419+0530 I CONTROL  [initandlisten] 
+2017-11-29T10:29:03.584+0530 I CONTROL  [initandlisten] ** WARNING: Access control is not enabled for the database.
+2017-11-29T10:29:06.688+0530 I CONTROL  [initandlisten] **          Read and write access to data and configuration is unrestricted.
+2017-11-29T10:29:08.628+0530 I CONTROL  [initandlisten] 
+2017-11-29T10:29:31.676+0530 I COMMAND  [initandlisten] query admin.system.roles planSummary: EOF ntoreturn:0 ntoskip:0 keysExamined:0 docsExamined:0 cursorExhausted:1 numYields:0 nreturned:0 reslen:20 locks:{ Global: { acquireCount: { r: 10, w: 1, W: 1 } }, Database: { acquireCount: { r: 4, W: 1 } }, Collection: { acquireCount: { r: 4 } } } 333ms
+2017-11-29T10:29:45.701+0530 I FTDC     [initandlisten] Initializing full-time diagnostic data capture with directory 'C:/Users/Rishabh/Documents/Visual Studio 2015/Projects/Zebra/Zebra-CMS/Zebra/mongodb/diagnostic.data'
+2017-11-29T10:29:47.171+0530 I FTDC     [ftdc] Unclean full-time diagnostic data capture shutdown detected, found interim file, some metrics may have been lost. OK
+2017-11-29T10:29:47.416+0530 I STORAGE  [initandlisten] Service running
+2017-11-29T10:29:47.450+0530 I NETWORK  [thread1] waiting for connections on port 27017

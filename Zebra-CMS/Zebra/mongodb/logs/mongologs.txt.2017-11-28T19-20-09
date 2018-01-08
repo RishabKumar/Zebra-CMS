@@ -1,0 +1,59 @@
+2017-11-26T15:02:09.499+0530 I CONTROL  [main] Trying to start Windows service 'MongoDB'
+2017-11-26T15:02:10.241+0530 I CONTROL  [initandlisten] MongoDB starting : pid=6940 port=27017 dbpath=C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\mongodb 64-bit host=RISHABH
+2017-11-26T15:02:10.241+0530 I CONTROL  [initandlisten] targetMinOS: Windows 7/Windows Server 2008 R2
+2017-11-26T15:02:10.241+0530 I CONTROL  [initandlisten] db version v3.4.10
+2017-11-26T15:02:10.241+0530 I CONTROL  [initandlisten] git version: 078f28920cb24de0dd479b5ea6c66c644f6326e9
+2017-11-26T15:02:13.108+0530 I CONTROL  [initandlisten] OpenSSL version: OpenSSL 1.0.1u-fips  22 Sep 2016
+2017-11-26T15:02:16.379+0530 I CONTROL  [initandlisten] allocator: tcmalloc
+2017-11-26T15:02:18.099+0530 I CONTROL  [initandlisten] modules: none
+2017-11-26T15:02:19.361+0530 I CONTROL  [initandlisten] build environment:
+2017-11-26T15:02:20.670+0530 I CONTROL  [initandlisten]     distmod: 2008plus-ssl
+2017-11-26T15:02:21.309+0530 I CONTROL  [initandlisten]     distarch: x86_64
+2017-11-26T15:02:21.910+0530 I CONTROL  [initandlisten]     target_arch: x86_64
+2017-11-26T15:02:22.582+0530 I CONTROL  [initandlisten] options: { service: true, storage: { dbPath: "C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\mongodb" }, systemLog: { destination: "file", path: "C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\mongodb\logs\mongologs.txt" } }
+2017-11-26T15:02:24.219+0530 W -        [initandlisten] Detected unclean shutdown - C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\mongodb\mongod.lock is not empty.
+2017-11-26T15:02:28.704+0530 I -        [initandlisten] Detected data files in C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\mongodb created by the 'wiredTiger' storage engine, so setting the active storage engine to 'wiredTiger'.
+2017-11-26T15:02:30.606+0530 W STORAGE  [initandlisten] Recovering data from the last clean checkpoint.
+2017-11-26T15:02:32.139+0530 I STORAGE  [initandlisten] wiredtiger_open config: create,cache_size=3541M,session_max=20000,eviction=(threads_min=4,threads_max=4),config_base=false,statistics=(fast),log=(enabled=true,archive=true,path=journal,compressor=snappy),file_manager=(close_idle_time=100000),checkpoint=(wait=60,log_size=2GB),statistics_log=(wait=0),
+2017-11-26T15:03:40.267+0530 I CONTROL  [initandlisten] 
+2017-11-26T15:03:42.872+0530 I CONTROL  [initandlisten] ** WARNING: Access control is not enabled for the database.
+2017-11-26T15:03:45.252+0530 I CONTROL  [initandlisten] **          Read and write access to data and configuration is unrestricted.
+2017-11-26T15:03:47.947+0530 I CONTROL  [initandlisten] 
+2017-11-26T15:03:59.653+0530 I COMMAND  [initandlisten] query admin.system.roles planSummary: EOF ntoreturn:0 ntoskip:0 keysExamined:0 docsExamined:0 cursorExhausted:1 numYields:0 nreturned:0 reslen:20 locks:{ Global: { acquireCount: { r: 10, w: 1, W: 1 } }, Database: { acquireCount: { r: 4, W: 1 } }, Collection: { acquireCount: { r: 4 } } } 211ms
+2017-11-26T15:04:05.665+0530 I FTDC     [initandlisten] Initializing full-time diagnostic data capture with directory 'C:/Users/Rishabh/Documents/Visual Studio 2015/Projects/Zebra/Zebra-CMS/Zebra/mongodb/diagnostic.data'
+2017-11-26T15:04:07.134+0530 I FTDC     [ftdc] Unclean full-time diagnostic data capture shutdown detected, found interim file, some metrics may have been lost. OK
+2017-11-26T15:04:07.209+0530 I STORAGE  [initandlisten] Service running
+2017-11-26T15:04:07.236+0530 I NETWORK  [thread1] waiting for connections on port 27017
+2017-11-26T16:06:54.014+0530 I NETWORK  [thread1] connection accepted from 127.0.0.1:2808 #1 (1 connection now open)
+2017-11-26T16:06:54.275+0530 I NETWORK  [conn1] received client metadata from 127.0.0.1:2808 conn1: { driver: { name: "mongo-csharp-driver", version: "2.4.4.0" }, os: { type: "Windows", name: "Microsoft Windows 10.0.14393", architecture: "x86_32", version: "10.0.14393" }, platform: ".NET Framework 4.0.0.0" }
+2017-11-26T16:23:50.261+0530 I -        [conn1] end connection 127.0.0.1:2808 (1 connection now open)
+2017-11-26T16:45:04.346+0530 I NETWORK  [thread1] connection accepted from 127.0.0.1:6421 #2 (1 connection now open)
+2017-11-26T16:45:04.433+0530 I NETWORK  [conn2] received client metadata from 127.0.0.1:6421 conn2: { driver: { name: "mongo-csharp-driver", version: "2.4.4.0" }, os: { type: "Windows", name: "Microsoft Windows 10.0.14393", architecture: "x86_32", version: "10.0.14393" }, platform: ".NET Framework 4.0.0.0" }
+2017-11-26T16:45:04.764+0530 I NETWORK  [thread1] connection accepted from 127.0.0.1:6422 #3 (2 connections now open)
+2017-11-26T16:45:04.767+0530 I NETWORK  [conn3] received client metadata from 127.0.0.1:6422 conn3: { driver: { name: "mongo-csharp-driver", version: "2.4.4.0" }, os: { type: "Windows", name: "Microsoft Windows 10.0.14393", architecture: "x86_32", version: "10.0.14393" }, platform: ".NET Framework 4.0.0.0" }
+2017-11-26T16:56:04.405+0530 I -        [conn3] end connection 127.0.0.1:6422 (2 connections now open)
+2017-11-26T17:27:18.722+0530 I -        [conn2] end connection 127.0.0.1:6421 (1 connection now open)
+2017-11-26T21:17:54.713+0530 I NETWORK  [thread1] connection accepted from 127.0.0.1:27854 #4 (1 connection now open)
+2017-11-26T21:17:54.814+0530 I NETWORK  [conn4] received client metadata from 127.0.0.1:27854 conn4: { driver: { name: "mongo-csharp-driver", version: "2.4.4.0" }, os: { type: "Windows", name: "Microsoft Windows 10.0.14393", architecture: "x86_32", version: "10.0.14393" }, platform: ".NET Framework 4.0.0.0" }
+2017-11-26T21:22:49.604+0530 I -        [conn4] end connection 127.0.0.1:27854 (1 connection now open)
+2017-11-26T21:26:52.291+0530 I NETWORK  [thread1] connection accepted from 127.0.0.1:28609 #5 (1 connection now open)
+2017-11-26T21:26:52.345+0530 I NETWORK  [conn5] received client metadata from 127.0.0.1:28609 conn5: { driver: { name: "mongo-csharp-driver", version: "2.4.4.0" }, os: { type: "Windows", name: "Microsoft Windows 10.0.14393", architecture: "x86_32", version: "10.0.14393" }, platform: ".NET Framework 4.0.0.0" }
+2017-11-26T21:30:24.433+0530 I -        [conn5] end connection 127.0.0.1:28609 (1 connection now open)
+2017-11-26T21:33:28.886+0530 I NETWORK  [thread1] connection accepted from 127.0.0.1:29124 #6 (1 connection now open)
+2017-11-26T21:33:29.140+0530 I NETWORK  [conn6] received client metadata from 127.0.0.1:29124 conn6: { driver: { name: "mongo-csharp-driver", version: "2.4.4.0" }, os: { type: "Windows", name: "Microsoft Windows 10.0.14393", architecture: "x86_32", version: "10.0.14393" }, platform: ".NET Framework 4.0.0.0" }
+2017-11-26T22:03:51.660+0530 I -        [conn6] end connection 127.0.0.1:29124 (1 connection now open)
+2017-11-27T21:04:44.623+0530 I NETWORK  [thread1] connection accepted from 127.0.0.1:36375 #7 (1 connection now open)
+2017-11-27T21:04:44.769+0530 I NETWORK  [conn7] received client metadata from 127.0.0.1:36375 conn7: { driver: { name: "mongo-csharp-driver", version: "2.4.4.0" }, os: { type: "Windows", name: "Microsoft Windows 10.0.14393", architecture: "x86_32", version: "10.0.14393" }, platform: ".NET Framework 4.0.0.0" }
+2017-11-27T21:40:16.553+0530 I -        [conn7] end connection 127.0.0.1:36375 (1 connection now open)
+2017-11-28T00:10:41.930+0530 I NETWORK  [thread1] connection accepted from 127.0.0.1:49346 #8 (1 connection now open)
+2017-11-28T00:10:42.083+0530 I NETWORK  [conn8] received client metadata from 127.0.0.1:49346 conn8: { driver: { name: "mongo-csharp-driver", version: "2.4.4.0" }, os: { type: "Windows", name: "Microsoft Windows 10.0.14393", architecture: "x86_32", version: "10.0.14393" }, platform: ".NET Framework 4.0.0.0" }
+2017-11-28T00:10:51.304+0530 I NETWORK  [thread1] connection accepted from 127.0.0.1:49350 #9 (2 connections now open)
+2017-11-28T00:10:51.307+0530 I NETWORK  [conn9] received client metadata from 127.0.0.1:49350 conn9: { driver: { name: "mongo-csharp-driver", version: "2.4.4.0" }, os: { type: "Windows", name: "Microsoft Windows 10.0.14393", architecture: "x86_32", version: "10.0.14393" }, platform: ".NET Framework 4.0.0.0" }
+2017-11-28T00:12:04.208+0530 I -        [conn8] end connection 127.0.0.1:49346 (2 connections now open)
+2017-11-28T00:12:04.208+0530 I -        [conn9] end connection 127.0.0.1:49350 (1 connection now open)
+2017-11-28T00:14:08.300+0530 I NETWORK  [thread1] connection accepted from 127.0.0.1:49705 #10 (1 connection now open)
+2017-11-28T00:14:08.647+0530 I NETWORK  [conn10] received client metadata from 127.0.0.1:49705 conn10: { driver: { name: "mongo-csharp-driver", version: "2.4.4.0" }, os: { type: "Windows", name: "Microsoft Windows 10.0.14393", architecture: "x86_32", version: "10.0.14393" }, platform: ".NET Framework 4.0.0.0" }
+2017-11-28T00:14:08.881+0530 I NETWORK  [thread1] connection accepted from 127.0.0.1:49706 #11 (2 connections now open)
+2017-11-28T00:14:08.884+0530 I NETWORK  [conn11] received client metadata from 127.0.0.1:49706 conn11: { driver: { name: "mongo-csharp-driver", version: "2.4.4.0" }, os: { type: "Windows", name: "Microsoft Windows 10.0.14393", architecture: "x86_32", version: "10.0.14393" }, platform: ".NET Framework 4.0.0.0" }
+2017-11-28T00:15:41.632+0530 I -        [conn11] end connection 127.0.0.1:49706 (2 connections now open)
+2017-11-28T00:15:41.632+0530 I -        [conn10] end connection 127.0.0.1:49705 (1 connection now open)
