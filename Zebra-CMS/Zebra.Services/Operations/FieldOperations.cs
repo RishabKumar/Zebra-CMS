@@ -16,10 +16,12 @@ namespace Zebra.Services.Operations
     {
         IFieldRepository _fieldrepo;
         INodeRepository _noderepo;
-        public FieldOperations(FieldRepository t, NodeRepository n) : base(t)
+        ITemplateRepository _temprepo;
+        public FieldOperations(FieldRepository f, NodeRepository n, TemplateRepository t) : base(f)
         {
-            _fieldrepo = t;
+            _fieldrepo = f;
             _noderepo = n;
+            _temprepo = t;
         }
 
         public List<Field> GetAllFields()
@@ -86,11 +88,16 @@ namespace Zebra.Services.Operations
             {
           //      return fields;
             }
+
             fields.AddRange(GetExclusiveFieldsOfTemplate(node.Id.ToString()));
-            // if(string.Equals(template.Id.ToString().ToUpper(), NodeType.SIMPLETEMPLATE_ID))
+            var listoftemp = _temprepo.GetInheritedTemplate(node);
+            foreach(var tmp in listoftemp)
+            {
+                fields.AddRange(GetExclusiveFieldsOfTemplate(tmp.Id.ToString()));
+            }
             if(node.Id.Equals(node.TemplateId))
             {
-                return fields;
+                return fields.OrderBy(x=>x.CreationDate).ToList();
             }
             return GetInclusiveFieldsOfTemplate(node.TemplateId.ToString(), fields);
         }

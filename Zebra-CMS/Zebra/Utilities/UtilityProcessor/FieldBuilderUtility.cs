@@ -72,8 +72,9 @@ namespace Zebra.Utilities.UtilityProcessor
                 {
                    // GetNodeRepository.
                 }
+                return true;
             }
-            return true;
+            return false;
         }
 
         public string RenderView(ref object obj)

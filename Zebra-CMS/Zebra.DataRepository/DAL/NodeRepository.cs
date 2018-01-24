@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Zebra.DataRepository.Interfaces;
 using Zebra.DataRepository.Models;
@@ -47,9 +48,25 @@ namespace Zebra.DataRepository.DAL
 
         public bool RegisterFieldsForNode(IEntity node, Field field, IEntity language)
         {
-            var nodefieldmap = new NodeFieldMap() { Id = Guid.NewGuid(), FieldId = field.Id, NodeId = node.Id, NodeData = string.Empty, LanguageId = language.Id };
-            nodefieldmap = _context.NodeFieldMaps.Add(nodefieldmap);
-            _context.SaveChanges();
+            if (_context.Database.CurrentTransaction != null)
+            {
+                var nodefieldmap = new NodeFieldMap() { Id = Guid.NewGuid(), FieldId = field.Id, NodeId = node.Id, NodeData = string.Empty, LanguageId = language.Id };
+                nodefieldmap = _context.NodeFieldMaps.Add(nodefieldmap);
+                //explicit transaction is not used as it was causing issue with foreach loop.
+                _context.SaveChanges();
+            }
+            else
+            {
+                using (var dbt = _context.Database.BeginTransaction())
+                {
+                    var nodefieldmap = new NodeFieldMap() { Id = Guid.NewGuid(), FieldId = field.Id, NodeId = node.Id, NodeData = string.Empty, LanguageId = language.Id };
+                    nodefieldmap = _context.NodeFieldMaps.Add(nodefieldmap);
+                    //explicit transaction is not used as it was causing issue with foreach loop.
+                    _context.SaveChanges();
+                    dbt.Commit();
+                    dbt.Dispose();
+                }
+            }
             return true;
         }
         /// <summary>
@@ -62,15 +79,14 @@ namespace Zebra.DataRepository.DAL
         {
             using (var dbt = _context.Database.BeginTransaction())
             {
-                //var t = from nodefieldmap in _context.NodeFieldMaps where nodefieldmap.NodeId == node.Id group nodefieldmap.LanguageId by nodefieldmap.LanguageId;
-                //var nodefieldmaps1 = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).GroupBy(y => y.LanguageId).Select(s => s.Key).ToList();
-                //var languages = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).Select(y=>y.LanguageId).Distinct().ToList();
-                var languages = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).Select(y => y.LanguageId);
+                    //var t = from nodefieldmap in _context.NodeFieldMaps where nodefieldmap.NodeId == node.Id group nodefieldmap.LanguageId by nodefieldmap.LanguageId;
+                    //var nodefieldmaps1 = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).GroupBy(y => y.LanguageId).Select(s => s.Key).ToList();
+                    //var languages = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).Select(y=>y.LanguageId).Distinct().ToList();
+                    var languages = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).Select(y => y.LanguageId);
                 foreach (var lang in languages)
                 {
                     RegisterFieldsForNode(node, field, new Language() { Id = lang.Value });
                 }
-                _context.SaveChanges();
                 dbt.Commit();
                 dbt.Dispose();
             }

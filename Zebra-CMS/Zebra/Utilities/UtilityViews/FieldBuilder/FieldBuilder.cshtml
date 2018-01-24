@@ -41,13 +41,14 @@
             </div>
         </div>
         <div class='field-sample'>
-            Field Name<input type='text' id=""/> FieldType 
+            Field Name<input class="fieldname" type='text' id=''/> FieldType 
             <select>
                 @foreach (var fieldtypes in ((Dictionary<string, dynamic>)Model)["FieldTypes"])
                 {
                     <option value='@fieldtypes.Id.ToString()'> @fieldtypes.TypeName</option>
                 }
             </select>
+            <input type="checkbox" class="fieldproperty" value="false" />
             <a href="#" class='remove-field-button' >Remove Field</a>
         </div>
 

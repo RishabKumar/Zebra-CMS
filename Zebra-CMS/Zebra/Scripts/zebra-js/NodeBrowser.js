@@ -47,3 +47,18 @@ $(document).on("click", ".zebra-add-locale", function () {
     });
 
 });
+
+
+// toggle template fields show/hide
+$(document).on('click', '.zebra-field-section-heading i', function () {
+    debugger;
+    if ($(this.parentElement).attr('data-section-expanded') == "true") {
+        $(this.parentElement.querySelector('i')).attr('class', 'fa fa-plus-square-o');
+        $(this.parentElement).attr('data-section-expanded', 'false');
+    }
+    else {
+        $(this.parentElement.querySelector('i')).attr('class', 'fa fa-minus-square-o');
+        $(this.parentElement).attr('data-section-expanded', 'true');
+    }
+    $(this.parentElement.parentElement.querySelector('.zebra-field-section')).toggle();
+});

@@ -256,20 +256,23 @@ function SetNodeSelected(nodetext)
 }
 
 function DeleteNode(nodeid, node) {
-    var nodeinfo = { nodeid: nodeid };
-    $.ajax({
-        type: "POST",
-        url: "/zebraapi/nodeservice/deletenode",
-        cache: false,
-        dataType: "json",
-        data: JSON.stringify(nodeinfo),
-        async: false,
-        success: function (json) {
-            if (json == true) {
-                $(node).remove();
+    var flag = confirm("Are you sure you want to delete ?");
+    if (flag) {
+        var nodeinfo = { nodeid: nodeid };
+        $.ajax({
+            type: "POST",
+            url: "/zebraapi/nodeservice/deletenode",
+            cache: false,
+            dataType: "json",
+            data: JSON.stringify(nodeinfo),
+            async: false,
+            success: function (json) {
+                if (json == true) {
+                    $(node).remove();
+                }
             }
-        }
-    });
+        });
+    }
 }
 
 function CreateNodeString(json) {

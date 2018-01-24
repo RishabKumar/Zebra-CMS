@@ -59,6 +59,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -87,6 +88,7 @@
     <Compile Include="DAL\LanguageRepository.cs" />
     <Compile Include="Interfaces\ILanguageRepository.cs" />
     <Compile Include="ModelsExtension\NodeLanguageMap.cs" />
+    <Compile Include="ModelsExtension\NodeTemplateMap.cs" />
     <Compile Include="ModelsExtension\User.cs" />
     <Compile Include="ModelsExtension\FieldType.cs" />
     <Compile Include="ModelsExtension\TemplateFieldMap.cs" />
@@ -112,6 +114,9 @@
       <DependentUpon>DTOContextContainer.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\NodeLanguageMap.cs">
+      <DependentUpon>DTOContextContainer.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\NodeTemplateMap.cs">
       <DependentUpon>DTOContextContainer.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Template.cs">

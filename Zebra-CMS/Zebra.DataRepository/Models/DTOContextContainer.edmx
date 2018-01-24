@@ -13,6 +13,7 @@
           <Property Name="FieldName" Type="nvarchar(max)" Nullable="false" />
           <Property Name="TypeId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="IsStatic" Type="bit" Nullable="false" />
+          <Property Name="CreationDate" Type="datetime2" Precision="7" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="FieldTypes">
           <Key>
@@ -61,6 +62,15 @@
           <Property Name="parentid" Type="uniqueidentifier" />
           <Property Name="CreationDate" Type="datetime2" Precision="7" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
+        <EntityType Name="NodeTemplateMaps">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="NodeId" Type="uniqueidentifier" />
+          <Property Name="TemplateId" Type="uniqueidentifier" />
+          <Property Name="CreationDate" Type="datetime2" Precision="7" StoreGeneratedPattern="Computed" />
+        </EntityType>
         <EntityType Name="TemplateFieldMaps">
           <Key>
             <PropertyRef Name="Id" />
@@ -99,7 +109,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__NodeField__Langu__2CF2ADDF">
+        <Association Name="FK__NodeField__Langu__339FAB6E">
           <End Role="Languages" Type="Self.Languages" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
@@ -127,8 +137,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__NodeLangu__Langu__31B762FC">
-          <End Role="Languages" Type="Self.Languages" Multiplicity="0..1" />
+        <Association Name="FK__NodeLangu__Langu__3A4CA8FD">
+          <End Role="Languages" Type="Self.Languages" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="NodeLanguageMaps" Type="Self.NodeLanguageMaps" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Languages">
@@ -139,8 +151,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__NodeLangu__NodeI__30C33EC3">
-          <End Role="Nodes" Type="Self.Nodes" Multiplicity="0..1" />
+        <Association Name="FK__NodeLangu__NodeI__3B40CD36">
+          <End Role="Nodes" Type="Self.Nodes" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="NodeLanguageMaps" Type="Self.NodeLanguageMaps" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Nodes">
@@ -148,6 +162,32 @@
             </Principal>
             <Dependent Role="NodeLanguageMaps">
               <PropertyRef Name="NodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__NodeTempl__NodeI__5224328E">
+          <End Role="Nodes" Type="Self.Nodes" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="NodeTemplateMaps" Type="Self.NodeTemplateMaps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Nodes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NodeTemplateMaps">
+              <PropertyRef Name="NodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__NodeTempl__Templ__540C7B00">
+          <End Role="Templates" Type="Self.Templates" Multiplicity="0..1" />
+          <End Role="NodeTemplateMaps" Type="Self.NodeTemplateMaps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Templates">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NodeTemplateMaps">
+              <PropertyRef Name="TemplateId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -214,6 +254,7 @@
           <EntitySet Name="NodeFieldMaps" EntityType="Self.NodeFieldMaps" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NodeLanguageMaps" EntityType="Self.NodeLanguageMaps" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Nodes" EntityType="Self.Nodes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NodeTemplateMaps" EntityType="Self.NodeTemplateMaps" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TemplateFieldMaps" EntityType="Self.TemplateFieldMaps" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Templates" EntityType="Self.Templates" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
@@ -221,7 +262,7 @@
             <End Role="Fields" EntitySet="Fields" />
             <End Role="NodeFieldMaps" EntitySet="NodeFieldMaps" />
           </AssociationSet>
-          <AssociationSet Name="FK__NodeField__Langu__2CF2ADDF" Association="Self.FK__NodeField__Langu__2CF2ADDF">
+          <AssociationSet Name="FK__NodeField__Langu__339FAB6E" Association="Self.FK__NodeField__Langu__339FAB6E">
             <End Role="Languages" EntitySet="Languages" />
             <End Role="NodeFieldMaps" EntitySet="NodeFieldMaps" />
           </AssociationSet>
@@ -229,13 +270,21 @@
             <End Role="Nodes" EntitySet="Nodes" />
             <End Role="NodeFieldMaps" EntitySet="NodeFieldMaps" />
           </AssociationSet>
-          <AssociationSet Name="FK__NodeLangu__Langu__31B762FC" Association="Self.FK__NodeLangu__Langu__31B762FC">
+          <AssociationSet Name="FK__NodeLangu__Langu__3A4CA8FD" Association="Self.FK__NodeLangu__Langu__3A4CA8FD">
             <End Role="Languages" EntitySet="Languages" />
             <End Role="NodeLanguageMaps" EntitySet="NodeLanguageMaps" />
           </AssociationSet>
-          <AssociationSet Name="FK__NodeLangu__NodeI__30C33EC3" Association="Self.FK__NodeLangu__NodeI__30C33EC3">
+          <AssociationSet Name="FK__NodeLangu__NodeI__3B40CD36" Association="Self.FK__NodeLangu__NodeI__3B40CD36">
             <End Role="Nodes" EntitySet="Nodes" />
             <End Role="NodeLanguageMaps" EntitySet="NodeLanguageMaps" />
+          </AssociationSet>
+          <AssociationSet Name="FK__NodeTempl__NodeI__5224328E" Association="Self.FK__NodeTempl__NodeI__5224328E">
+            <End Role="Nodes" EntitySet="Nodes" />
+            <End Role="NodeTemplateMaps" EntitySet="NodeTemplateMaps" />
+          </AssociationSet>
+          <AssociationSet Name="FK__NodeTempl__Templ__540C7B00" Association="Self.FK__NodeTempl__Templ__540C7B00">
+            <End Role="Templates" EntitySet="Templates" />
+            <End Role="NodeTemplateMaps" EntitySet="NodeTemplateMaps" />
           </AssociationSet>
           <AssociationSet Name="FK_FieldsTemplateFieldMap" Association="Self.FK_FieldsTemplateFieldMap">
             <End Role="Fields" EntitySet="Fields" />
@@ -269,6 +318,7 @@
           <NavigationProperty Name="FieldType" Relationship="Self.FK_FieldTypesFields" FromRole="Fields" ToRole="FieldTypes" />
           <NavigationProperty Name="NodeFieldMaps" Relationship="ZebraDB_Model.FK__NodeField__Field__73BA3083" FromRole="Field" ToRole="NodeFieldMap" />
           <Property Name="IsStatic" Type="Boolean" Nullable="false" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="7" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="FieldType">
           <Key>
@@ -291,6 +341,7 @@
           <NavigationProperty Name="NodeFieldMaps" Relationship="ZebraDB_Model.FK__NodeField__NodeI__72C60C4A" FromRole="Node" ToRole="NodeFieldMap" />
           <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Computed" Precision="7" />
           <NavigationProperty Name="NodeLanguageMaps" Relationship="ZebraDB_Model.FK__NodeLangu__NodeI__30C33EC3" FromRole="Node" ToRole="NodeLanguageMap" />
+          <NavigationProperty Name="NodeTemplateMaps" Relationship="ZebraDB_Model.FK__NodeTempl__NodeI__5224328E" FromRole="Node" ToRole="NodeTemplateMap" />
         </EntityType>
         <EntityType Name="TemplateFieldMap">
           <Key>
@@ -310,6 +361,7 @@
           <Property Name="TemplateName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Nodes" Relationship="Self.FK_TemplatesNodes" FromRole="Templates" ToRole="Nodes" />
           <NavigationProperty Name="TemplateFieldMaps" Relationship="Self.FK_TemplatesTemplateFieldMap" FromRole="Templates" ToRole="TemplateFieldMaps" />
+          <NavigationProperty Name="NodeTemplateMaps" Relationship="ZebraDB_Model.FK__NodeTempl__Templ__540C7B00" FromRole="Template" ToRole="NodeTemplateMap" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -414,6 +466,15 @@
             <End Role="Node" EntitySet="Nodes" />
             <End Role="NodeLanguageMap" EntitySet="NodeLanguageMaps" />
           </AssociationSet>
+          <EntitySet Name="NodeTemplateMaps" EntityType="ZebraDB_Model.NodeTemplateMap" />
+          <AssociationSet Name="FK__NodeTempl__NodeI__5224328E" Association="ZebraDB_Model.FK__NodeTempl__NodeI__5224328E">
+            <End Role="Node" EntitySet="Nodes" />
+            <End Role="NodeTemplateMap" EntitySet="NodeTemplateMaps" />
+          </AssociationSet>
+          <AssociationSet Name="FK__NodeTempl__Templ__540C7B00" Association="ZebraDB_Model.FK__NodeTempl__Templ__540C7B00">
+            <End Role="Template" EntitySet="Templates" />
+            <End Role="NodeTemplateMap" EntitySet="NodeTemplateMaps" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="NodeFieldMap">
           <Key>
@@ -513,6 +574,43 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="NodeTemplateMap">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="NodeId" Type="Guid" />
+          <Property Name="TemplateId" Type="Guid" />
+          <Property Name="CreationDate" Type="DateTime" Precision="7" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="Node" Relationship="ZebraDB_Model.FK__NodeTempl__NodeI__5224328E" FromRole="NodeTemplateMap" ToRole="Node" />
+          <NavigationProperty Name="Template" Relationship="ZebraDB_Model.FK__NodeTempl__Templ__540C7B00" FromRole="NodeTemplateMap" ToRole="Template" />
+        </EntityType>
+        <Association Name="FK__NodeTempl__NodeI__5224328E">
+          <End Type="ZebraDB_Model.Node" Role="Node" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ZebraDB_Model.NodeTemplateMap" Role="NodeTemplateMap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Node">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NodeTemplateMap">
+              <PropertyRef Name="NodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__NodeTempl__Templ__540C7B00">
+          <End Type="ZebraDB_Model.Template" Role="Template" Multiplicity="0..1" />
+          <End Type="ZebraDB_Model.NodeTemplateMap" Role="NodeTemplateMap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Template">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NodeTemplateMap">
+              <PropertyRef Name="TemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -522,6 +620,7 @@
           <EntitySetMapping Name="Fields">
             <EntityTypeMapping TypeName="ZebraDB_Model.Field">
               <MappingFragment StoreEntitySet="Fields">
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
                 <ScalarProperty Name="IsStatic" ColumnName="IsStatic" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="FieldName" ColumnName="FieldName" />
@@ -603,6 +702,16 @@
             <EntityTypeMapping TypeName="ZebraDB_Model.NodeLanguageMap">
               <MappingFragment StoreEntitySet="NodeLanguageMaps">
                 <ScalarProperty Name="LanguageId" ColumnName="LanguageId" />
+                <ScalarProperty Name="NodeId" ColumnName="NodeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NodeTemplateMaps">
+            <EntityTypeMapping TypeName="ZebraDB_Model.NodeTemplateMap">
+              <MappingFragment StoreEntitySet="NodeTemplateMaps">
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
                 <ScalarProperty Name="NodeId" ColumnName="NodeId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

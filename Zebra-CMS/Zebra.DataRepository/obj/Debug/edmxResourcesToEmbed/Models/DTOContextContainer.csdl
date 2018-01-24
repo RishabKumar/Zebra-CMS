@@ -11,6 +11,7 @@
     <NavigationProperty Name="FieldType" Relationship="Self.FK_FieldTypesFields" FromRole="Fields" ToRole="FieldTypes" />
     <NavigationProperty Name="NodeFieldMaps" Relationship="ZebraDB_Model.FK__NodeField__Field__73BA3083" FromRole="Field" ToRole="NodeFieldMap" />
     <Property Name="IsStatic" Type="Boolean" Nullable="false" />
+    <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="7" annotation:StoreGeneratedPattern="Computed" />
   </EntityType>
   <EntityType Name="FieldType">
     <Key>
@@ -33,6 +34,7 @@
     <NavigationProperty Name="NodeFieldMaps" Relationship="ZebraDB_Model.FK__NodeField__NodeI__72C60C4A" FromRole="Node" ToRole="NodeFieldMap" />
     <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Computed" Precision="7" />
     <NavigationProperty Name="NodeLanguageMaps" Relationship="ZebraDB_Model.FK__NodeLangu__NodeI__30C33EC3" FromRole="Node" ToRole="NodeLanguageMap" />
+    <NavigationProperty Name="NodeTemplateMaps" Relationship="ZebraDB_Model.FK__NodeTempl__NodeI__5224328E" FromRole="Node" ToRole="NodeTemplateMap" />
   </EntityType>
   <EntityType Name="TemplateFieldMap">
     <Key>
@@ -52,6 +54,7 @@
     <Property Name="TemplateName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
     <NavigationProperty Name="Nodes" Relationship="Self.FK_TemplatesNodes" FromRole="Templates" ToRole="Nodes" />
     <NavigationProperty Name="TemplateFieldMaps" Relationship="Self.FK_TemplatesTemplateFieldMap" FromRole="Templates" ToRole="TemplateFieldMaps" />
+    <NavigationProperty Name="NodeTemplateMaps" Relationship="ZebraDB_Model.FK__NodeTempl__Templ__540C7B00" FromRole="Template" ToRole="NodeTemplateMap" />
   </EntityType>
   <EntityType Name="User">
     <Key>
@@ -156,6 +159,15 @@
       <End Role="Node" EntitySet="Nodes" />
       <End Role="NodeLanguageMap" EntitySet="NodeLanguageMaps" />
     </AssociationSet>
+    <EntitySet Name="NodeTemplateMaps" EntityType="ZebraDB_Model.NodeTemplateMap" />
+    <AssociationSet Name="FK__NodeTempl__NodeI__5224328E" Association="ZebraDB_Model.FK__NodeTempl__NodeI__5224328E">
+      <End Role="Node" EntitySet="Nodes" />
+      <End Role="NodeTemplateMap" EntitySet="NodeTemplateMaps" />
+    </AssociationSet>
+    <AssociationSet Name="FK__NodeTempl__Templ__540C7B00" Association="ZebraDB_Model.FK__NodeTempl__Templ__540C7B00">
+      <End Role="Template" EntitySet="Templates" />
+      <End Role="NodeTemplateMap" EntitySet="NodeTemplateMaps" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="NodeFieldMap">
     <Key>
@@ -252,6 +264,43 @@
       </Principal>
       <Dependent Role="NodeLanguageMap">
         <PropertyRef Name="NodeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="NodeTemplateMap">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="NodeId" Type="Guid" />
+    <Property Name="TemplateId" Type="Guid" />
+    <Property Name="CreationDate" Type="DateTime" Precision="7" annotation:StoreGeneratedPattern="Computed" />
+    <NavigationProperty Name="Node" Relationship="ZebraDB_Model.FK__NodeTempl__NodeI__5224328E" FromRole="NodeTemplateMap" ToRole="Node" />
+    <NavigationProperty Name="Template" Relationship="ZebraDB_Model.FK__NodeTempl__Templ__540C7B00" FromRole="NodeTemplateMap" ToRole="Template" />
+  </EntityType>
+  <Association Name="FK__NodeTempl__NodeI__5224328E">
+    <End Type="ZebraDB_Model.Node" Role="Node" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="ZebraDB_Model.NodeTemplateMap" Role="NodeTemplateMap" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Node">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="NodeTemplateMap">
+        <PropertyRef Name="NodeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__NodeTempl__Templ__540C7B00">
+    <End Type="ZebraDB_Model.Template" Role="Template" Multiplicity="0..1" />
+    <End Type="ZebraDB_Model.NodeTemplateMap" Role="NodeTemplateMap" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Template">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="NodeTemplateMap">
+        <PropertyRef Name="TemplateId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

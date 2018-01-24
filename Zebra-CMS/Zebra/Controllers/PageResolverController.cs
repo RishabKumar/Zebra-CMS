@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Zebra.Application;
-using Zebra.ModelView;
+using Zebra.ViewModel;
 using Zebra.Services.Interfaces;
 using Zebra.Services.Operations;
 

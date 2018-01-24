@@ -47,5 +47,8 @@ namespace Zebra.Services.Interfaces
         List<Language> GetNodeLanguages(string nodeid);
         bool RegisterFieldsForNode(IEntity node, Field field);
         bool RegisterFieldsForNode(IEntity node, Field field, Language language);
+        List<Template> GetInheritedTemplate(string nodeid);
+        bool AddInheritance(string nodeid, string templateid);
+        bool RemoveInheritance(string nodeid, string templateid);
     }
 }

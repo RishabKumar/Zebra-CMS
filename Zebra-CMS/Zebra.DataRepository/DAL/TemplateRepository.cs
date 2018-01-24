@@ -22,6 +22,43 @@ namespace Zebra.DataRepository.DAL
             return template;
         }
 
+        //Add templates inheritance to other templates.
+        [Obsolete("add check if inheritance already present",false)]
+        public NodeTemplateMap AddInheritance(Node node, Template newparent)
+        {
+            NodeTemplateMap newntm = null;
+            var ntm = new NodeTemplateMap() { Id = Guid.NewGuid(), NodeId = node.Id, TemplateId = newparent.Id };
+            using (var dbt = _context.Database.BeginTransaction())
+            {
+                newntm = _context.NodeTemplateMaps.Add(ntm);
+                _context.SaveChanges();
+                dbt.Commit();
+            }
+            return newntm;
+        }
+
+        public List<NodeTemplateMap> GetByCondition(Expression<Func<NodeTemplateMap, bool>> selector)
+        {
+            return _context.NodeTemplateMaps.Where(selector).ToList();
+        }
+
+        public List<Template> GetInheritedTemplate(Node node)
+        {
+            return GetByCondition(x => x.NodeId == node.Id).Select(y=>y.Template).ToList();
+        }
+
+        public bool RemoveInheritance(Node node, Template parent)
+        {
+            using (var dbt = _context.Database.BeginTransaction())
+            {
+                var list = _context.NodeTemplateMaps.Where(x=>x.NodeId == node.Id && x.TemplateId == parent.Id).ToList();
+                _context.NodeTemplateMaps.RemoveRange(list);
+                _context.SaveChanges();
+                dbt.Commit();
+            }
+            return true;
+        }
+
         public Template DeleteTemplate(IEntity entity)
         {
             var template = new Template() { Id = entity.Id };

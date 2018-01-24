@@ -8,7 +8,7 @@ using System.Web.Mvc;
 using Zebra.CustomAttributes;
 using Zebra.DataRepository.Models;
 using Zebra.Globalization;
-using Zebra.ModelView;
+using Zebra.ViewModel;
 using Zebra.Services.Interfaces;
 using Zebra.Services.Operations;
 
@@ -46,7 +46,7 @@ namespace Zebra.Controllers
             var list = new List<Node>();
             list.Add(root);
             ViewBag.Root = list;
-            ViewBag.Utilities = new List<string> { "Zebra.Utilities.UtilityProcessor.FieldBuilderUtility, Zebra" };
+            ViewBag.Utilities = new List<string> { "Zebra.Utilities.UtilityProcessor.FieldBuilderUtility, Zebra", "Zebra.Utilities.UtilityProcessor.InheritanceUtility, Zebra" };
             return View();
         }
 
@@ -80,9 +80,27 @@ namespace Zebra.Controllers
                 //         htmllist.Add(_fieldOperations.GetRenderedField(field.Id.ToString()));
                 htmllist.Add(_fieldOperations.GetRenderedField(nodeid, nodefield.FieldId.ToString(), nodefield.Id.ToString()));
             }
-            //.Select(x => x.Id).Cast<string>()
+            var orderedfields = new Dictionary<string, List<string>>();
+
+            foreach (var nodefield in nodefieldmap)
+            {
+                if (nodefield.Field != null)
+                {
+                    var templatename = nodefield.Field.GetTemplate().TemplateName;
+                    if (orderedfields.ContainsKey(templatename))
+                    {
+                        orderedfields[templatename].Add(_fieldOperations.GetRenderedField(nodeid, nodefield.FieldId.ToString(), nodefield.Id.ToString()));
+                    }
+                    else
+                    {
+                        var tmplist = new List<string>() { _fieldOperations.GetRenderedField(nodeid, nodefield.FieldId.ToString(), nodefield.Id.ToString()) };
+                        orderedfields.Add(templatename, tmplist);
+                    }
+                }
+            }
+
             var presentlanguages = ((IStructureOperations)_nodeop).GetNodeLanguages(node.Id.ToString());
-            return View(model: new NodeBrowserModel() { fields = htmllist, node = node, template = node.Template, currentlanguage = language, alllanguages = languages, allnodelanguages = presentlanguages });
+            return View(model: new NodeBrowserModel() { fields = htmllist, orderedfields = orderedfields,  node = node, template = node.Template, currentlanguage = language, alllanguages = languages, allnodelanguages = presentlanguages });
         }
         
         public ActionResult RenderUtility(string fullyqualifiedname, string method = "RenderView", dynamic data = null)

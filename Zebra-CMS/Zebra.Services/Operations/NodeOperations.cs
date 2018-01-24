@@ -27,11 +27,15 @@ namespace Zebra.Services.Operations
         {
             Guid newid = Guid.NewGuid();
             Node node = new Node() { Id = newid, NodeName = nodename, TemplateId = new Guid(templateid), ParentId = new Guid(parentid) };
-            node = ((INodeRepository)_currentrepository).CreateNode(node);
-            ((INodeRepository)_currentrepository).AddLanguageToNode(node, LanguageManager.GetDefaultLanguage());
-            if (!DetermineNodeTypeAndCreate(node.NodeName, newid, node))
+
+            if (DetermineNodeTypeAndCreate(node.NodeName, newid, node))
             {
-                DeleteNode(node.Id.ToString());
+                node = ((INodeRepository)_currentrepository).CreateNode(node);
+                ((INodeRepository)_currentrepository).AddLanguageToNode(node, LanguageManager.GetDefaultLanguage());
+            }
+            else
+            { 
+       //         DeleteNode(node.Id.ToString());
                 return null;
             }
             foreach (var field in fields)
@@ -97,6 +101,7 @@ namespace Zebra.Services.Operations
             bool flag = false;
             switch(DetermineNodeType(new Node { Id = new Guid(nodeid) }))
             {
+                case NodeType.SYSTEM_TYPE:
                 case NodeType.CONTENT_TYPE:
                 case NodeType.RENDER_TYPE:
                         flag = _currentrepository.DeleteNode(new Node() { Id = new Guid(nodeid) });
@@ -123,8 +128,6 @@ namespace Zebra.Services.Operations
                         filerepo.DeleteMedia(nodefieldmap.NodeData);
                     }
                     flag = _currentrepository.DeleteNode(node);
-                    break;
-                case NodeType.SYSTEM_TYPE:
                     break;
                 case NodeType.FIELD_TYPE:
                     break;
@@ -286,6 +289,7 @@ namespace Zebra.Services.Operations
             
             switch(node.Id.ToString().ToUpper())
             {
+                case NodeType.SYSTEM_ID:
                 case NodeType.CONTENTNODE_ID:
                     type = NodeType.CONTENT_TYPE;
                     return true; 
@@ -318,7 +322,7 @@ namespace Zebra.Services.Operations
                     type = NodeType.MEDIA_TYPE;
                     return true;
                 default:
-                    node = GetNode(node.Id.ToString());
+                    node = GetNode(node.Id.ToString()) ?? node;
                     return DetermineNodeTypeAndCreate(name, newid, GetNode(node.ParentId.ToString()));
                     
             }
@@ -398,6 +402,38 @@ namespace Zebra.Services.Operations
                 return null;
             }
             return _templaterepository.GetTemplate(new Template() { Id = new Guid(templateid) });
+        }
+
+        public List<Template> GetInheritedTemplate(string nodeid)
+        {
+            Node node = null;
+            if(!string.IsNullOrWhiteSpace(nodeid) && (node = GetNode(nodeid)) != null )
+            {
+                return _templaterepository.GetInheritedTemplate(node);
+            }
+            return null;
+        }
+
+        public bool AddInheritance(string nodeid, string templateid)
+        {
+            Node node;
+            Template template;
+            if (!string.IsNullOrWhiteSpace(nodeid) && (node = GetNode(nodeid)) != null && !string.IsNullOrWhiteSpace(templateid) && (template = GetTemplate(templateid)) != null)
+            {
+                return _templaterepository.AddInheritance(node, template) != null ? true: false;
+            }
+            return false;
+        }
+
+        public bool RemoveInheritance(string nodeid, string templateid)
+        {
+            Node node;
+            Template template;
+            if (!string.IsNullOrWhiteSpace(nodeid) && (node = GetNode(nodeid)) != null && !string.IsNullOrWhiteSpace(templateid) && (template = GetTemplate(templateid)) != null)
+            {
+                return _templaterepository.RemoveInheritance(node, template);
+            }
+            return false;
         }
 
         public bool SaveNode(Node node, dynamic rawdata, List<Field> fields = null)

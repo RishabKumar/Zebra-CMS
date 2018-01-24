@@ -81,9 +81,12 @@ namespace Zebra.DataRepository.Providers
         public override long GetMediaLength(string filename)
         {
             long length = -1;
-            using (var stream = new FileStream(GetMediaLocalFilePath(filename), FileMode.Open))
+            if (!string.IsNullOrWhiteSpace(filename))
             {
-                length = stream.Length;
+                using (var stream = new FileStream(GetMediaLocalFilePath(filename), FileMode.Open))
+                {
+                    length = stream.Length;
+                }
             }
             return length;
         }

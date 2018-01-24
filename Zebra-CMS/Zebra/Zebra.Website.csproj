@@ -187,6 +187,7 @@
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\ZebraController.cs" />
     <Compile Include="CustomAttributes\ZebraAuthorize.cs" />
+    <Compile Include="Extensions\FieldExtension.cs" />
     <Compile Include="Extensions\NodeExtension.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -197,8 +198,9 @@
     <Compile Include="Handlers\MediaHandler.ashx.cs">
       <DependentUpon>MediaHandler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="ModelView\NodeBrowserModel.cs" />
-    <Compile Include="ModelView\PageModel.cs" />
+    <Compile Include="Utilities\UtilityProcessor\InheritanceUtility.cs" />
+    <Compile Include="ViewModel\NodeBrowserModel.cs" />
+    <Compile Include="ViewModel\PageModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
@@ -206,6 +208,7 @@
     <Content Include="Scripts\zebra-js\NodeBrowser.js" />
     <Compile Include="Utilities\UtilityProcessor\FieldBuilderUtility.cs" />
     <Compile Include="Utilities\UtilityProcessor\IZebraUtility.cs" />
+    <Compile Include="ZebraHelpers\Test.cs" />
     <Compile Include="ZebraHelpers\ZebraHelper.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -283,6 +286,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\zebra-js\utilities\fieldbuilder.js" />
+    <Content Include="Scripts\zebra-js\utilities\inheritance.js" />
     <Content Include="Scripts\zebra-js\utility-menu.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
@@ -313,6 +317,8 @@
     <Content Include="Views\shared\TestLayout.cshtml" />
     <Content Include="Views\Test\Details.cshtml" />
     <Content Include="Views\Test\Heading.cshtml" />
+    <Content Include="Utilities\UtilityViews\Inheritance\AddInheritance.cshtml" />
+    <Content Include="Utilities\UtilityViews\Inheritance\InheritanceMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

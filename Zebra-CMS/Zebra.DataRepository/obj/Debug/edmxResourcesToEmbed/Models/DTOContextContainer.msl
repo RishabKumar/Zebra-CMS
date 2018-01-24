@@ -4,6 +4,7 @@
     <EntitySetMapping Name="Fields">
       <EntityTypeMapping TypeName="ZebraDB_Model.Field">
         <MappingFragment StoreEntitySet="Fields">
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
           <ScalarProperty Name="IsStatic" ColumnName="IsStatic" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="FieldName" ColumnName="FieldName" />
@@ -85,6 +86,16 @@
       <EntityTypeMapping TypeName="ZebraDB_Model.NodeLanguageMap">
         <MappingFragment StoreEntitySet="NodeLanguageMaps">
           <ScalarProperty Name="LanguageId" ColumnName="LanguageId" />
+          <ScalarProperty Name="NodeId" ColumnName="NodeId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NodeTemplateMaps">
+      <EntityTypeMapping TypeName="ZebraDB_Model.NodeTemplateMap">
+        <MappingFragment StoreEntitySet="NodeTemplateMaps">
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
           <ScalarProperty Name="NodeId" ColumnName="NodeId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>

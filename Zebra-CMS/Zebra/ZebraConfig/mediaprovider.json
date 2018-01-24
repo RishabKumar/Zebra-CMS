@@ -3,7 +3,7 @@
     {
       "name": "FileProvider",
       "type": "Zebra.DataRepository.Providers.FileProvider, Zebra.DataRepository",
-      "active": false,
+      "active": true,
       "mediapath": "/media/",
       "config": [ {  }]
     },
@@ -11,7 +11,7 @@
      {
       "name": "MongodbProvider",
       "type": "Zebra.DataRepository.Providers.MongodbProvider, Zebra.DataRepository",
-      "active": true,
+      "active": false,
       "mediapath": "/mongodb/",
       "config": [
         {

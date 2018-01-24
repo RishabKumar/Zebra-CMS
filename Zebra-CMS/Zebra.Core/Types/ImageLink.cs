@@ -41,8 +41,13 @@ namespace Zebra.Core.Types
                 {
                     return link.OriginalString;
                 }
-                var noderepo = new NodeRepository();
-                var data = noderepo.GetNodeFieldMapData(new Node() { Id = Guid.Parse(rawdata) }, "Image");
+                var noderepo = new NodeRepository();//4ea49c20-a9f6-4312-bea1-7e0c5243e1b9
+                Guid id ;
+                string data = string.Empty;
+                if (Guid.TryParse(rawdata, out id))
+                {
+                    data = noderepo.GetNodeFieldMapData(new Node() { Id = id }, "Image");
+                }
                 return new FileRepository().GetMediaFilePath(data);
             }
             return string.Empty;
