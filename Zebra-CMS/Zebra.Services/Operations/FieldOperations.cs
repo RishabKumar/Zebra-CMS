@@ -78,8 +78,13 @@ namespace Zebra.Services.Operations
 
         public List<Field> GetInclusiveFieldsOfTemplate(string nodeid, List<Field> fields = null)
         {
+
             var node = _noderepo.GetNode(new Node() { Id = Guid.Parse(nodeid) });
-         //   var template = _.GetTemplate(new Node() { Id = Guid.Parse(nodeid) });
+            if (node.Id.Equals(node.TemplateId))
+            {
+                return fields.OrderBy(x => x.CreationDate).ToList();
+            }
+            //   var template = _.GetTemplate(new Node() { Id = Guid.Parse(nodeid) });
             if (fields == null)
             {
                 fields = new List<Field>();
@@ -90,16 +95,34 @@ namespace Zebra.Services.Operations
             }
 
             fields.AddRange(GetExclusiveFieldsOfTemplate(node.Id.ToString()));
+
             var listoftemp = _temprepo.GetInheritedTemplate(node);
             foreach(var tmp in listoftemp)
             {
+                fields.AddRange(GetInclusiveFieldsOfTemplate(tmp.Id.ToString()));
+            }
+
+            if (node.Id.Equals(node.TemplateId))
+            {
+                return fields.OrderBy(x => x.CreationDate).ToList();
+            }
+
+            return GetInclusiveFieldsOfTemplate(node.TemplateId.ToString(), fields);
+        }
+
+        private List<Field> GetAllParentFields(Node node, List<Field> fields = null)
+        {
+            if(node.TemplateId == node.Id)
+            {
+                return fields;
+            }
+            var tmpnode = new Node() { Id = node.TemplateId };
+            var listoftemp = _temprepo.GetInheritedTemplate(tmpnode);
+            foreach (var tmp in listoftemp)
+            {
                 fields.AddRange(GetExclusiveFieldsOfTemplate(tmp.Id.ToString()));
             }
-            if(node.Id.Equals(node.TemplateId))
-            {
-                return fields.OrderBy(x=>x.CreationDate).ToList();
-            }
-            return GetInclusiveFieldsOfTemplate(node.TemplateId.ToString(), fields);
+            return GetAllParentFields(tmpnode, fields);
         }
 
         public FieldType CreateFieldType(FieldType ft)

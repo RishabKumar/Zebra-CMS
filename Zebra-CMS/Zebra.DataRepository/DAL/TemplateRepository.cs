@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -18,7 +20,9 @@ namespace Zebra.DataRepository.DAL
                 template = _context.Templates.Add(template);
                 _context.SaveChanges();
                 dbt.Commit();
+                dbt.Dispose();
             }
+            ReloadEntities();
             return template;
         }
 
@@ -33,7 +37,9 @@ namespace Zebra.DataRepository.DAL
                 newntm = _context.NodeTemplateMaps.Add(ntm);
                 _context.SaveChanges();
                 dbt.Commit();
+                dbt.Dispose();
             }
+            ReloadEntities();
             return newntm;
         }
 
@@ -55,7 +61,9 @@ namespace Zebra.DataRepository.DAL
                 _context.NodeTemplateMaps.RemoveRange(list);
                 _context.SaveChanges();
                 dbt.Commit();
+                dbt.Dispose();
             }
+            ReloadEntities();
             return true;
         }
 
@@ -64,11 +72,31 @@ namespace Zebra.DataRepository.DAL
             var template = new Template() { Id = entity.Id };
             using (var dbt = _context.Database.BeginTransaction())
             {
-                template = _context.Templates.Find(template.Id);
+                foreach (var t in _context.ChangeTracker.Entries())
+                {
+                    t.Reload();
+                }
+                template = GetTemplate(template);
                 template = _context.Templates.Remove(template);
-                _context.SaveChanges();
-                dbt.Commit();
+                try
+                {   
+                    _context.SaveChanges();
+                }
+                catch(DbUpdateConcurrencyException e)
+                {
+                    foreach(var t in e.Entries)
+                    {
+                        _context.Entry(t.Entity).State = EntityState.Deleted;
+                    }
+                    _context.SaveChanges();
+                }
+                finally
+                {
+                    dbt.Commit();
+                    dbt.Dispose();
+                }
             }
+            ReloadEntities();
             return template;
         }
 
@@ -90,6 +118,30 @@ namespace Zebra.DataRepository.DAL
         public Template GetTemplate(IEntity entity)
         {
             return _context.Templates.Find(entity.Id);
+        }
+
+
+        public List<Node> GetDerivedNodes(Node node, Template template, List<Node> derived)
+        {
+            template = GetTemplate(template);
+            var nodes = _context.Nodes.Where(x => x.TemplateId == template.Id).ToList();
+            var inheritedtemplatenodes = _context.NodeTemplateMaps.Where(x => x.TemplateId == template.Id).Select(x => x.Node);
+            nodes.AddRange(inheritedtemplatenodes);
+            derived.AddRange(nodes);
+            foreach (var n in nodes)
+            {
+                var tmp = _context.Templates.Find(n.Id);
+                if (tmp != null && node.Id != n.Id)
+                {
+                    GetDerivedNodes(n, tmp, derived);
+                }
+            }
+            return derived;
+        }
+
+        public List<Node> GetInheritedTemplateNodes(Template template)
+        {
+            return _context.NodeTemplateMaps.Where(x => x.TemplateId == template.Id).Select(x => x.Node).ToList();
         }
     }
 }

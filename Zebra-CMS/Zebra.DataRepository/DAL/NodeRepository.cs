@@ -19,7 +19,9 @@ namespace Zebra.DataRepository.DAL
                 node = _context.Nodes.Add(node);
                 _context.SaveChanges();
                 dbt.Commit();
+                dbt.Dispose();
             }
+            ReloadEntities();
             return node;
 
         }
@@ -33,6 +35,7 @@ namespace Zebra.DataRepository.DAL
                 dbt.Commit();
                 dbt.Dispose();
             }
+            ReloadEntities();
             return true;
         }
 
@@ -67,6 +70,7 @@ namespace Zebra.DataRepository.DAL
                     dbt.Dispose();
                 }
             }
+            ReloadEntities();
             return true;
         }
         /// <summary>
@@ -81,8 +85,8 @@ namespace Zebra.DataRepository.DAL
             {
                     //var t = from nodefieldmap in _context.NodeFieldMaps where nodefieldmap.NodeId == node.Id group nodefieldmap.LanguageId by nodefieldmap.LanguageId;
                     //var nodefieldmaps1 = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).GroupBy(y => y.LanguageId).Select(s => s.Key).ToList();
-                    //var languages = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).Select(y=>y.LanguageId).Distinct().ToList();
-                    var languages = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).Select(y => y.LanguageId);
+                var languages = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).Select(y=>y.LanguageId).Distinct();
+                //var languages = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).Select(y => y.LanguageId);
                 foreach (var lang in languages)
                 {
                     RegisterFieldsForNode(node, field, new Language() { Id = lang.Value });
@@ -90,6 +94,35 @@ namespace Zebra.DataRepository.DAL
                 dbt.Commit();
                 dbt.Dispose();
             }
+            ReloadEntities();
+            return true;
+        }
+
+        public bool RemoveFieldFromNode(IEntity node, Field field)
+        {
+            using (var dbt = _context.Database.BeginTransaction())
+            {
+                var nodefieldmap = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id && x.FieldId == field.Id).ToList();
+                 _context.NodeFieldMaps.RemoveRange(nodefieldmap);
+                _context.SaveChanges();
+                dbt.Commit();
+                dbt.Dispose();
+            }
+            ReloadEntities();
+            return true;
+        }
+
+        public bool RemoveFieldFromNode(IEntity node, Field field, Language language)
+        {
+            using (var dbt = _context.Database.BeginTransaction())
+            {
+                var nodefieldmap = _context.NodeLanguageMaps.Where(x => x.NodeId == node.Id && x.Id == field.Id && x.LanguageId == language.Id).ToList();
+                _context.NodeLanguageMaps.RemoveRange(nodefieldmap);
+                _context.SaveChanges();
+                dbt.Commit();
+                dbt.Dispose();
+            }
+            ReloadEntities();
             return true;
         }
 
@@ -109,10 +142,14 @@ namespace Zebra.DataRepository.DAL
                     return false;
                 nodes.Add(node);
                 DeleteEntryFromNodeFieldMap(nodes);
+                DeleteEntryFromNodeLanguageMap(nodes);
+                DeleteEntryFromNodeTemplateMap(nodes);
                 var rnodes = _context.Nodes.RemoveRange(nodes.AsEnumerable());
                 _context.SaveChanges();
                 dbt.Commit();
+                dbt.Dispose();
             }
+            ReloadEntities();
             return true;
         }
 
@@ -124,6 +161,30 @@ namespace Zebra.DataRepository.DAL
                 _context.NodeFieldMaps.RemoveRange(entrieslist);
             }
             _context.SaveChanges();
+            ReloadEntities();
+        }
+
+        private void DeleteEntryFromNodeTemplateMap(List<Node> nodes)
+        {
+            foreach (var node in nodes)
+            {
+                var entrieslist = _context.NodeTemplateMaps.Where(x => x.NodeId == node.Id).ToList();
+                entrieslist.AddRange(_context.NodeTemplateMaps.Where(x => x.TemplateId == node.Id).ToList());
+                _context.NodeTemplateMaps.RemoveRange(entrieslist);
+            }
+            _context.SaveChanges();
+            ReloadEntities();
+        }
+
+        private void DeleteEntryFromNodeLanguageMap(List<Node> nodes)
+        {
+            foreach (var node in nodes)
+            {
+                var entrieslist = _context.NodeLanguageMaps.Where(x => x.NodeId == node.Id).ToList();
+                _context.NodeLanguageMaps.RemoveRange(entrieslist);
+            }
+            _context.SaveChanges();
+            ReloadEntities();
         }
 
         private List<Node> GetAllChildren(Node node, List<Node> children)
@@ -147,6 +208,16 @@ namespace Zebra.DataRepository.DAL
         public override List<Node> GetByCondition(Expression<Func<Node, bool>> selector)
         {
             return _context.Nodes.Where(selector).ToList();
+        }
+
+        public List<NodeLanguageMap> GetByCondition(Expression<Func<NodeLanguageMap, bool>> selector)
+        {
+            return _context.NodeLanguageMaps.Where(selector).ToList();
+        }
+
+        public List<NodeFieldMap> GetByCondition(Expression<Func<NodeFieldMap, bool>> selector)
+        {
+            return _context.NodeFieldMaps.Where(selector).ToList();
         }
 
         public override Node GetByName(Node t)
@@ -183,7 +254,9 @@ namespace Zebra.DataRepository.DAL
                 nodedata = _context.NodeFieldMaps.Add(nodedata);
                 _context.SaveChanges();
                 dbt.Commit();
+                dbt.Dispose();
             }
+            ReloadEntities();
             return true;
         }
 
@@ -197,6 +270,7 @@ namespace Zebra.DataRepository.DAL
                     oldnodefieldmap.NodeData = nodefieldmap.NodeData;
                     _context.SaveChanges();
                     dbt.Commit();
+                    dbt.Dispose();
                 }
             }
             return true;
@@ -244,9 +318,9 @@ namespace Zebra.DataRepository.DAL
                     existingnode.ParentId = parent.Id;
                     _context.SaveChanges();
                     dbt.Commit();
+                    dbt.Dispose();
                 }
             }
         }
-
     }
 }

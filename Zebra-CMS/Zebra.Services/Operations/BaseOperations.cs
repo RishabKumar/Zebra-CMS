@@ -18,5 +18,10 @@ namespace Zebra.Services.Operations
         {
             _base = t;
         }
+
+        public virtual void ReloadEntities()
+        {
+            _base.ReloadEntities();
+        }
     }
 }

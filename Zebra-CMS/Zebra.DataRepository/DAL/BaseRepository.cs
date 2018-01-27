@@ -29,5 +29,13 @@ namespace Zebra.DataRepository.DAL
         {
             return _context.Set<T>().ToList<T>();
         }
+
+        public virtual void ReloadEntities()
+        {
+            foreach (var t in _context.ChangeTracker.Entries())
+            {
+                t.Reload();
+            }
+        }
     }
 }

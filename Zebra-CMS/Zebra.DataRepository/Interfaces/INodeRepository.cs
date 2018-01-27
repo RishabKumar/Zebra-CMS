@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Zebra.DataRepository.Models;
@@ -29,6 +30,8 @@ namespace Zebra.DataRepository.Interfaces
         /// <param name="fields"></param>
         /// <returns></returns>
         bool RegisterFieldsForNode(IEntity entity, Field field);
+        bool RemoveFieldFromNode(IEntity node, Field field);
+        bool RemoveFieldFromNode(IEntity node, Field field, Language language);
 
         List<NodeFieldMap> GetNodeFieldMapData(Node node);
 
@@ -51,5 +54,8 @@ namespace Zebra.DataRepository.Interfaces
         List<Language> GetNodeLanguages(IEntity node);
 
         NodeLanguageMap GetNodeLanguageMap(NodeLanguageMap nlmap);
+
+        List<NodeLanguageMap> GetByCondition(Expression<Func<NodeLanguageMap, bool>> selector);
+        List<NodeFieldMap> GetByCondition(Expression<Func<NodeFieldMap, bool>> selector);
     }
 }

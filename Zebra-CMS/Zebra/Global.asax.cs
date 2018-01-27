@@ -8,6 +8,8 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Security;
+using Zebra.DataRepository.DAL;
+using Zebra.DataRepository.Models;
 using Zebra.Services.Operations;
 
 namespace Zebra

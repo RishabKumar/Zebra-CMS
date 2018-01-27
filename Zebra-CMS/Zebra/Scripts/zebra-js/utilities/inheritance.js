@@ -63,7 +63,7 @@ $(document).on('click', '.zebra-inheritance-savetemplate-btn', function (e) {
     }
 });
 
-$('.zebra-inheritance-canceltemplate-btn').on('click', function () {
+$(document).on('click', '.zebra-inheritance-canceltemplate-btn', function () {
     $(".zebra-inheritance-container").remove();
     $('.black-overlay').remove();
 });

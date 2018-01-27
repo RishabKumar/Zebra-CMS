@@ -147,6 +147,7 @@ namespace Zebra.Services.Operations
 
         public Node GetRootNode()
         {
+      //      GetDerivedNodes("15B7C811-CD36-4CFC-BD40-40AFDA66BAC7");
            return _base.GetByName(new Node() { NodeName = "root" });
         }
 
@@ -161,8 +162,8 @@ namespace Zebra.Services.Operations
             _fieldrepository.AddFieldToTemplate(template, field);
             //template = _templaterepository.GetTemplate(template);  // this doesnot always retrieve all Nodes in case if browser is not refreshed after noder creation, hence its not safe.
             //    var nodes = _base.GetByCondition(x => x.TemplateId == template.Id);
-            var nodes = GetAllDerivedNodesByType(template);
-
+            //     var nodes = GetAllDerivedNodesByType(template);
+            var nodes = GetDerivedNodes(template.Id.ToString());
             nodes.Add(new Node() { Id = template.Id }); // every template's id is same as to it corresponding Node's Id.
             var lang = language ?? LanguageManager.GetDefaultLanguage();
             foreach (var node in nodes)
@@ -178,8 +179,8 @@ namespace Zebra.Services.Operations
             _fieldrepository.AddFieldToTemplate(template, field);
             //template = _templaterepository.GetTemplate(template);  // this doesnot always retrieve all Nodes in case if browser is not refreshed after noder creation, hence its not safe.
             //    var nodes = _base.GetByCondition(x => x.TemplateId == template.Id);
-            var nodes = GetAllDerivedNodesByType(template);
-
+            //            var nodes = GetAllDerivedNodesByType(template);
+            var nodes = GetDerivedNodes(template.Id.ToString());
             nodes.Add(new Node() { Id = template.Id }); // every template's id is same as to it corresponding Node's Id.
             
             foreach (var node in nodes)
@@ -205,27 +206,35 @@ namespace Zebra.Services.Operations
         public bool RegisterFieldsForNode(IEntity node, Field field, Language language)
         {
             field = _fieldrepository.GetField(field);
-            if (field.IsStatic)
+            if (field.IsStatic && ((INodeRepository)_currentrepository).GetByCondition(x => x.FieldId == field.Id && x.NodeId == node.Id).Count == 0)
             {
-                return false;
+                return ((INodeRepository)_currentrepository).RegisterFieldsForNode(node, field, language);
+            }
+            else if (!field.IsStatic)
+            {
+                return ((INodeRepository)_currentrepository).RegisterFieldsForNode(node, field, language);
             }
             else
             {
-                return ((INodeRepository)_currentrepository).RegisterFieldsForNode(node, field, language);
-            } 
-            
+                return false;
+            }
+
         }
 
         public bool RegisterFieldsForNode(IEntity node, Field field)
         {
             field = _fieldrepository.GetField(field);
-            if (field.IsStatic)
-            {
-                return false;
-            }
-            else
+            if (field.IsStatic && ((INodeRepository)_currentrepository).GetByCondition(x => x.FieldId == field.Id && x.NodeId == node.Id).Count == 0)
             {
                 return ((INodeRepository)_currentrepository).RegisterFieldsForNode(node, field);
+            }
+            else if (!field.IsStatic)
+            {
+                return ((INodeRepository)_currentrepository).RegisterFieldsForNode(node, field);
+            }
+            else
+            { 
+                return false;
             }
         }
 
@@ -256,6 +265,7 @@ namespace Zebra.Services.Operations
             return ((NodeRepository)_currentrepository).GetNodesByType(template);
         }
 
+        [Obsolete]
         /// <summary>
         /// Gets all the Nodes of Template t Type
         ///
@@ -420,7 +430,18 @@ namespace Zebra.Services.Operations
             Template template;
             if (!string.IsNullOrWhiteSpace(nodeid) && (node = GetNode(nodeid)) != null && !string.IsNullOrWhiteSpace(templateid) && (template = GetTemplate(templateid)) != null)
             {
-                return _templaterepository.AddInheritance(node, template) != null ? true: false;
+                if (_templaterepository.AddInheritance(node, template) != null)
+                {
+                    var flag = false;
+                    foreach (var field in _fieldrepository.GetFieldsFromTemplate(template))
+                    {
+                        foreach (var tmpnode in GetDerivedNodes(nodeid))
+                        {        
+                            flag &= RegisterFieldsForNode(tmpnode, field);
+                        }
+                    }
+                    return flag;
+                }
             }
             return false;
         }
@@ -431,7 +452,18 @@ namespace Zebra.Services.Operations
             Template template;
             if (!string.IsNullOrWhiteSpace(nodeid) && (node = GetNode(nodeid)) != null && !string.IsNullOrWhiteSpace(templateid) && (template = GetTemplate(templateid)) != null)
             {
-                return _templaterepository.RemoveInheritance(node, template);
+                if(_templaterepository.RemoveInheritance(node, template))
+                {
+                    var flag = false;
+                    foreach (var field in _fieldrepository.GetFieldsFromTemplate(template))
+                    {
+                        foreach (var tmpnode in GetDerivedNodes(nodeid))
+                        {
+                            flag &= ((INodeRepository)_currentrepository).RemoveFieldFromNode(tmpnode, field);
+                        }
+                    }
+                    return flag;
+                }
             }
             return false;
         }
@@ -541,6 +573,32 @@ namespace Zebra.Services.Operations
                 return null;
             }
             return ((INodeRepository)_currentrepository).GetNodeFieldMapData(new Node() { Id = Guid.Parse(nodeid) }, new Language() { Id = Guid.Parse(language)});
+        }
+
+        public List<Node> GetDerivedNodes(string templateid)
+        {
+            var node = GetNode(templateid);
+            var template = GetTemplate(node.Id.ToString());
+            var list = new List<Node>();
+            var result = _templaterepository.GetDerivedNodes(node, template, list);
+            return result;
+        }
+
+        private List<Node> GetDerivedNodes(Node node, Template template, List<Node> derived)
+        {
+            var nodes = template.Nodes.ToList();
+            var inheritedtemplatenodes = _templaterepository.GetInheritedTemplateNodes(template);
+            nodes.AddRange(inheritedtemplatenodes);
+            derived.AddRange(nodes);
+            foreach (var n in nodes)
+            {
+                var tmp = GetTemplate(n.Id.ToString());
+                if (tmp != null && node.Id != n.Id)
+                {
+                    GetDerivedNodes(n, tmp, derived);
+                }
+            }
+            return derived;
         }
     }
 }

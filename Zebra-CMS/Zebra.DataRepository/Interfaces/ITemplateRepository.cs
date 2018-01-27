@@ -17,5 +17,7 @@ namespace Zebra.DataRepository.Interfaces
         bool RemoveInheritance(Node node, Template parent);
         List<NodeTemplateMap> GetByCondition(Expression<Func<NodeTemplateMap, bool>> selector);
         List<Template> GetInheritedTemplate(Node node);
+        List<Node> GetDerivedNodes(Node node, Template template, List<Node> derived);
+        List<Node> GetInheritedTemplateNodes(Template template);
     }
 }

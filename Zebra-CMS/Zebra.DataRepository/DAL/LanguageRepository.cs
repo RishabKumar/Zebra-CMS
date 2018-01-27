@@ -18,7 +18,9 @@ namespace Zebra.DataRepository.DAL
                 language = _context.Languages.Add(language);
                 _context.SaveChanges();
                 dbt.Commit();
+                dbt.Dispose();
             }
+            ReloadEntities();
             return language;
         }
 
@@ -32,12 +34,14 @@ namespace Zebra.DataRepository.DAL
                     _context.Languages.Remove(tmplanguage);
                     _context.SaveChanges();
                     dbt.Commit();
+                    dbt.Dispose();
                 }
                 else
                 {
                     return false;
                 }
             }
+            ReloadEntities();
             return true;
         }
 
@@ -86,6 +90,7 @@ namespace Zebra.DataRepository.DAL
                     _context.Entry(oldlanguage).CurrentValues.SetValues(language);
                     _context.SaveChanges();
                     dbt.Commit();
+                    dbt.Dispose();
                 }
             }
             return GetLanguage(language);

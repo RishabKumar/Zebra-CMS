@@ -31,9 +31,10 @@ namespace Zebra.DataRepository.DAL
                 ft = _context.FieldTypes.Add(ft);
                 _context.SaveChanges();
                 dbt.Commit();
+                dbt.Dispose();
             }
+            ReloadEntities();
             return ft;
-             
         }
 
 
@@ -70,7 +71,9 @@ namespace Zebra.DataRepository.DAL
                 tfm = _context.TemplateFieldMaps.Add(new Models.TemplateFieldMap() { Id = Guid.NewGuid(), FieldId = field.Id, TemplateId = template.Id });
                 _context.SaveChanges();
                 dbt.Commit();
+                dbt.Dispose();
             }
+            ReloadEntities();
             return tfm;
         }
 
@@ -96,7 +99,9 @@ namespace Zebra.DataRepository.DAL
                 field = _context.Fields.Add(field);
                 _context.SaveChanges();
                 dbt.Commit();
+                dbt.Dispose();
             }
+            ReloadEntities();
             return field;
         }
 
@@ -117,7 +122,9 @@ namespace Zebra.DataRepository.DAL
                 field = _context.Fields.Remove(field);
                 _context.SaveChanges();
                 dbt.Commit();
+                dbt.Dispose();
             }
+            ReloadEntities();
             return field;
         }
 
@@ -138,7 +145,9 @@ namespace Zebra.DataRepository.DAL
                 }
                 _context.SaveChanges();
                 dbt.Commit();
+                dbt.Dispose();
             }
+            ReloadEntities();
         }
 
         public void RemoveFieldTemplateRelation(Models.TemplateFieldMap tmp)
@@ -153,7 +162,9 @@ namespace Zebra.DataRepository.DAL
                 _context.TemplateFieldMaps.Remove(tmp);
                 _context.SaveChanges();
                 dbt.Commit();
+                dbt.Dispose();
             }
+            ReloadEntities();
         }
 
         public Field UpdateField(Field field)
@@ -173,6 +184,7 @@ namespace Zebra.DataRepository.DAL
                 //   _context.Entry(tmp).State = EntityState.Modified;
                 _context.SaveChanges();
                 dbt.Commit();
+                dbt.Dispose();
             }
             return _context.Fields.Find(tmp.Id);
         }
