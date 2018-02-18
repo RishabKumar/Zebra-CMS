@@ -10,7 +10,9 @@ namespace Zebra.DataRepository.DAL
 {
     public abstract class BaseRepository<T> where T : class
     {
-        protected DTOContextContainer _context = new DTOContextContainer();
+        protected DTOContextContainer _Context = new DTOContextContainer();
+
+        protected DTOContextContainer _context { get { lock (_Context) { return _Context; } } }
 
         #warning "This method will be removed in future release."
         public virtual dynamic GetById(IEntity t)

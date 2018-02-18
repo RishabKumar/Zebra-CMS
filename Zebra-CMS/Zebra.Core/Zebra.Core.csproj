@@ -102,6 +102,7 @@
     <Compile Include="Types\ImageLink.cs" />
     <Compile Include="Types\LayoutType.cs" />
     <Compile Include="Types\MultiLineStringType.cs" />
+    <Compile Include="Types\NodeLinkType.cs" />
     <Compile Include="Types\VideoType.cs" />
     <Compile Include="Types\SmallFileType.cs" />
     <Compile Include="Types\SingleLineStringType.cs" />

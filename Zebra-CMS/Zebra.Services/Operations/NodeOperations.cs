@@ -343,6 +343,9 @@ namespace Zebra.Services.Operations
             string type = NodeType.UNKNOWN_TYPE;
             switch (node.Id.ToString().ToUpper())
             {
+                case NodeType.SYSTEM_ID:
+                    type = NodeType.SYSTEM_TYPE;
+                    break;
                 case NodeType.CONTENTNODE_ID:
                     type = NodeType.CONTENT_TYPE;
                     break;
@@ -550,6 +553,7 @@ namespace Zebra.Services.Operations
                 case NodeType.TEMPLATE_TYPE:
                     break;
             }
+            FrameworkOperations.Execute(node.Id.ToString(), 1);//validation
         }   
 
         public List<NodeFieldMap> GetNodeFieldMapData(string nodeid)

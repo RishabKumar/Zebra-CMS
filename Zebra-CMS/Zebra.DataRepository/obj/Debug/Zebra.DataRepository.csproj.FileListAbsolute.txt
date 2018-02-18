@@ -19,3 +19,4 @@ C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Dat
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.DataRepository\bin\Debug\Newtonsoft.Json.xml
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.DataRepository\obj\Debug\Zebra.DataRepository.dll
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.DataRepository\obj\Debug\Zebra.DataRepository.pdb
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.DataRepository\obj\Debug\Zebra.DataRepository.csprojResolveAssemblyReference.cache

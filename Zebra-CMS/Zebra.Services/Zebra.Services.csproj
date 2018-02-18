@@ -69,6 +69,7 @@
     <Compile Include="Extensions\NodeExtension.cs" />
     <Compile Include="Operations\BaseOperations.cs" />
     <Compile Include="Operations\FieldOperations.cs" />
+    <Compile Include="Operations\FrameworkOperations.cs" />
     <Compile Include="Operations\NodeOperations.cs" />
     <Compile Include="Operations\OperationsFactory.cs" />
     <Compile Include="Operations\PageOperations.cs" />
@@ -89,6 +90,10 @@
     <ProjectReference Include="..\Zebra.Essentials\Zebra.Essentials.csproj">
       <Project>{63AAF883-A2F7-4C89-948A-60EDFA5D2A2E}</Project>
       <Name>Zebra.Essentials</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Zebra.Framework\Zebra.Framework.csproj">
+      <Project>{D0DD8793-E260-422E-898B-3AE2E66EF85B}</Project>
+      <Name>Zebra.Framework</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

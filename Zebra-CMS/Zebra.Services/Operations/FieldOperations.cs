@@ -80,11 +80,12 @@ namespace Zebra.Services.Operations
         {
 
             var node = _noderepo.GetNode(new Node() { Id = Guid.Parse(nodeid) });
-            if (node.Id.Equals(node.TemplateId))
+            //this if must be placed before initializing fields list
+            if (node.Id.Equals(node.TemplateId) && fields != null)
             {
                 return fields.OrderBy(x => x.CreationDate).ToList();
             }
-            //   var template = _.GetTemplate(new Node() { Id = Guid.Parse(nodeid) });
+            
             if (fields == null)
             {
                 fields = new List<Field>();

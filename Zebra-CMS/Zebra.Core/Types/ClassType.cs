@@ -30,14 +30,14 @@ namespace Zebra.Core.Types
 
         public override string GetProcessedValue()
         {
-            if (!string.IsNullOrWhiteSpace(_context.Value))
-            {
-                var type = Type.GetType(_context.Value);
-                var obj = Activator.CreateInstance(type);
+            //if (!string.IsNullOrWhiteSpace(_context.Value))
+            //{
+            //    var type = Type.GetType(_context.Value);
+            //    var obj = Activator.CreateInstance(type);
 
-                var mi = type.GetMethod("Validate");
-                var data = mi.Invoke(obj, null).ToString();
-            }
+            //    var mi = type.GetMethod("Validate");
+            //    var data = mi.Invoke(obj, null).ToString();
+            //}
             return _context.Value;
         }
 

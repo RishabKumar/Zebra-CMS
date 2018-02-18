@@ -14,7 +14,7 @@ namespace Zebra.Services.Type
             SIMPLENODE = "",
             CONTENT_TYPE = "Node",
             MEDIA_TYPE = "Media",
-            SYSTEM_TYPE = "",
+            SYSTEM_TYPE = "System",
             UNKNOWN_TYPE = "",
             RENDER_TYPE = "Render",
             LANGUAGE_TYPE = "Language";
@@ -25,7 +25,7 @@ namespace Zebra.Services.Type
             CONTENTNODE_ID = "2401C12C-1CB4-48E2-B685-7891D9190D70",
             RENDERNODE_ID = "5B94E15C-FF9E-4E16-92D6-FE9ADA430557",
             MEDIA_ID = "BAFB439E-6F83-4B80-8B90-6FF45E778EC3",
-            SYSTEM_ID = "",
+            SYSTEM_ID = "6604AFEF-28F8-42F1-8085-1A50189A3BDB",
             UNKNOWN_ID = "",
             VIEW_ID = "",
             SIMPLETEMPLATE_ID = "AAAAAAAA-7238-43A0-B3DB-AA2BA9B2FB25",
