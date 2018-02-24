@@ -1,0 +1,31 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@{
+    Layout = null;
+}
+<div>
+    <input class="framework-roadmap-executor-submit" type="button" value="Submit" />
+    <input class="framework-roadmap-executor-bounce" type="button" value="Bounce" />
+</div>
+
+<script>
+    $(document).on('click', '.framework-roadmap-executor-submit', function()
+    {
+        RoadmapExecute("SUBMIT");
+    });
+
+    $(document).on('click', '.framework-roadmap-executor-bounce', function ()
+    {
+        RoadmapExecute("BOUNCE");
+    });
+
+    function RoadmapExecute(result)
+    {
+        var node = [];
+        var data = {};
+        data["nodeid"] = $(ZebraEditor_currentnode.element.parentElement).attr("data-nodeid");
+        data["result"] = result;
+        node.push(data);
+        var query = "fullyqualifiedname=Zebra.Utilities.UtilityProcessor.RoadmapUtility,Zebra&method=Process&data=" + JSON.stringify(node);
+        $.get("./RenderUtility?" + query, function (data) { });
+    }
+</script>

@@ -512,7 +512,7 @@ namespace Zebra.Services.Operations
                 {
                     try
                     {
-                        var value = rawdata[nodefield.Id.ToString()];
+                        var value = rawdata[nodefield.FieldId.ToString()];
                         //raw data has to be processed before saving to database
                         var fieldtype = _fieldrepository.GetFieldType(nodefield.Field);
                         var type = System.Type.GetType(fieldtype.ClassPath);
@@ -554,7 +554,7 @@ namespace Zebra.Services.Operations
                     break;
             }
             FrameworkOperations.Execute(node.Id.ToString(), 1);//validation
-        }   
+        }
 
         public List<NodeFieldMap> GetNodeFieldMapData(string nodeid)
         {

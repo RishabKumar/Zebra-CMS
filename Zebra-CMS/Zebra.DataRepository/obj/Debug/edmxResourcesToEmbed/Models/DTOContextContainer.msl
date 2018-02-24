@@ -101,5 +101,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="FrameworkDatas">
+      <EntityTypeMapping TypeName="ZebraDB_Model.FrameworkData">
+        <MappingFragment StoreEntitySet="FrameworkData">
+          <ScalarProperty Name="NodeId" ColumnName="NodeId" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+          <ScalarProperty Name="ProcessData" ColumnName="ProcessData" />
+          <ScalarProperty Name="ProcessName" ColumnName="ProcessName" />
+          <ScalarProperty Name="RelatedId" ColumnName="RelatedId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

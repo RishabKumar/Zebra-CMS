@@ -46,7 +46,7 @@ namespace Zebra.Controllers
             var list = new List<Node>();
             list.Add(root);
             ViewBag.Root = list;
-            ViewBag.Utilities = new List<string> { "Zebra.Utilities.UtilityProcessor.FieldBuilderUtility, Zebra", "Zebra.Utilities.UtilityProcessor.InheritanceUtility, Zebra" };
+            ViewBag.Utilities = new List<string> { "Zebra.Utilities.UtilityProcessor.FieldBuilderUtility, Zebra", "Zebra.Utilities.UtilityProcessor.InheritanceUtility, Zebra", "Zebra.Utilities.UtilityProcessor.RoadmapUtility, Zebra" };
             return View();
         }
 

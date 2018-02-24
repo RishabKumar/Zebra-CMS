@@ -26,6 +26,8 @@
         <EntityTypeShape EntityType="ZebraDB_Model.NodeTemplateMap" Width="1.5" PointX="8.25" PointY="6.125" />
         <AssociationConnector Association="ZebraDB_Model.FK__NodeTempl__NodeI__5224328E" />
         <AssociationConnector Association="ZebraDB_Model.FK__NodeTempl__Templ__540C7B00" />
+        <EntityTypeShape EntityType="ZebraDB_Model.FrameworkData" Width="1.5" PointX="4.375" PointY="8.75" />
+        <AssociationConnector Association="ZebraDB_Model.FK__Framework__NodeI__671F4F74" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

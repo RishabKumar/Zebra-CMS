@@ -10,7 +10,7 @@ using Zebra.Services.Operations;
 
 namespace Zebra.Utilities.UtilityProcessor
 {
-    public  interface IZebraUtility
+    public interface IZebraUtility
     {
         dynamic Process(ref object obj);
 

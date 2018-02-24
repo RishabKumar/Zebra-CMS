@@ -7,12 +7,15 @@ namespace Zebra.Framework.Contexts
     {
         public FrameworkNodeContext frameworknodecontext;
         public NodeContext initiatornodecontext;
-        public ProcessType processtype;
+        public dynamic parameters;
+        public short processtype;
 
-        public FrameworkContext(FrameworkNodeContext frameworknodecontext, NodeContext initiator)
+        public FrameworkContext(FrameworkNodeContext frameworknodecontext, NodeContext initiator, short processType, dynamic parameters = null)
         {
             this.frameworknodecontext = frameworknodecontext;
             initiatornodecontext = initiator;
+            processtype = processType;
+            this.parameters = parameters;
         }
     }
 
@@ -22,7 +25,7 @@ namespace Zebra.Framework.Contexts
         public const short VALIDATION_TYPE = 1;
         public const short LIFESPAN_TYPE = 2;
         public const short SECURITY_TYPE = 3;
-       // public const short ROADMAP_TYPE = "Roadmap";
+        
     }
 
     public class FieldData
@@ -39,7 +42,21 @@ namespace Zebra.Framework.Contexts
             TemplateName = templateName;
         }
 
+        public FieldData(Guid fieldId, Guid fieldRenderId, string fieldName, string fieldValue, Guid? templateId = null, string templateName = null)
+        {
+            FieldId = fieldId;
+            FieldRenderId = fieldRenderId;
+            FieldName = fieldName;
+            FieldValue = fieldValue;
+            if (templateId.HasValue)
+            {
+                TemplateId = templateId.Value;
+            }
+            TemplateName = templateName;
+        }
+
         public Guid FieldId { get; set; }
+        public Guid FieldRenderId { get; set; }
         public string FieldName { get; set; }
         public string FieldValue { get; set; }
         public Guid TemplateId { get; set; }

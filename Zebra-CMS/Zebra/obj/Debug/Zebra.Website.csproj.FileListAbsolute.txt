@@ -79,3 +79,5 @@ C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\obj
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\obj\Debug\Zebra.pdb
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Zebra.Framework.dll
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Zebra.Framework.pdb
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Zebra.Services.Interfaces.dll
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra\bin\Zebra.Services.Interfaces.pdb

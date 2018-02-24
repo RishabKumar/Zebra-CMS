@@ -32,3 +32,5 @@ C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Ser
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Services\obj\Debug\Zebra.Services.pdb
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Services\bin\Debug\Zebra.Framework.dll
 C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Services\bin\Debug\Zebra.Framework.pdb
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Services\bin\Debug\Zebra.Services.Interfaces.dll
+C:\Users\Rishabh\Documents\Visual Studio 2015\Projects\Zebra\Zebra-CMS\Zebra.Services\bin\Debug\Zebra.Services.Interfaces.pdb

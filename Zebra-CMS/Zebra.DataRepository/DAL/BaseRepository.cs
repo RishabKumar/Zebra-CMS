@@ -34,10 +34,10 @@ namespace Zebra.DataRepository.DAL
 
         public virtual void ReloadEntities()
         {
-            foreach (var t in _context.ChangeTracker.Entries())
-            {
-                t.Reload();
-            }
+            //foreach (var t in _context.ChangeTracker.Entries())
+            //{
+            //    t.Reload();
+            //}
         }
     }
 }

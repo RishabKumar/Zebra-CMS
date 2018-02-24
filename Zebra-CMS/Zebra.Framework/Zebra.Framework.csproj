@@ -40,10 +40,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RoadmapExecutors\RoadmapExecutor.cs" />
     <Compile Include="Executors\FrameworkContext.cs" />
     <Compile Include="Executors\FrameworkExecutor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValidationExecutors\NotEmpty.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Zebra.DataRepository\Zebra.DataRepository.csproj">
+      <Project>{95DF0239-628C-4FC5-A6F2-01BF8EC2ACBD}</Project>
+      <Name>Zebra.DataRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Zebra.Essentials\Zebra.Essentials.csproj">
+      <Project>{63AAF883-A2F7-4C89-948A-60EDFA5D2A2E}</Project>
+      <Name>Zebra.Essentials</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Zebra.Services.Interfaces\Zebra.Services.Interfaces.csproj">
+      <Project>{38D2D85E-B35A-43A2-B0FF-268E07B934B5}</Project>
+      <Name>Zebra.Services.Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

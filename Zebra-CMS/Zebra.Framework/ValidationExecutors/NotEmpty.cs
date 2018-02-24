@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Zebra.Framework.Contexts;
+using Zebra.Services.Operations;
 
 namespace Zebra.Framework.ValidationExecutors
 {

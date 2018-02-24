@@ -20,6 +20,7 @@ namespace Zebra.DataRepository.Models
             this.NodeFieldMaps = new HashSet<NodeFieldMap>();
             this.NodeLanguageMaps = new HashSet<NodeLanguageMap>();
             this.NodeTemplateMaps = new HashSet<NodeTemplateMap>();
+            this.FrameworkDatas = new HashSet<FrameworkData>();
         }
     
         public System.Guid Id { get; set; }
@@ -35,5 +36,7 @@ namespace Zebra.DataRepository.Models
         public virtual ICollection<NodeLanguageMap> NodeLanguageMaps { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NodeTemplateMap> NodeTemplateMaps { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FrameworkData> FrameworkDatas { get; set; }
     }
 }

@@ -35,6 +35,7 @@
     <Property Name="CreationDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Computed" Precision="7" />
     <NavigationProperty Name="NodeLanguageMaps" Relationship="ZebraDB_Model.FK__NodeLangu__NodeI__30C33EC3" FromRole="Node" ToRole="NodeLanguageMap" />
     <NavigationProperty Name="NodeTemplateMaps" Relationship="ZebraDB_Model.FK__NodeTempl__NodeI__5224328E" FromRole="Node" ToRole="NodeTemplateMap" />
+    <NavigationProperty Name="FrameworkDatas" Relationship="ZebraDB_Model.FK__Framework__NodeI__671F4F74" FromRole="Node" ToRole="FrameworkData" />
   </EntityType>
   <EntityType Name="TemplateFieldMap">
     <Key>
@@ -167,6 +168,11 @@
     <AssociationSet Name="FK__NodeTempl__Templ__540C7B00" Association="ZebraDB_Model.FK__NodeTempl__Templ__540C7B00">
       <End Role="Template" EntitySet="Templates" />
       <End Role="NodeTemplateMap" EntitySet="NodeTemplateMaps" />
+    </AssociationSet>
+    <EntitySet Name="FrameworkDatas" EntityType="ZebraDB_Model.FrameworkData" />
+    <AssociationSet Name="FK__Framework__NodeI__671F4F74" Association="ZebraDB_Model.FK__Framework__NodeI__671F4F74">
+      <End Role="Node" EntitySet="Nodes" />
+      <End Role="FrameworkData" EntitySet="FrameworkDatas" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="NodeFieldMap">
@@ -301,6 +307,30 @@
       </Principal>
       <Dependent Role="NodeTemplateMap">
         <PropertyRef Name="TemplateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="FrameworkData">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="RelatedId" Type="Guid" Nullable="false" />
+    <Property Name="ProcessName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ProcessData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="NodeId" Type="Guid" Nullable="false" />
+    <NavigationProperty Name="Node" Relationship="ZebraDB_Model.FK__Framework__NodeI__671F4F74" FromRole="FrameworkData" ToRole="Node" />
+  </EntityType>
+  <Association Name="FK__Framework__NodeI__671F4F74">
+    <End Type="ZebraDB_Model.Node" Role="Node" Multiplicity="1" />
+    <End Type="ZebraDB_Model.FrameworkData" Role="FrameworkData" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Node">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="FrameworkData">
+        <PropertyRef Name="NodeId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

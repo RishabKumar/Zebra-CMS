@@ -64,10 +64,10 @@ namespace Zebra.Services.Operations
             var field = GetField(fieldid);
             var node = _noderepo.GetNode(new Node() { Id = Guid.Parse(nodeid) });
             NodeFieldMap nodefieldmap = _noderepo.GetNodeFieldMap(new NodeFieldMap() { Id = Guid.Parse(fieldrenderid)});
-            if (type != null)
+            if (type != null && field != null)
             {
                 var fieldtype = System.Type.GetType(type.ClassPath);
-                FieldContext _context = new FieldContext(Guid.Parse(fieldrenderid ?? fieldid), field.FieldType.Id, field.FieldName);
+                FieldContext _context = new FieldContext(Guid.Parse(fieldid), field.FieldType.Id, field.FieldName);
                 _context.Value = nodefieldmap == null ? string.Empty : nodefieldmap.NodeData;
                 var fieldobj = Activator.CreateInstance(fieldtype, _context);
                 var mi = fieldtype.GetMethod("DoRender");
