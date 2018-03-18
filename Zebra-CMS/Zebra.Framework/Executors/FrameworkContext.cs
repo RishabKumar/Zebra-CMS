@@ -23,6 +23,7 @@ namespace Zebra.Framework.Contexts
     {
         public const short ROADMAP_TYPE = 0;
         public const short VALIDATION_TYPE = 1;
+        public const short FIELDVALIDATION_TYPE = 1;
         public const short LIFESPAN_TYPE = 2;
         public const short SECURITY_TYPE = 3;
         

@@ -63,6 +63,16 @@
           <Property Name="NodeId" Type="uniqueidentifier" />
           <Property Name="LanguageId" Type="uniqueidentifier" />
         </EntityType>
+        <EntityType Name="NodeRoleMaps">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="NodeId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="RoleId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="NonReadable" Type="bit" Nullable="false" />
+          <Property Name="NonWritable" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="Nodes">
           <Key>
             <PropertyRef Name="Id" />
@@ -81,6 +91,21 @@
           <Property Name="NodeId" Type="uniqueidentifier" />
           <Property Name="TemplateId" Type="uniqueidentifier" />
           <Property Name="CreationDate" Type="datetime2" Precision="7" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="RoleUserMaps">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="RoleId" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="TemplateFieldMaps">
           <Key>
@@ -103,7 +128,7 @@
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="UserName" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Roles" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Roles" Type="nvarchar(max)" />
           <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <Association Name="FK__Framework__NodeI__671F4F74">
@@ -188,6 +213,34 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__NodeRoleM__NodeI__76619304">
+          <End Role="Nodes" Type="Self.Nodes" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="NodeRoleMaps" Type="Self.NodeRoleMaps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Nodes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NodeRoleMaps">
+              <PropertyRef Name="NodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__NodeRoleM__RoleI__7755B73D">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="NodeRoleMaps" Type="Self.NodeRoleMaps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NodeRoleMaps">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__NodeTempl__NodeI__5224328E">
           <End Role="Nodes" Type="Self.Nodes" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -211,6 +264,34 @@
             </Principal>
             <Dependent Role="NodeTemplateMaps">
               <PropertyRef Name="TemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RoleUserM__RoleI__72910220">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="RoleUserMaps" Type="Self.RoleUserMaps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RoleUserMaps">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RoleUserM__UserI__73852659">
+          <End Role="Users" Type="Self.Users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="RoleUserMaps" Type="Self.RoleUserMaps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RoleUserMaps">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -277,8 +358,11 @@
           <EntitySet Name="Languages" EntityType="Self.Languages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NodeFieldMaps" EntityType="Self.NodeFieldMaps" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NodeLanguageMaps" EntityType="Self.NodeLanguageMaps" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NodeRoleMaps" EntityType="Self.NodeRoleMaps" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Nodes" EntityType="Self.Nodes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NodeTemplateMaps" EntityType="Self.NodeTemplateMaps" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RoleUserMaps" EntityType="Self.RoleUserMaps" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TemplateFieldMaps" EntityType="Self.TemplateFieldMaps" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Templates" EntityType="Self.Templates" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
@@ -306,6 +390,14 @@
             <End Role="Nodes" EntitySet="Nodes" />
             <End Role="NodeLanguageMaps" EntitySet="NodeLanguageMaps" />
           </AssociationSet>
+          <AssociationSet Name="FK__NodeRoleM__NodeI__76619304" Association="Self.FK__NodeRoleM__NodeI__76619304">
+            <End Role="Nodes" EntitySet="Nodes" />
+            <End Role="NodeRoleMaps" EntitySet="NodeRoleMaps" />
+          </AssociationSet>
+          <AssociationSet Name="FK__NodeRoleM__RoleI__7755B73D" Association="Self.FK__NodeRoleM__RoleI__7755B73D">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="NodeRoleMaps" EntitySet="NodeRoleMaps" />
+          </AssociationSet>
           <AssociationSet Name="FK__NodeTempl__NodeI__5224328E" Association="Self.FK__NodeTempl__NodeI__5224328E">
             <End Role="Nodes" EntitySet="Nodes" />
             <End Role="NodeTemplateMaps" EntitySet="NodeTemplateMaps" />
@@ -313,6 +405,14 @@
           <AssociationSet Name="FK__NodeTempl__Templ__540C7B00" Association="Self.FK__NodeTempl__Templ__540C7B00">
             <End Role="Templates" EntitySet="Templates" />
             <End Role="NodeTemplateMaps" EntitySet="NodeTemplateMaps" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RoleUserM__RoleI__72910220" Association="Self.FK__RoleUserM__RoleI__72910220">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="RoleUserMaps" EntitySet="RoleUserMaps" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RoleUserM__UserI__73852659" Association="Self.FK__RoleUserM__UserI__73852659">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="RoleUserMaps" EntitySet="RoleUserMaps" />
           </AssociationSet>
           <AssociationSet Name="FK_FieldsTemplateFieldMap" Association="Self.FK_FieldsTemplateFieldMap">
             <End Role="Fields" EntitySet="Fields" />
@@ -371,6 +471,7 @@
           <NavigationProperty Name="NodeLanguageMaps" Relationship="ZebraDB_Model.FK__NodeLangu__NodeI__30C33EC3" FromRole="Node" ToRole="NodeLanguageMap" />
           <NavigationProperty Name="NodeTemplateMaps" Relationship="ZebraDB_Model.FK__NodeTempl__NodeI__5224328E" FromRole="Node" ToRole="NodeTemplateMap" />
           <NavigationProperty Name="FrameworkDatas" Relationship="ZebraDB_Model.FK__Framework__NodeI__671F4F74" FromRole="Node" ToRole="FrameworkData" />
+          <NavigationProperty Name="NodeRoleMaps" Relationship="ZebraDB_Model.FK__NodeRoleM__NodeI__719CDDE7" FromRole="Node" ToRole="NodeRoleMap" />
         </EntityType>
         <EntityType Name="TemplateFieldMap">
           <Key>
@@ -398,8 +499,9 @@
           </Key>
           <Property Name="Id" Type="Guid" Nullable="false" />
           <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Roles" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Roles" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="RoleUserMaps" Relationship="ZebraDB_Model.FK__RoleUserM__UserI__6EC0713C" FromRole="User" ToRole="RoleUserMap" />
         </EntityType>
         <Association Name="FK_FieldsTemplateFieldMap">
           <End Role="Fields" Type="Self.Field" Multiplicity="1" />
@@ -508,6 +610,29 @@
           <AssociationSet Name="FK__Framework__NodeI__671F4F74" Association="ZebraDB_Model.FK__Framework__NodeI__671F4F74">
             <End Role="Node" EntitySet="Nodes" />
             <End Role="FrameworkData" EntitySet="FrameworkDatas" />
+          </AssociationSet>
+          <EntitySet Name="NodeRoleMaps" EntityType="ZebraDB_Model.NodeRoleMap" />
+          <EntitySet Name="Roles" EntityType="ZebraDB_Model.Role" />
+          <EntitySet Name="RoleUserMaps" EntityType="ZebraDB_Model.RoleUserMap" />
+          <AssociationSet Name="FK__NodeRoleM__NodeI__719CDDE7" Association="ZebraDB_Model.FK__NodeRoleM__NodeI__719CDDE7">
+            <End Role="Node" EntitySet="Nodes" />
+            <End Role="NodeRoleMap" EntitySet="NodeRoleMaps" />
+          </AssociationSet>
+          <AssociationSet Name="FK__NodeRoleM__RoleI__70A8B9AE" Association="ZebraDB_Model.FK__NodeRoleM__RoleI__70A8B9AE">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="NodeRoleMap" EntitySet="NodeRoleMaps" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RoleUserM__RoleI__6FB49575" Association="ZebraDB_Model.FK__RoleUserM__RoleI__6FB49575">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="RoleUserMap" EntitySet="RoleUserMaps" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RoleUserM__UserI__6EC0713C" Association="ZebraDB_Model.FK__RoleUserM__UserI__6EC0713C">
+            <End Role="User" EntitySet="Users" />
+            <End Role="RoleUserMap" EntitySet="RoleUserMaps" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RoleUserMaps_RoleUserMaps" Association="ZebraDB_Model.FK_RoleUserMaps_RoleUserMaps">
+            <End Role="RoleUserMap" EntitySet="RoleUserMaps" />
+            <End Role="RoleUserMap1" EntitySet="RoleUserMaps" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="NodeFieldMap">
@@ -669,6 +794,107 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="NodeRoleMap">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="NodeId" Type="Guid" Nullable="false" />
+          <Property Name="RoleId" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Node" Relationship="ZebraDB_Model.FK__NodeRoleM__NodeI__719CDDE7" FromRole="NodeRoleMap" ToRole="Node" />
+          <NavigationProperty Name="Role" Relationship="ZebraDB_Model.FK__NodeRoleM__RoleI__70A8B9AE" FromRole="NodeRoleMap" ToRole="Role" />
+          <Property Name="NonReadable" Type="Boolean" Nullable="false" />
+          <Property Name="NonWritable" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="NodeRoleMaps" Relationship="ZebraDB_Model.FK__NodeRoleM__RoleI__70A8B9AE" FromRole="Role" ToRole="NodeRoleMap" />
+          <NavigationProperty Name="RoleUserMaps" Relationship="ZebraDB_Model.FK__RoleUserM__RoleI__6FB49575" FromRole="Role" ToRole="RoleUserMap" />
+        </EntityType>
+        <EntityType Name="RoleUserMap">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="UserId" Type="Guid" Nullable="false" />
+          <Property Name="RoleId" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Role" Relationship="ZebraDB_Model.FK__RoleUserM__RoleI__6FB49575" FromRole="RoleUserMap" ToRole="Role" />
+          <NavigationProperty Name="User" Relationship="ZebraDB_Model.FK__RoleUserM__UserI__6EC0713C" FromRole="RoleUserMap" ToRole="User" />
+          <NavigationProperty Name="RoleUserMaps1" Relationship="ZebraDB_Model.FK_RoleUserMaps_RoleUserMaps" FromRole="RoleUserMap" ToRole="RoleUserMap1" />
+          <NavigationProperty Name="RoleUserMap1" Relationship="ZebraDB_Model.FK_RoleUserMaps_RoleUserMaps" FromRole="RoleUserMap1" ToRole="RoleUserMap" />
+        </EntityType>
+        <Association Name="FK__NodeRoleM__NodeI__719CDDE7">
+          <End Type="ZebraDB_Model.Node" Role="Node" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ZebraDB_Model.NodeRoleMap" Role="NodeRoleMap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Node">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NodeRoleMap">
+              <PropertyRef Name="NodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__NodeRoleM__RoleI__70A8B9AE">
+          <End Type="ZebraDB_Model.Role" Role="Role" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ZebraDB_Model.NodeRoleMap" Role="NodeRoleMap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NodeRoleMap">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RoleUserM__RoleI__6FB49575">
+          <End Type="ZebraDB_Model.Role" Role="Role" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ZebraDB_Model.RoleUserMap" Role="RoleUserMap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RoleUserMap">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RoleUserM__UserI__6EC0713C">
+          <End Type="ZebraDB_Model.User" Role="User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ZebraDB_Model.RoleUserMap" Role="RoleUserMap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RoleUserMap">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RoleUserMaps_RoleUserMaps">
+          <End Type="ZebraDB_Model.RoleUserMap" Role="RoleUserMap" Multiplicity="1" />
+          <End Type="ZebraDB_Model.RoleUserMap" Role="RoleUserMap1" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="RoleUserMap">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RoleUserMap1">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -783,6 +1009,34 @@
                 <ScalarProperty Name="ProcessData" ColumnName="ProcessData" />
                 <ScalarProperty Name="ProcessName" ColumnName="ProcessName" />
                 <ScalarProperty Name="RelatedId" ColumnName="RelatedId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NodeRoleMaps">
+            <EntityTypeMapping TypeName="ZebraDB_Model.NodeRoleMap">
+              <MappingFragment StoreEntitySet="NodeRoleMaps">
+                <ScalarProperty Name="NonWritable" ColumnName="NonWritable" />
+                <ScalarProperty Name="NonReadable" ColumnName="NonReadable" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="NodeId" ColumnName="NodeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="ZebraDB_Model.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RoleUserMaps">
+            <EntityTypeMapping TypeName="ZebraDB_Model.RoleUserMap">
+              <MappingFragment StoreEntitySet="RoleUserMaps">
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

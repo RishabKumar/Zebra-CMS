@@ -185,7 +185,7 @@ function MoveNode(nodeid)
     });
 }
 
-$(".content-node").contextmenu(function (event) {
+$(".tree-container .content-node").contextmenu(function (event) {
     event.preventDefault();
     var nodeid = $(event.target.parentElement).attr('data-nodeid');
     if (nodeid != null) {

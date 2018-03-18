@@ -29,9 +29,14 @@ namespace Zebra.APIControllers
                 if (type != null /*&& typeof(IZebraUtility).IsAssignableFrom(type)*/ && (assembly = Assembly.GetAssembly(type)) != null)
                 {
                     var instance = Activator.CreateInstance(type, null);
-                    var mi = type.GetMethod(methodname);
+                    var mi = type.GetMethod("HasExecutionRights");
                     var returndata = mi.Invoke(instance, new [] { data });
-                    return JsonConvert.SerializeObject(returndata);
+                    if (returndata.Equals(true))
+                    {
+                        mi = type.GetMethod(methodname);
+                        returndata = mi.Invoke(instance, new[] { data });
+                        return JsonConvert.SerializeObject(returndata);
+                    }
                 }
                 return null;
             }

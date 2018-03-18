@@ -28,6 +28,14 @@
         <AssociationConnector Association="ZebraDB_Model.FK__NodeTempl__Templ__540C7B00" />
         <EntityTypeShape EntityType="ZebraDB_Model.FrameworkData" Width="1.5" PointX="4.375" PointY="8.75" />
         <AssociationConnector Association="ZebraDB_Model.FK__Framework__NodeI__671F4F74" />
+        <EntityTypeShape EntityType="ZebraDB_Model.NodeRoleMap" Width="1.5" PointX="8.625" PointY="9.75" />
+        <EntityTypeShape EntityType="ZebraDB_Model.Role" Width="1.5" PointX="6.375" PointY="11.75" />
+        <EntityTypeShape EntityType="ZebraDB_Model.RoleUserMap" Width="1.5" PointX="10.625" PointY="6" />
+        <AssociationConnector Association="ZebraDB_Model.FK__NodeRoleM__NodeI__719CDDE7" />
+        <AssociationConnector Association="ZebraDB_Model.FK__NodeRoleM__RoleI__70A8B9AE" />
+        <AssociationConnector Association="ZebraDB_Model.FK__RoleUserM__RoleI__6FB49575" />
+        <AssociationConnector Association="ZebraDB_Model.FK__RoleUserM__UserI__6EC0713C" />
+        <AssociationConnector Association="ZebraDB_Model.FK_RoleUserMaps_RoleUserMaps" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

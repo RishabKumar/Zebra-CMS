@@ -12,6 +12,7 @@ namespace Zebra.Utilities.UtilityProcessor
 {
     public interface IZebraUtility
     {
+        bool HasExecutionRights(ref object obj);
         dynamic Process(ref object obj);
 
         string RenderView(ref object obj);

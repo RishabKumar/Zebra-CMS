@@ -22,15 +22,15 @@ namespace Zebra.Controllers
 
         // GET: Account
         [HttpGet]
-        public ActionResult Index(string returnurl)
+        public ActionResult Index(string returnUrl)
         {
-            if (Url.IsLocalUrl(returnurl))
+            if (Url.IsLocalUrl(returnUrl))
             {
-                TempData["returnurl"] = returnurl;
+                TempData["returnUrl"] = returnUrl;
             }
             else
             {
-                TempData["returnurl"] = "/Cpanel";
+                TempData["returnUrl"] = "/Cpanel";
             }
             return View();
         }
@@ -44,7 +44,7 @@ namespace Zebra.Controllers
                 if (user != null)
                 {
                     FormsAuthentication.SetAuthCookie(user.UserName, false);
-                    var authTicket = new FormsAuthenticationTicket(1, user.UserName, DateTime.Now, DateTime.Now.AddMinutes(10), false, user.Roles);
+                    var authTicket = new FormsAuthenticationTicket(1, user.UserName, DateTime.Now, DateTime.Now.AddMinutes(10), false, user.Id.ToString());
                     string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
                     var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
                     HttpContext.Response.Cookies.Add(authCookie);

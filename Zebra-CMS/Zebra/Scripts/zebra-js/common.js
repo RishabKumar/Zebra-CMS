@@ -17,6 +17,16 @@ function showLoader()
     $('body').append("<div class='black-overlay'></div>");
 }
 
+function dimBackground()
+{
+    $('body').append("<div class='black-overlay'></div>");
+}
+
+function removeOverload()
+{
+    $('body').remove("<div class='black-overlay'></div>");
+}
+
 function hideLoader()
 {
     $(document.body).css({ 'cursor': 'default' });
@@ -41,3 +51,8 @@ function hideLoader()
 
     }, 8);
  
+
+    function getSelectedNodeId()
+    {
+        return $(ZebraEditor_currentnode.element.parentElement).attr('data-nodeid');
+    }

@@ -1,0 +1,127 @@
+﻿@using Zebra.DataRepository.Models
+@{
+    ViewBag.Title = "Zebra - SecurityEditor";
+    Layout = "~/Views/Shared/SecurityEditorLayout.cshtml";
+}
+@model List<Node>
+<div class="security-editor-menu">
+    <div class="menu-container">
+        <div class="menu-options">
+            <div class="option-name">
+                <label>Role-User Selector</label>
+            </div>
+            <div>
+                <b>Role Name</b>
+                <select class="role-selector">
+                    @foreach (var t in (List<Role>)ViewBag.Roles)
+                    {
+                        <option value="@t.Id">@t.RoleName</option>
+                    }
+                </select>
+            </div>
+            @*<div>
+                <b>User Name</b>
+                <select class="user-selector">
+                    @foreach (var t in (List<User>)ViewBag.Users)
+                    {
+                        <option value="@t.Id">@t.UserName</option>
+                    }
+                </select>
+            </div>*@
+        </div>
+        <div class="menu-options">
+            <div class="option-name">
+                <label>Roles Editor</label>
+            </div>
+            <button id="role-optn-btn">Roles Editor</button>
+        </div>
+        <div class="menu-options">
+            <div class="option-name">
+                <label>Users Editor</label>
+            </div>
+            <button id="user-optn-btn">Users Editor</button>
+        </div>
+    </div>
+</div>
+<div class="security-editor-tree-container">
+    @{Html.RenderPartial("~/Views/CPanel/NodeTree.cshtml", Model);}
+    <div class="permission-outer-container">
+    </div>
+</div>
+<script>
+    $(document).on('click', '#role-optn-btn', function () {
+        dimBackground();
+        $.get("./RoleEditor", function (data) {
+            $('body').append(data);
+        });
+    });
+
+    $(document).on('click', '#user-optn-btn', function () {
+        dimBackground();
+        $.get("./UserEditor", function (data) {
+            $('body').append(data);
+        });
+    });
+
+    $(document).on('click', '.security-editor-tree-container .content-node p', function () {
+        if (event.target === this) {
+            var parentid = $(event.target.parentElement).attr('data-nodeid');
+            var roleid = $('select.role-selector').val();
+            LoadPermissionBrowser(parentid, roleid);
+        }
+    });
+
+    function LoadPermissionBrowser(nodeid, roleid) {
+        var query = 'nodeid=' + nodeid + "&roleid=" + roleid;
+        $.get("./PermissionBrowser?" + query, function (data) {
+            $(".permission-outer-container").html(data);
+        });
+    }
+
+
+</script>
+<style>
+    .security-editor-tree-container{
+        display: table;
+        width: 100%;
+    }
+
+    .permission-outer-container{
+        border: groove;
+        display: table-cell;
+        border: groove;
+        overflow-y: auto;
+    }
+
+    .security-editor-menu{
+        height: 100px;
+        border: groove;
+    }
+
+    .menu-container{
+        display: inline-flex;
+    }
+
+    .menu-options{
+        height: 100px;
+        position: relative;
+        border-left: groove;
+        border-right: groove;
+        margin-right: 1px;  
+    }
+
+    .option-name{
+        position: absolute;
+        bottom: 0;
+        text-align: center;
+        width: 100%;
+    }
+
+    .role-editor{
+        
+    }
+
+    .user-editor{
+        
+    }
+</style>

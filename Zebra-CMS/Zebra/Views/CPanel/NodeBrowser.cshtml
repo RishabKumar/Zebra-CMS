@@ -1,7 +1,9 @@
 ﻿@using Zebra.ZebraHelpers
 @using Zebra.ViewModel
+@using Newtonsoft.Json
 @{
     Layout = null;
+    var nodeop = Zebra.Services.Operations.OperationsFactory.NodeOperations;
 } 
 @model NodeBrowserModel
 
@@ -11,11 +13,29 @@
 
     <p>Template Name: @Model.template.TemplateName</p>
     <p>Template ID: @Model.template.Id</p>
-    @{ var nodepath = Zebra.Services.Operations.OperationsFactory.NodeOperations.GetAllParentNodes(Model.node.Id.ToString());
+    @{ var nodepath = nodeop.GetAllParentNodes(Model.node.Id.ToString());
     }
     <p>Node Path: @Html.LoadNodePath(nodepath)</p>
 </div>
+<div>
+    @foreach (var t in Zebra.Framework.Executors.FrameworkExecutor.GetFrameworkDataList(@Model.node.Id))
+    {
+        switch (@t.ProcessName.ToLowerInvariant())
+        {
+            case "roadmap":
+                <p>@t.ProcessName : @nodeop.GetNode(t.RelatedId.ToString()).NodeName => Phase : @nodeop.GetNode((string)((dynamic)JsonConvert.DeserializeObject(@t.ProcessData))["currentphaseid"]).NodeName</p>
+                break;
+            case "validation":
+                <p>@t.ProcessName : @nodeop.GetNode(t.RelatedId.ToString()).NodeName => Status : @(((dynamic)JsonConvert.DeserializeObject(@t.ProcessData))["validation"].Value)</p>
+            break;
+            default:
+                <text>@t.ProcessName : @t.ProcessData</text>
+                break;
+        }
+    }
 
+
+</div>
 <button class="zebra-save-data">Save</button>
 <select data-nodeid="@Model.node.Id" class="zebra-language-selector">
     @foreach (var lang in Model.alllanguages)
@@ -23,6 +43,7 @@
         <option @(Model.currentlanguage.Id==lang.Id ? "selected" : "") value="@lang.Id">@lang.CultureName</option>
     }
 </select>
+<a class="page-designer-link" href="./PageDesigner?nodeid=@Model.node.Id" target="_blank">Page Designer</a>
 <div class="zebra-field">
     <form class="zebra-field-data-form" enctype="multipart/form-data">
         <input type="hidden" name="nodeid" id="nodeid" value="@Model.node.Id" />
@@ -66,11 +87,16 @@
     .zebra-field{
         max-height: calc(100vh - 310px);
     }
-      .field {
-                margin-left:3px;
-                margin-right:3px;
-                margin-top:1px;
-                margin-bottom:3px;
-                display: block;
-            }
+    .field {
+            margin-left:3px;
+            margin-right:3px;
+            margin-top:1px;
+            margin-bottom:3px;
+            display: block;
+        }
+      .page-designer-link{
+            float: right;
+            margin: 10px;
+            border: dotted;
+      }
 </style>

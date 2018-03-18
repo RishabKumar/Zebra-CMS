@@ -1,0 +1,24 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@{
+    Layout = null;
+}
+<div>
+    <input class="framework-validation-executor" type="button" value="Validate"/>
+</div>
+
+<script>
+    $(document).on('click', '.framework-validation-executor', function ()
+    {
+        ValidationExecute();
+    });
+
+    function ValidationExecute()
+    {
+        var node = [];
+        var data = {};
+        data["nodeid"] = $(ZebraEditor_currentnode.element.parentElement).attr("data-nodeid");
+        node.push(data);
+        var query = "fullyqualifiedname=Zebra.Utilities.UtilityProcessor.ValidationUtility,Zebra&method=Process&data=" + JSON.stringify(node);
+        $.get("./RenderUtility?" + query, function (data) { });
+    }
+</script>

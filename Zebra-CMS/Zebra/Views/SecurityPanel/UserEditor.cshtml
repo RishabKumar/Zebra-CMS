@@ -1,0 +1,143 @@
+﻿
+<div class="user-editor-container">
+
+    <div class="user-editor-edit-container">
+        <b>Edit User</b>
+        <select class="user-editor-userslist">
+            @foreach (var t in ViewBag.Users)
+            {
+                <option value="@t.Id">@t.UserName</option>
+            }
+        </select>
+        <p>
+            <label>User Name</label> <input type="text" readonly />
+        </p>
+        <p>
+            <label>New Password</label> <input type="password" />
+        </p>
+        <p>
+            <label>Assigned Roles</label>
+            <ul class="user-editor-allroles-container">
+                @foreach (var t in ViewBag.Roles)
+                {
+                    <li>
+                        <label>
+                            <input type="checkbox" id="@t.Id" />
+                            @t.RoleName
+                        </label>
+                    </li>
+                }
+            </ul>
+        </p>
+        <p>
+            <input type="button" value="Save" />
+            <input type="button" class="user-editor-userremove-btn" value="Remove" />
+        </p>
+    </div>
+
+    <div class="user-editor-newuser-container">
+        <b>Add New User</b>
+        <p><label>User Name</label> <input id="user-editor-new-username" type="text" /></p>
+        <p><label>Password</label> <input id="user-editor-new-password" type="password" /> </p>
+        <label>Assign Roles</label>
+        <ul class="user-editor-allroles-container">
+            @foreach(var t in ViewBag.Roles)
+            {
+                <li>
+                    <label>
+                        <input type="checkbox" id="@t.Id" />
+                        @t.RoleName
+                    </label>
+                </li>
+            }
+        </ul>
+        <input type="button" class="add-new-user-btn" value="Submit" />
+    </div>
+
+
+</div>
+<script>
+    $(document).on('click', '.user-editor-userremove-btn', function () {
+        var userid = $('.user-editor-edit-container .user-editor-userslist').val();
+        var formdata = {};
+        formdata["userid"] = userid;
+
+        $.ajax({
+            type: "POST",
+            url: "/zebraapi/UserService/DeleteUser",
+            data: { '': JSON.stringify(formdata) },
+            dataType: "json",
+            async: true,
+            success: function (json) {
+                alert("User deleted");
+                console.log(json);
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+        $(".user-editor-container").remove();
+        $('.black-overlay').remove();
+
+    });
+
+    $(document).on('click', '.add-new-user-btn', function () {
+        var username = $('#user-editor-new-username').val();
+        var password = $('#user-editor-new-password').val();
+        var userroles = $('.user-editor-newuser-container .user-editor-allroles-container input:checked');
+
+        var formdata = {};
+        var roles = [];
+        for(var i = 0; i < userroles.length; i++)
+        {
+            roles.push($(userroles[i]).attr('id'));
+        }
+        formdata['username'] = username;
+        formdata['password'] = password;
+        formdata['roles'] = roles;
+
+        $.ajax({
+            type: "POST",
+            url: "/zebraapi/UserService/AddUser",
+            data: { '': JSON.stringify(formdata) },
+            dataType: "json",
+            async: true,
+            success: function (json) {
+                alert("Saved");
+                console.log(json);
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+        $(".user-editor-container").remove();
+        $('.black-overlay').remove();
+    });
+</script>
+
+<style>
+    .user-editor-container{
+        position: fixed;
+        width: 400px;
+        height: 300px;
+        left: 50%;
+        top: 50%;
+        margin-left: -200px;
+        margin-top: -150px;
+        background-color: white;
+        border: groove;
+        z-index: 100;
+    }
+    .user-editor-allroles-container{
+        border: groove;
+        width: 50%;
+        list-style: none;
+        height: 30px;
+        overflow: auto;
+    }
+
+    .user-editor-newuser-container{
+        padding: 5px;
+    }
+
+</style>

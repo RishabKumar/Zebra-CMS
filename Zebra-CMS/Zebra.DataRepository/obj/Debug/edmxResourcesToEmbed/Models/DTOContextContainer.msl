@@ -113,5 +113,33 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="NodeRoleMaps">
+      <EntityTypeMapping TypeName="ZebraDB_Model.NodeRoleMap">
+        <MappingFragment StoreEntitySet="NodeRoleMaps">
+          <ScalarProperty Name="NonWritable" ColumnName="NonWritable" />
+          <ScalarProperty Name="NonReadable" ColumnName="NonReadable" />
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="NodeId" ColumnName="NodeId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Roles">
+      <EntityTypeMapping TypeName="ZebraDB_Model.Role">
+        <MappingFragment StoreEntitySet="Roles">
+          <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RoleUserMaps">
+      <EntityTypeMapping TypeName="ZebraDB_Model.RoleUserMap">
+        <MappingFragment StoreEntitySet="RoleUserMaps">
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

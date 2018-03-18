@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using static Zebra.Application.ZebraContext;
 
 namespace Zebra.ViewModel
 {
     public class PageModel
     {
         public string LayoutPath { get; set; }
-        public List<Guid> Actions { get; set; }
+        public PageDesign Actions { get; set; }
     }
 }

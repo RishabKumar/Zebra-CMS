@@ -89,6 +89,7 @@
     <Compile Include="DAL\LanguageRepository.cs" />
     <Compile Include="Interfaces\IFrameworkRepository.cs" />
     <Compile Include="Interfaces\ILanguageRepository.cs" />
+    <Compile Include="Interfaces\IUserRepository.cs" />
     <Compile Include="ModelsExtension\NodeLanguageMap.cs" />
     <Compile Include="ModelsExtension\NodeTemplateMap.cs" />
     <Compile Include="ModelsExtension\FrameworkData.cs" />
@@ -122,7 +123,16 @@
     <Compile Include="Models\NodeLanguageMap.cs">
       <DependentUpon>DTOContextContainer.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\NodeRoleMap.cs">
+      <DependentUpon>DTOContextContainer.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\NodeTemplateMap.cs">
+      <DependentUpon>DTOContextContainer.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Role.cs">
+      <DependentUpon>DTOContextContainer.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RoleUserMap.cs">
       <DependentUpon>DTOContextContainer.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Template.cs">

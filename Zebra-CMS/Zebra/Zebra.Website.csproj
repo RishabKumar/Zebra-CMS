@@ -172,6 +172,7 @@
   <ItemGroup>
     <Compile Include="APIControllers\MediaServiceController.cs" />
     <Compile Include="APIControllers\NodeServiceController.cs" />
+    <Compile Include="APIControllers\UserServiceController.cs" />
     <Compile Include="APIControllers\UtilityServiceController.cs" />
     <Compile Include="Application\ZebraContext.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -184,6 +185,7 @@
     <Compile Include="Controllers\CPanelController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\PageResolverController.cs" />
+    <Compile Include="Controllers\SecurityPanelController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\ZebraController.cs" />
     <Compile Include="CustomAttributes\ZebraAuthorize.cs" />
@@ -322,13 +324,19 @@
     <Content Include="Utilities\UtilityViews\Inheritance\AddInheritance.cshtml" />
     <Content Include="Utilities\UtilityViews\Inheritance\InheritanceMenu.cshtml" />
     <Content Include="Utilities\UtilityViews\Framework\Roadmap\Roadmap.cshtml" />
+    <Content Include="Utilities\UtilityViews\Framework\Validation\Validation.cshtml" />
+    <Content Include="Views\SecurityPanel\SecurityEditor.cshtml" />
+    <Content Include="Views\shared\SecurityEditorLayout.cshtml" />
+    <Content Include="Views\SecurityPanel\PermissionBrowser.cshtml" />
+    <Content Include="Views\SecurityPanel\RoleEditor.cshtml" />
+    <Content Include="Views\SecurityPanel\UserEditor.cshtml" />
+    <Content Include="Views\CPanel\PageDesigner.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\images\" />
     <Folder Include="Media\" />
     <Folder Include="Temp_Data\temp_upload\" />
-    <Folder Include="Utilities\UtilityViews\Framework\Validation\" />
     <Folder Include="Views\Zebra\" />
   </ItemGroup>
   <ItemGroup>
@@ -354,6 +362,10 @@
     <ProjectReference Include="..\Zebra.Essentials\Zebra.Essentials.csproj">
       <Project>{63AAF883-A2F7-4C89-948A-60EDFA5D2A2E}</Project>
       <Name>Zebra.Essentials</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Zebra.Framework\Zebra.Framework.csproj">
+      <Project>{D0DD8793-E260-422E-898B-3AE2E66EF85B}</Project>
+      <Name>Zebra.Framework</Name>
     </ProjectReference>
     <ProjectReference Include="..\Zebra.Services.Interfaces\Zebra.Services.Interfaces.csproj">
       <Project>{38D2D85E-B35A-43A2-B0FF-268E07B934B5}</Project>

@@ -12,7 +12,8 @@ $(document).on('click', '.save-field-button', function (e) {
     debugger;
     var typesarr = $('.fields-fieldbuilder .field select');
     var namesarr = $('.fields-fieldbuilder .field input.fieldname');
-    var propertyarr = $('.fields-fieldbuilder .field input.fieldproperty ');
+    var propertyarr = $('.fields-fieldbuilder .field input.fieldproperty');
+   // var fieldvalidatorarr = $('.fields-fieldbuilder .field input.fieldvalidator');
     formdata = [];
     fieldsdata = [];
     template = {}
@@ -24,6 +25,7 @@ $(document).on('click', '.save-field-button', function (e) {
         field["id"] = namesarr[i].id;
         field["typeid"] = typesarr[i].value;
         field["isstatic"] = propertyarr[i].checked;
+    //    field["fieldvalidatorid"] = fieldvalidatorarr[i].value;
         fieldsdata.push(field);
     }
     fullyqualifiedname = {};

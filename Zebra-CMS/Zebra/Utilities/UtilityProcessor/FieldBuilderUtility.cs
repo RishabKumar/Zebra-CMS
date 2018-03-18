@@ -92,5 +92,10 @@ namespace Zebra.Utilities.UtilityProcessor
             obj.Add("FieldTypes", OperationsFactory.FieldOperations.GetAllFieldTypes());
             return "~/Utilities/UtilityViews/FieldBuilder/FieldBuilder.cshtml";
         }
+
+        public bool HasExecutionRights(ref object obj)
+        {
+            return true;
+        }
     }
 }

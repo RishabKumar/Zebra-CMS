@@ -1,0 +1,72 @@
+﻿@using Zebra.DataRepository.Models
+@model NodeRoleMap
+    @{ 
+        Layout = null;
+    }
+<div class="save-permission-btn-container">
+    <input id="save-permission-btn" type="button" value="Save" />
+</div>
+<div class="permission-container">
+    <div class="permission-selector">
+        <b>Readable</b>
+        <p><input type="checkbox" id="permission-selector-readable" checked="@(!Model.NonReadable)" /></p>
+    </div>
+    <div class="permission-selector">
+        <b>Writable</b>
+        <p><input type="checkbox" id="permission-selector-writable" checked="@(!Model.NonWritable)" /></p>
+    </div>
+</div>
+
+<style>
+    .permission-container{
+        display: inline-flex;
+        width: 100%;
+    }
+
+    .permission-selector{
+        display: grid;
+        width: 100px;
+    }
+
+    .permission-selector p, b{
+        text-align: center;
+    }
+
+    .save-permission-btn{
+        display:block;
+    }
+</style>
+
+<script>
+
+    $(document).on('click', '#save-permission-btn', function () {
+        var nodeid = getSelectedNodeId();
+        var readable = $('#permission-selector-readable').get(0.).checked;
+        var writable = $('#permission-selector-writable').get(0.).checked;
+        var roleid = $('select.role-selector').val();
+        //var userid = $('select.user-selector').val();
+        var formdata = [];
+        var values = {};
+        values["nodeid"] = nodeid;
+        values["roleid"] = roleid;
+        //values["userid"] = userid;
+        values["readable"] = readable;
+        values["writable"] = writable;
+        formdata.push(values);
+
+        $.ajax({
+            type: "POST",
+            url: "/zebraapi/UserService/UpdatePermissions",
+            data: { '': JSON.stringify(formdata) },
+            dataType: "json",
+            async: true,
+            success: function () {
+                
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+    });
+
+</script>

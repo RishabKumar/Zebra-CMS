@@ -58,6 +58,16 @@
     <Property Name="NodeId" Type="uniqueidentifier" />
     <Property Name="LanguageId" Type="uniqueidentifier" />
   </EntityType>
+  <EntityType Name="NodeRoleMaps">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="NodeId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="RoleId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="NonReadable" Type="bit" Nullable="false" />
+    <Property Name="NonWritable" Type="bit" Nullable="false" />
+  </EntityType>
   <EntityType Name="Nodes">
     <Key>
       <PropertyRef Name="Id" />
@@ -76,6 +86,21 @@
     <Property Name="NodeId" Type="uniqueidentifier" />
     <Property Name="TemplateId" Type="uniqueidentifier" />
     <Property Name="CreationDate" Type="datetime2" Precision="7" StoreGeneratedPattern="Computed" />
+  </EntityType>
+  <EntityType Name="Roles">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="RoleName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="RoleUserMaps">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="RoleId" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="TemplateFieldMaps">
     <Key>
@@ -98,7 +123,7 @@
     </Key>
     <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
     <Property Name="UserName" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="Roles" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Roles" Type="nvarchar(max)" />
     <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <Association Name="FK__Framework__NodeI__671F4F74">
@@ -183,6 +208,34 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK__NodeRoleM__NodeI__76619304">
+    <End Role="Nodes" Type="Self.Nodes" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="NodeRoleMaps" Type="Self.NodeRoleMaps" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Nodes">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="NodeRoleMaps">
+        <PropertyRef Name="NodeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__NodeRoleM__RoleI__7755B73D">
+    <End Role="Roles" Type="Self.Roles" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="NodeRoleMaps" Type="Self.NodeRoleMaps" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Roles">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="NodeRoleMaps">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK__NodeTempl__NodeI__5224328E">
     <End Role="Nodes" Type="Self.Nodes" Multiplicity="0..1">
       <OnDelete Action="Cascade" />
@@ -206,6 +259,34 @@
       </Principal>
       <Dependent Role="NodeTemplateMaps">
         <PropertyRef Name="TemplateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__RoleUserM__RoleI__72910220">
+    <End Role="Roles" Type="Self.Roles" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="RoleUserMaps" Type="Self.RoleUserMaps" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Roles">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="RoleUserMaps">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__RoleUserM__UserI__73852659">
+    <End Role="Users" Type="Self.Users" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="RoleUserMaps" Type="Self.RoleUserMaps" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="RoleUserMaps">
+        <PropertyRef Name="UserId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -272,8 +353,11 @@
     <EntitySet Name="Languages" EntityType="Self.Languages" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="NodeFieldMaps" EntityType="Self.NodeFieldMaps" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="NodeLanguageMaps" EntityType="Self.NodeLanguageMaps" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="NodeRoleMaps" EntityType="Self.NodeRoleMaps" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Nodes" EntityType="Self.Nodes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="NodeTemplateMaps" EntityType="Self.NodeTemplateMaps" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RoleUserMaps" EntityType="Self.RoleUserMaps" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TemplateFieldMaps" EntityType="Self.TemplateFieldMaps" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Templates" EntityType="Self.Templates" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
@@ -301,6 +385,14 @@
       <End Role="Nodes" EntitySet="Nodes" />
       <End Role="NodeLanguageMaps" EntitySet="NodeLanguageMaps" />
     </AssociationSet>
+    <AssociationSet Name="FK__NodeRoleM__NodeI__76619304" Association="Self.FK__NodeRoleM__NodeI__76619304">
+      <End Role="Nodes" EntitySet="Nodes" />
+      <End Role="NodeRoleMaps" EntitySet="NodeRoleMaps" />
+    </AssociationSet>
+    <AssociationSet Name="FK__NodeRoleM__RoleI__7755B73D" Association="Self.FK__NodeRoleM__RoleI__7755B73D">
+      <End Role="Roles" EntitySet="Roles" />
+      <End Role="NodeRoleMaps" EntitySet="NodeRoleMaps" />
+    </AssociationSet>
     <AssociationSet Name="FK__NodeTempl__NodeI__5224328E" Association="Self.FK__NodeTempl__NodeI__5224328E">
       <End Role="Nodes" EntitySet="Nodes" />
       <End Role="NodeTemplateMaps" EntitySet="NodeTemplateMaps" />
@@ -308,6 +400,14 @@
     <AssociationSet Name="FK__NodeTempl__Templ__540C7B00" Association="Self.FK__NodeTempl__Templ__540C7B00">
       <End Role="Templates" EntitySet="Templates" />
       <End Role="NodeTemplateMaps" EntitySet="NodeTemplateMaps" />
+    </AssociationSet>
+    <AssociationSet Name="FK__RoleUserM__RoleI__72910220" Association="Self.FK__RoleUserM__RoleI__72910220">
+      <End Role="Roles" EntitySet="Roles" />
+      <End Role="RoleUserMaps" EntitySet="RoleUserMaps" />
+    </AssociationSet>
+    <AssociationSet Name="FK__RoleUserM__UserI__73852659" Association="Self.FK__RoleUserM__UserI__73852659">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="RoleUserMaps" EntitySet="RoleUserMaps" />
     </AssociationSet>
     <AssociationSet Name="FK_FieldsTemplateFieldMap" Association="Self.FK_FieldsTemplateFieldMap">
       <End Role="Fields" EntitySet="Fields" />

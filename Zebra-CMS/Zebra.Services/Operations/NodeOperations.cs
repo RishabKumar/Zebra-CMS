@@ -513,24 +513,27 @@ namespace Zebra.Services.Operations
                     try
                     {
                         var value = rawdata[nodefield.FieldId.ToString()];
-                        //raw data has to be processed before saving to database
-                        var fieldtype = _fieldrepository.GetFieldType(nodefield.Field);
-                        var type = System.Type.GetType(fieldtype.ClassPath);
-                        FieldContext _context = new FieldContext(nodefield.Field.Id ,fieldtype.Id, nodefield.Field.FieldName);
-                        _context.RawData = value;
-                        _context.OldValue = nodefield.NodeData;
-                        var fieldobj = Activator.CreateInstance(type, _context);
-                        //invoke GetValue to get the processed value.
-                        var mi = type.GetMethod("GetValue");
-                        var data = mi.Invoke(fieldobj, null).ToString();
-                        //call SaveValue to save addition information. 
-                        mi = type.GetMethod("SaveValue");
-                        data = mi.Invoke(fieldobj, null).ToString();
+                        if (value != null)
+                        {
+                            //raw data has to be processed before saving to database
+                            var fieldtype = _fieldrepository.GetFieldType(nodefield.Field);
+                            var type = System.Type.GetType(fieldtype.ClassPath);
+                            FieldContext _context = new FieldContext(nodefield.Field.Id, fieldtype.Id, nodefield.Field.FieldName);
+                            _context.RawData = value;
+                            _context.OldValue = nodefield.NodeData;
+                            var fieldobj = Activator.CreateInstance(type, _context);
+                            //invoke GetValue to get the processed value.
+                            var mi = type.GetMethod("GetValue");
+                            var data = mi.Invoke(fieldobj, null).ToString();
+                            //call SaveValue to save addition information. 
+                            mi = type.GetMethod("SaveValue");
+                            data = mi.Invoke(fieldobj, null).ToString();
 
-                        nodefield.NodeData = data;
-                        nodefield.LanguageId = language.Id;
-                        _currentrepository.SaveNodeData(nodefield);
-                        processedlist.Add(nodefield);
+                            nodefield.NodeData = data;
+                            nodefield.LanguageId = language.Id;
+                            _currentrepository.SaveNodeData(nodefield);
+                            processedlist.Add(nodefield);
+                        }
                     }
                     catch(Exception e) { }
                 }

@@ -53,5 +53,10 @@ namespace Zebra.Utilities.UtilityProcessor
             obj.Add("templates", templates);
             return "~/Utilities/UtilityViews/Inheritance/AddInheritance.cshtml";
         }
+
+        public bool HasExecutionRights(ref object obj)
+        {
+            return true;
+        }
     }
 }

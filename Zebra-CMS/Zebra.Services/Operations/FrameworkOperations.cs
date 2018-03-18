@@ -38,7 +38,6 @@ namespace Zebra.Services.Operations
 
         private static FrameworkNodeContext GetFrameworkNodeContext(string initiatornodeid, short processType, dynamic parameters)
         {
-            
             switch (processType)
             {
                 case ProcessType.VALIDATION_TYPE:
@@ -77,7 +76,7 @@ namespace Zebra.Services.Operations
             var roadmapnode = nodeop.GetNode(roadmapid);
             var fields = OperationsFactory.FieldOperations.GetInclusiveFieldsOfTemplate(roadmapnode.TemplateId.ToString());
             var initialphasefield = fields.Where(x => x.FieldName == "Initial Phase Executor").FirstOrDefault();
-            var frameworkdata = GetFrameworkData(node.Id, roadmapnode.Id);
+            var frameworkdata = FrameworkExecutor.GetFrameworkData(node.Id, roadmapnode.Id);
             var frameworknodeid = "";
             var currentphaseid = frameworkdata != null ? (string)((dynamic)JsonConvert.DeserializeObject(frameworkdata.ProcessData))["currentphaseid"] : null;
             var initialphaseid = nodeop.GetValueForField(roadmapid, initialphasefield.Id.ToString());
@@ -114,41 +113,50 @@ namespace Zebra.Services.Operations
                     {
                         list.Add(new FieldData(t.Id, t.FieldName, nodeop.GetValueForField(frameworknodeid, t.Id.ToString())));
                     }
-                    FrameworkData tt = GetFrameworkData(node.Id, roadmapnode.Id);
+                    FrameworkData tt = FrameworkExecutor.GetFrameworkData(node.Id, roadmapnode.Id);
                     if(tt != null)
                     {
-                        UpdateFrameworkData(tt.Id, Guid.Parse(initiatornodeid), Guid.Parse(roadmapid), "Roadmap", "{\"currentphaseid\":\"" + currentphaseid + "\"}", "intermediate");
+                       FrameworkExecutor.UpdateFrameworkData(tt.Id, Guid.Parse(initiatornodeid), Guid.Parse(roadmapid), "Roadmap", "{\"currentphaseid\":\"" + currentphaseid + "\"}", "intermediate");
                     }
                     else
                     {
-                        SaveFrameworkData(Guid.Parse(initiatornodeid), Guid.Parse(roadmapid), "Roadmap", "{\"currentphaseid\":\"" + currentphaseid + "\"}", "intermediate");
+                        FrameworkExecutor.SaveFrameworkData(Guid.Parse(initiatornodeid), Guid.Parse(roadmapid), "Roadmap", "{\"currentphaseid\":\"" + currentphaseid + "\"}", "intermediate");
                     }
                 }
             }
-           
-            var context = new FrameworkNodeContext(Guid.Parse(frameworknodeid), nodeop.GetNode(frameworknodeid).NodeName, list);
-            return context;
+            if (!string.IsNullOrWhiteSpace(frameworknodeid))
+            {
+                var context = new FrameworkNodeContext(Guid.Parse(frameworknodeid), nodeop.GetNode(frameworknodeid).NodeName, list);
+                return context;
+            }
+            return null;
         }
 
-        private static void SaveFrameworkData(Guid nodeId, Guid relatedId, string processName, string processData, string value)
-        {
-            var data = new FrameworkData() { Id = Guid.NewGuid(), NodeId = nodeId, RelatedId = relatedId, ProcessName = processName, ProcessData = processData, Value = value};
-            IFrameworkRepository repo = new FrameworkRepository();
-            repo.SaveFrameworkData(data);
-        }
+        //public static void SaveFrameworkData(Guid nodeId, Guid relatedId, string processName, string processData, string value)
+        //{
+        //    var data = new FrameworkData() { Id = Guid.NewGuid(), NodeId = nodeId, RelatedId = relatedId, ProcessName = processName, ProcessData = processData, Value = value};
+        //    IFrameworkRepository repo = new FrameworkRepository();
+        //    repo.SaveFrameworkData(data);
+        //}
 
-        private static FrameworkData GetFrameworkData(Guid nodeId ,Guid relatedId)
-        {
-            BaseRepository<FrameworkData> repo = new FrameworkRepository();
-            return repo.GetByCondition(x=>x.NodeId == nodeId && relatedId == x.RelatedId).FirstOrDefault();
-        }
+        //public static FrameworkData GetFrameworkData(Guid nodeId ,Guid relatedId)
+        //{
+        //    BaseRepository<FrameworkData> repo = new FrameworkRepository();
+        //    return repo.GetByCondition(x=>x.NodeId == nodeId && relatedId == x.RelatedId).FirstOrDefault();
+        //}
 
-        private static void UpdateFrameworkData(Guid id, Guid nodeId, Guid relatedId, string processName, string processData, string value)
-        {
-            var data = new FrameworkData() { Id = id, NodeId = nodeId, RelatedId = relatedId, ProcessName = processName, ProcessData = processData, Value = value };
-            IFrameworkRepository repo = new FrameworkRepository();
-            repo.UpdateFrameworkData(data);
-        }
+        //public static void UpdateFrameworkData(Guid id, Guid nodeId, Guid relatedId, string processName, string processData, string value)
+        //{
+        //    var data = new FrameworkData() { Id = id, NodeId = nodeId, RelatedId = relatedId, ProcessName = processName, ProcessData = processData, Value = value };
+        //    IFrameworkRepository repo = new FrameworkRepository();
+        //    repo.UpdateFrameworkData(data);
+        //}
+
+        //public static List<FrameworkData> GetFrameworkDataList(Guid nodeId)
+        //{
+        //    BaseRepository<FrameworkData> repo = new FrameworkRepository();
+        //    return repo.GetByCondition(x => x.NodeId == nodeId).ToList();
+        //}
 
     }
 }

@@ -7,6 +7,7 @@ using Zebra.Application;
 using Zebra.ViewModel;
 using Zebra.Services.Interfaces;
 using Zebra.Services.Operations;
+using Zebra.Constants;
 
 namespace Zebra.Controllers
 {
@@ -22,9 +23,9 @@ namespace Zebra.Controllers
         public ActionResult Index()
         {
             var layoutid = ZebraContext.Current.Page.PageLayout;
-            var actions = ZebraContext.Current.Page.Actions;
-            var layout = OperationsFactory.NodeOperations.GetValueForField(layoutid.Value.ToString(), "97C9C0EC-361D-47FA-B032-C8C8BE15019D");
-            var model = new PageModel() { LayoutPath = layout, Actions = actions};
+            var design = ZebraContext.Current.Page.PageDesign;
+            var layout = OperationsFactory.NodeOperations.GetValueForField(layoutid.Value.ToString(), FieldId.LayoutFieldId);
+            var model = new PageModel() { LayoutPath = layout, Design = design };
             return View(model:model);
         }
 

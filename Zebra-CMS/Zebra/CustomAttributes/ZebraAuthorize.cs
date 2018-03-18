@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Mvc;
@@ -16,10 +17,10 @@ namespace Zebra.CustomAttributes
             if (authCookie != null)
             {
                 FormsAuthenticationTicket authTicket = FormsAuthentication.Decrypt(authCookie.Value);
-                if (authTicket != null && !authTicket.Expired)
+                if (authTicket != null && !authTicket.Expired && !string.IsNullOrWhiteSpace(authTicket.UserData))
                 {
-                    var userroles = authTicket.UserData.ToLower().Trim().Split(',').OfType<string>().ToList<string>();
-                    if (userroles == null && userroles.Count < 1)
+                    var userid = Guid.Parse(authTicket.UserData);
+                    if (userid == null)
                     {
                         HttpContext.Current.Response.Redirect("~/CPanel/Error");
                         return;
@@ -60,22 +61,10 @@ namespace Zebra.CustomAttributes
             if (authCookie != null)
             {
                 FormsAuthenticationTicket authTicket = FormsAuthentication.Decrypt(authCookie.Value);
-                if (authTicket != null && !authTicket.Expired)
+                if (authTicket != null && !authTicket.Expired && !string.IsNullOrWhiteSpace(authTicket.UserData))
                 {
-                    var userroles = authTicket.UserData.ToLower().Trim().Split(',').OfType<string>().ToList<string>();
-                    if (string.IsNullOrWhiteSpace(Roles))
-                    {
-                        return;
-                    }
-
-                    var roles = Roles.Split(',').OfType<string>().ToList<string>();
-
-                    bool flag = true;
-
-                    roles.ForEach(x =>
-                    {
-                        flag &= userroles.Contains(x.ToLower());
-                    });
+                    var userid = Guid.Parse(authTicket.UserData);
+                    var flag = true;
 
                     if (!flag)
                     {
@@ -92,7 +81,7 @@ namespace Zebra.CustomAttributes
                 }
                 else
                 {
-                    //filterContext.Result = new RedirectResult("/Account?returnurl="+ returnUrl);
+                    //filterContext.Result = new RedirectResult("/Account?returnUrl="+ returnUrl);
                     if (!HttpContext.Current.Response.HeadersWritten)
                     {
                         RedirectHelper.RedirectToLogin(returnUrl);
@@ -102,7 +91,7 @@ namespace Zebra.CustomAttributes
             }
             else
             {
-                //filterContext.Result = new RedirectResult("/Account?returnurl=" + returnUrl);
+                //filterContext.Result = new RedirectResult("/Account?returnUrl=" + returnUrl);
                 RedirectHelper.RedirectToLogin(returnUrl);
                 return;
             }
@@ -129,7 +118,7 @@ namespace Zebra.CustomAttributes
         {
             try
             {
-                HttpContext.Current.Response.Redirect("~/Account?returnurl=" + returnurl);
+                HttpContext.Current.Response.Redirect("~/Account?returnUrl=" + returnurl);
             }
             catch { }
         }

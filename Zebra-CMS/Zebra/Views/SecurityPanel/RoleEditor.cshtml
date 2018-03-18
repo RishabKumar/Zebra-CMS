@@ -1,0 +1,88 @@
+﻿@using Zebra.DataRepository.Models
+@{ 
+    Layout = null;
+}
+
+@model List<Role>
+
+<div class="role-editor-container">
+    <div>
+        <select>
+            @foreach (var t in Model)
+            {
+                <option value="@t.Id">@t.RoleName</option>
+            }
+        </select>
+        <input type="text" value="" placeholder="New role name" />
+        <input type="button" value="Remove" />
+    </div>
+    <div class="role-editor-newrole-container">
+        <p><input class="role-editor-newrole-btn" type="button" value="Add Role" /><input type="button" id="newrole-save-btn" value="Save" /></p>
+        <p><input class="role-editor-newrole" type="text" placeholder="Enter role name" /></p>
+    </div>
+</div>
+<div class="role-editor-newrole-dummy-container">
+    <p><input class="role-editor-newrole" type="text" placeholder="Enter role name" /></p>
+</div>
+<style>
+    .role-editor-container{
+        position: fixed;
+        width: 400px;
+        height: 300px;
+        left: 50%;
+        top: 50%;
+        margin-left: -200px;
+        margin-top: -150px;
+        background-color: white;
+        border: groove;
+        z-index: 100;
+    }
+
+</style>
+
+<script>
+    $(document).on('click', '.role-editor-newrole-container .role-editor-newrole-btn', function () {
+            var dummy = $('.role-editor-newrole-dummy-container p').clone();
+            $('.role-editor-newrole-container').append(dummy);
+    });
+
+    $(document).on('mouseup', '.role-editor-container', function () {
+        var flag = false;
+        var roles = $('.role-editor-container input.role-editor-newrole');
+        for (var i = 0; i < roles.length; i++) {
+            if (flag) {
+                $(roles[i]).remove();
+            }
+            if (roles[i].value.length == 0) {
+                flag = true;
+            }
+        }
+    });
+
+    $(document).on('click', '#newrole-save-btn', function () {
+        formdata = [];
+        var roles = $('.role-editor-container input.role-editor-newrole');
+        for (var i = 0; i < roles.length; i++) {
+            if (roles[i].value.length > 0 ) {
+                formdata.push(roles[i].value);
+            }
+        }
+        $.ajax({
+            type: "POST",
+            url: "/zebraapi/UserService/AddRole",
+            data: { '': JSON.stringify(formdata) },
+            dataType: "json",
+            async: true,
+            success: function (json) {
+                alert("Saved");
+                console.log(json);
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+        $(".role-editor-container").remove();
+        $('.black-overlay').remove();
+    });
+
+</script>

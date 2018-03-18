@@ -16,16 +16,9 @@ namespace Zebra.Controllers
 {
     public class CPanelController : ZebraController
     {
-        private IFieldOperations _fieldOperations;
-
-        public void Data(string nodeid)
+        public CPanelController(NodeOperations nodeOperations, FieldOperations fieldOperations, UserOperations userOperations) : base(nodeOperations, fieldOperations, userOperations, true)
         {
-            OperationsFactory.NodeOperations.GetAllParentNodes(nodeid);
-        }
-
-        public CPanelController(NodeOperations nodeOperations, FieldOperations fieldOperations) : base(nodeOperations, true)
-        {
-            _fieldOperations = fieldOperations;
+             
         }
 
         // GET: CPanel
@@ -42,11 +35,17 @@ namespace Zebra.Controllers
         public ActionResult Editor()
         {
             Node root = _nodeop.GetRootNode();
+            root = _userOperations.FilterByUser(CurrentUser, root);
            // ((NodeOperations)_nodeop).CreateContentMap();
             var list = new List<Node>();
             list.Add(root);
             ViewBag.Root = list;
-            ViewBag.Utilities = new List<string> { "Zebra.Utilities.UtilityProcessor.FieldBuilderUtility, Zebra", "Zebra.Utilities.UtilityProcessor.InheritanceUtility, Zebra", "Zebra.Utilities.UtilityProcessor.RoadmapUtility, Zebra" };
+            ViewBag.Utilities = new List<string>
+            {   "Zebra.Utilities.UtilityProcessor.FieldBuilderUtility, Zebra",
+                "Zebra.Utilities.UtilityProcessor.InheritanceUtility, Zebra",
+                "Zebra.Utilities.UtilityProcessor.RoadmapUtility, Zebra",
+                "Zebra.Utilities.UtilityProcessor.ValidationUtility, Zebra"
+            };
             return View();
         }
 
@@ -55,20 +54,31 @@ namespace Zebra.Controllers
         public ActionResult NodeTree(string nodeid= "8087FA7D-6753-40B9-9F3A-7AE62E882258")
         {
             var list = new List<Node>();
-            list.Add(_nodeop.GetNode(nodeid));
+            var node = _nodeop.GetNode(nodeid);
+            node = _userOperations.FilterByUser(CurrentUser, node);
+            list.Add(node);
+            if(list.Count == 0)
+            {
+                return null;
+            }
             return View(list);
         }
 
         [ZebraAuthorize(Roles = "Editor")]
         public ActionResult NodeSearchResult(string nameorid)
         {
-            return View(_nodeop.SearchNode(nameorid));
+            return View(_userOperations.FilterByUser(CurrentUser, _nodeop.SearchNode(nameorid)));
         }
 
         [ZebraAuthorize(Roles = "Editor")]
         public ActionResult NodeBrowser(string nodeid, string languageid = "B45089D2-CF01-4351-B6A6-40FBFFD64DC3")
         {
             var node = _nodeop.GetNode(nodeid);
+            node = _userOperations.FilterByUser(CurrentUser, node);
+            if(node == null)
+            {
+                return null;
+            }
             var language = LanguageManager.GetLanguageById(languageid);
             var languages = LanguageManager.GetAllLanguages();
             var list = _fieldOperations.GetInclusiveFieldsOfTemplate(node.Id.ToString());
@@ -102,7 +112,8 @@ namespace Zebra.Controllers
             var presentlanguages = ((IStructureOperations)_nodeop).GetNodeLanguages(node.Id.ToString());
             return View(model: new NodeBrowserModel() { fields = htmllist, orderedfields = orderedfields,  node = node, template = node.Template, currentlanguage = language, alllanguages = languages, allnodelanguages = presentlanguages });
         }
-        
+
+        [ZebraAuthorize(Roles = "Editor")]
         public ActionResult RenderUtility(string fullyqualifiedname, string method = "RenderView", dynamic data = null)
         {
             var type = Type.GetType(fullyqualifiedname);
@@ -110,83 +121,40 @@ namespace Zebra.Controllers
             if (type != null && (assembly = Assembly.GetAssembly(type)) != null)
             {
                 var instance = Activator.CreateInstance(type, null);
-                var mi = type.GetMethod(method);
                 object[] args = new[] { data };
-                var path = mi.Invoke(instance, args).ToString();
-                if (VirtualPathUtility.IsAppRelative(path))
+                var mi = type.GetMethod("HasExecutionRights");
+                data = mi.Invoke(instance, args);
+                if (data.Equals(true))
                 {
-                    return PartialView(viewName:path, model: args[0]);
+                    mi = type.GetMethod(method);
+                    var path = mi.Invoke(instance, args).ToString();
+                    if (VirtualPathUtility.IsAppRelative(path))
+                    {
+                        return PartialView(viewName: path, model: args[0]);
+                    }
                 }
             }
             return PartialView();
         }
         
-         
-
-        // GET: CPanel/Create
-        public ActionResult Create()
+        [HttpGet]
+        public ActionResult PageDesigner(string nodeid)
         {
-            return View();
-        }
-
-        // POST: CPanel/Create
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
+            if(!string.IsNullOrWhiteSpace(nodeid))
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
+                var node = _nodeop.GetNode(nodeid);
+                if(node != null)
+                {
+                    var designdetailfieldid = "06C00328-A252-4BA9-A8C2-95A354A90E2F";
+                    var data = _nodeop.GetValueForField(node.Id.ToString(), designdetailfieldid);
+                    // string json = ("[{\"iscontainer\":true,\"children\":[{\"iscontainer\":true,\"children\":[{\"iscontainer\":true,\"children\":[]},{\"iscontainer\":true,\"children\":[{\"iscontainer\":true,\"children\":[{\"iscontainer\":true,\"children\":[]}]},{\"actionid\":\"cd51d86f - c990 - 48f2 - 9655 - 160ec15c1cd8\",\"children\":[]}]}]},{\"iscontainer\":true,\"children\":[]}]},{\"iscontainer\":true,\"children\":[]},{\"iscontainer\":true,\"children\":[]}]");
+                    ViewBag.NodeId = nodeid;
+                    ViewBag.DesignerDetailFieldId = designdetailfieldid;
+                    ViewBag.DefaultLanguageId = LanguageManager.GetDefaultLanguage().Id.ToString();
+                    return View(model: HttpUtility.HtmlDecode(data));
+                }
             }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: CPanel/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: CPanel/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: CPanel/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: CPanel/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            return null;
         }
     }
 }

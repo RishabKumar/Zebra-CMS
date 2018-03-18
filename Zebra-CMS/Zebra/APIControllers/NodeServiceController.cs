@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using Zebra.Application;
 using Zebra.CustomAttributes;
 using Zebra.DataRepository.Models;
 using Zebra.Globalization;
@@ -20,12 +21,15 @@ namespace Zebra.APIControllers
         private IStructureOperations _structops;
         private INodeOperations _nodeops;
         private IFieldOperations _fieldops;
+        private IUserOperations _userops;
         
         public NodeServiceController() : base()
         {
             _structops = OperationsFactory.StructureOperations;
             _nodeops = OperationsFactory.NodeOperations;
             _fieldops = OperationsFactory.FieldOperations;
+            _userops = OperationsFactory.UserOperations;
+            ZebraContext.IsEditorMode = false;
         }
 
         [HttpGet]
@@ -33,6 +37,7 @@ namespace Zebra.APIControllers
         {
             Node node = new Node() { Id = new Guid(parentid) };
             var list = _nodeops.GetChildNodes(node);
+            list = _userops.FilterByUser(ZebraContext.Current.CurrentUser, list).ToList();
             var newlist = list.Select(x => new { x.Id, x.NodeName });
             return JsonConvert.SerializeObject(newlist);
         }
@@ -105,9 +110,5 @@ namespace Zebra.APIControllers
             _nodeops.SaveNode(node, rawform);
             return result;
         }
-
-
-
-
     }
 }

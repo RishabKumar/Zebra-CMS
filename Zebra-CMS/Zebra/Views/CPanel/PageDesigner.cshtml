@@ -1,0 +1,168 @@
+﻿@{
+    ViewBag.Title = "PageDesigner";
+    Layout = "~/Views/Shared/EditorLayout.cshtml";
+}
+@model string
+@{ 
+    var data = Model;
+}
+<div id="outer-container" class="outer-container">
+    <input type="button" class="designer-add-container" value="Add Container"/>
+    <input type="button" class="designer-add-action" value="Add Action" />
+    <input type="button" class="designer-save-design" value="Save Design" />
+
+</div>
+
+
+<div class="outer-container-sample">
+    <input type="button" class="designer-add-container" value="Add Container" />
+    <input type="button" class="designer-add-action" value="Add Action" />
+    <input type="button" class="designer-remove-container" value="Remove Container" />
+</div>
+
+<script>
+    var designerdata = JSON.parse("@data".replace(/&quot;/g, '\"'));
+    console.log(JSON.stringify(designerdata));
+    var parentcontainer = $('#outer-container');
+    for (var i = 0; i < designerdata.length; i++) {
+        if (designerdata[i]["iscontainer"]) {
+            var childcontainer = AddContainer(parentcontainer);
+            var childdata = designerdata[i].children;
+            TraverseChildren(childcontainer, childdata);
+        }
+        else
+        {
+            var id = designerdata[i]['actionid'];
+            var name = designerdata[i]['actionname'];
+            AddActionContainer(parentcontainer, id, name);
+        }
+    }
+
+    function AddContainer(parent) {
+        var newcontainer = $('.outer-container-sample').clone();
+        newcontainer.attr('class', 'outer-container');
+        $(newcontainer).appendTo(parent);
+        var depth = $(newcontainer).parents('.outer-container').length;
+        $(newcontainer).prepend('<p>Depth: ' + depth + '</p>');
+        return $(newcontainer);
+    }
+
+    function TraverseChildren(currentcontainer, currentdata) {
+
+        for (var i = 0; i < currentdata.length; i++) {
+            if (currentdata[i]["iscontainer"]) {
+                var childcontainer = AddContainer(currentcontainer);
+                var childdata = currentdata[i].children;
+                TraverseChildren(childcontainer, childdata);
+            }
+            else {
+                var id = currentdata[i]['actionid'];
+                var name = currentdata[i]['actionname'];
+                AddActionContainer(currentcontainer, id, name);
+            }
+        }
+    }
+
+
+    $(document).on('click', '.designer-add-container', function () {
+        var parent = this.parentElement;
+        AddContainer(parent);
+    });
+
+
+
+    $(document).on('click', '.designer-add-action', function () {
+        var parent = this.parentElement;
+        ShowModelTreePopup('40feaa0d-4c88-4517-8297-5e21c5b06e21', '', '', '', function () { AddAction(parent, $(GetSelectedNodeInPopup())) });
+    });
+
+    function AddAction(parentcontainer, node)
+    {
+        var nodename = $(node).find('p')[0].innerHTML;
+        var nodeid = node.attr('data-nodeid');
+        AddActionContainer(parentcontainer, nodeid, nodename);
+    }
+
+    function AddActionContainer(parentcontainer, nodeid, nodename)
+    {
+        var action = "<div class='designer-action-container' data-nodeid='" + nodeid + "'><span><p>" + nodename + "<i class='fa fa-window-close-o'></i></p></span></div>";
+        $(parentcontainer).append(action);
+    }
+
+    $(document).on('click', '.designer-action-container i', function () {
+        $(this.parentElement.parentElement.parentElement).remove();
+    });
+
+    $(document).on('click', '.designer-remove-container', function () {
+        $(this.parentElement).remove();
+    });
+
+    $(document).on('click', '.designer-save-design', function () {
+        var outercontainer = this.parentElement;
+        var childdiv = $(outercontainer).children('div');
+        var data = [];
+        data = GetAllChildren(outercontainer);
+        console.log(JSON.stringify(data));
+
+        var formdata = {};
+        formdata['nodeid'] = '@ViewBag.NodeId';
+        formdata['@ViewBag.DesignerDetailFieldId'] = JSON.stringify(data);
+        formdata['nodelanguageid'] = '@ViewBag.DefaultLanguageId';
+        var ajaxRequest = $.ajax({
+            type: "POST",
+            url: "/zebraapi/nodeservice/savenode",
+            data: formdata,
+            success(data) {
+                alert('Saved');
+            }
+        });
+        ajaxRequest.done(function (data, textStatus, jqXHR) {
+
+        });
+        event.preventDefault();
+    });
+
+    function GetAllChildren(container)
+    {
+        var child = $(container).children('div');
+        var data = [];
+        for(var i = 0; i < child.length; i++)
+        {
+            var id = $(child[i]).attr('data-nodeid');
+            var tmp = {};
+            if (id == undefined) {
+                tmp['iscontainer'] = true;
+            }
+            else {
+                tmp['iscontainer'] = false;
+                tmp['actionid'] = id;
+                tmp['actionname'] = $(child[i]).children().children()[0].innerText;
+            }
+            tmp['children'] = GetAllChildren(child[i]);
+            data.push(tmp);
+        }
+        return data;
+    }
+
+</script>
+
+<style>
+    .outer-container-sample{
+        display: none;
+    }
+
+    .outer-container{
+        display: block;
+        border: ridge;
+        padding: 10px;
+    }
+
+    .designer-action-container{
+        margin: 5px;
+    }
+
+</style>
+
+
+
+
