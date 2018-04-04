@@ -13,7 +13,7 @@ namespace Zebra.Services.Operations
     {
         protected BaseRepository<E> _base;
         protected dynamic _currentrepository;  
-          
+        
         public BaseOperations(T t)
         {
             _base = t;

@@ -8,6 +8,7 @@ using Zebra.Services.Operations;
 using System.Web.Http;
 using Zebra.DataRepository.Interfaces;
 using Zebra.Globalization;
+using Zebra.DataRepository.Models;
 
 namespace Zebra
 {
@@ -16,7 +17,6 @@ namespace Zebra
         public static void RegisterComponents()
         {
             var container = new UnityContainer();
-
             container.RegisterType(typeof(BaseRepository<>), typeof(UserRepository));
             container.RegisterType<INodeRepository, NodeRepository>();
             container.RegisterType<ILanguageRepository, LanguageRepository>();

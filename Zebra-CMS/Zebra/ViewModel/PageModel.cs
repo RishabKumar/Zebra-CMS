@@ -9,6 +9,6 @@ namespace Zebra.ViewModel
     public class PageModel
     {
         public string LayoutPath { get; set; }
-        public PageDesign Actions { get; set; }
+        public PageDesign Design { get; set; }
     }
 }

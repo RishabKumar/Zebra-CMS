@@ -504,7 +504,9 @@
           <NavigationProperty Name="RoleUserMaps" Relationship="ZebraDB_Model.FK__RoleUserM__UserI__6EC0713C" FromRole="User" ToRole="RoleUserMap" />
         </EntityType>
         <Association Name="FK_FieldsTemplateFieldMap">
-          <End Role="Fields" Type="Self.Field" Multiplicity="1" />
+          <End Role="Fields" Type="Self.Field" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="TemplateFieldMaps" Type="Self.TemplateFieldMap" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Fields">
@@ -516,7 +518,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_FieldTypesFields">
-          <End Role="FieldTypes" Type="Self.FieldType" Multiplicity="1" />
+          <End Role="FieldTypes" Type="Self.FieldType" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Fields" Type="Self.Field" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="FieldTypes">
@@ -528,8 +532,11 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_TemplatesNodes">
-          <End Role="Templates" Type="Self.Template" Multiplicity="1" />
-          <End Role="Nodes" Type="Self.Node" Multiplicity="*" />
+          <End Role="Templates" Type="Self.Template" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Nodes" Type="Self.Node" Multiplicity="*" >
+          </End>
           <ReferentialConstraint>
             <Principal Role="Templates">
               <PropertyRef Name="Id" />
@@ -540,7 +547,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_TemplatesTemplateFieldMap">
-          <End Role="Templates" Type="Self.Template" Multiplicity="1" />
+          <End Role="Templates" Type="Self.Template" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="TemplateFieldMaps" Type="Self.TemplateFieldMap" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Templates">
@@ -650,7 +659,9 @@
           <NavigationProperty Name="Language" Relationship="ZebraDB_Model.FK__NodeField__Langu__2CF2ADDF" FromRole="NodeFieldMap" ToRole="Language" />
         </EntityType>
         <Association Name="FK__NodeField__Field__73BA3083">
-          <End Type="ZebraDB_Model.Field" Role="Field" Multiplicity="0..1" />
+          <End Type="ZebraDB_Model.Field" Role="Field" Multiplicity="0..1" >
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="ZebraDB_Model.NodeFieldMap" Role="NodeFieldMap" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Field">
@@ -662,7 +673,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__NodeField__NodeI__72C60C4A">
-          <End Type="ZebraDB_Model.Node" Role="Node" Multiplicity="0..1" />
+          <End Type="ZebraDB_Model.Node" Role="Node" Multiplicity="0..1" >
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="ZebraDB_Model.NodeFieldMap" Role="NodeFieldMap" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Node">
@@ -710,7 +723,9 @@
           <NavigationProperty Name="Node" Relationship="ZebraDB_Model.FK__NodeLangu__NodeI__30C33EC3" FromRole="NodeLanguageMap" ToRole="Node" />
         </EntityType>
         <Association Name="FK__NodeLangu__Langu__31B762FC">
-          <End Type="ZebraDB_Model.Language" Role="Language" Multiplicity="0..1" />
+          <End Type="ZebraDB_Model.Language" Role="Language" Multiplicity="0..1" >
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="ZebraDB_Model.NodeLanguageMap" Role="NodeLanguageMap" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Language">

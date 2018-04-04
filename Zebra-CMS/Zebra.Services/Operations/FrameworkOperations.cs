@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Zebra.Constants;
 using Zebra.DataRepository.DAL;
 using Zebra.DataRepository.Interfaces;
 using Zebra.DataRepository.Models;
@@ -55,7 +56,7 @@ namespace Zebra.Services.Operations
         private static FrameworkNodeContext ValidationProcess(string initiatornodeid)
         {
             var list = new List<FieldData>();
-            var frameworknodeid = OperationsFactory.NodeOperations.GetValueForField(initiatornodeid, "B5FD7B60-0E49-4A41-9C4C-B99A33E072D6");
+            var frameworknodeid = OperationsFactory.NodeOperations.GetValueForField(initiatornodeid, FieldId.ValidationFieldId);
             var frameworknode = OperationsFactory.NodeOperations.GetNode(frameworknodeid);
             var fields = OperationsFactory.FieldOperations.GetInclusiveFieldsOfTemplate(frameworknode.TemplateId.ToString());
             foreach (var field in fields)

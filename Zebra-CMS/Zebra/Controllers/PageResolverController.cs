@@ -8,6 +8,8 @@ using Zebra.ViewModel;
 using Zebra.Services.Interfaces;
 using Zebra.Services.Operations;
 using Zebra.Constants;
+using CacheCrow.Cache;
+using static Zebra.Application.ZebraContext;
 
 namespace Zebra.Controllers
 {
@@ -24,7 +26,7 @@ namespace Zebra.Controllers
         {
             var layoutid = ZebraContext.Current.Page.PageLayout;
             var design = ZebraContext.Current.Page.PageDesign;
-            var layout = OperationsFactory.NodeOperations.GetValueForField(layoutid.Value.ToString(), FieldId.LayoutFieldId);
+            var layout = OperationsFactory.NodeOperations.GetValueForField(layoutid.Value.ToString(), FieldId.LayoutPathFieldId);
             var model = new PageModel() { LayoutPath = layout, Design = design };
             return View(model:model);
         }

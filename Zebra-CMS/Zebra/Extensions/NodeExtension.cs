@@ -14,11 +14,11 @@ namespace Zebra.Services.Operations
         {
             var dictionary = new Dictionary<string, object>();
             Language lang = ZebraContext.Current.CurrentLanguage;
-            if (lang == null)
+            if (lang != null)
             {
-                lang = LanguageManager.GetDefaultLanguage();
+                return node.GetFieldValues(lang);
             }
-            return node.GetFieldValues(lang);
+            return null;
         }
     }
 }

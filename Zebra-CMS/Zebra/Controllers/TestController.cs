@@ -16,18 +16,20 @@ namespace Zebra.Controllers
             return View();
         }
 
-        public ActionResult Heading()
+        public ActionResult Heading(string datasource)
         {
-            var node = OperationsFactory.NodeOperations.GetNode(ZebraContext.Current.Page.PageNodeId.ToString());
-            var values = node.GetFieldValues();
-            return View(model:values["First Name"]);
+            var nodeid = ZebraContext.Current.Page.PageNodeId;
+            var node = OperationsFactory.NodeOperations.GetNode(nodeid.ToString());
+            var fieldata = node.GetFieldValues();
+            ViewBag.Title = fieldata["Test"];
+            ViewBag.Meta = fieldata["META"];
+            ViewBag.Copyrights = fieldata["Copyrights"];
+            return PartialView();
         }
 
-        public ActionResult Details()
+        public ActionResult Details(string datasourceidwersdf4r)
         {
-            return View();
+            return PartialView();
         }
-       
-
     }
 }

@@ -72,10 +72,10 @@ namespace Zebra.DataRepository.DAL
             var template = new Template() { Id = entity.Id };
             using (var dbt = _context.Database.BeginTransaction())
             {
-                foreach (var t in _context.ChangeTracker.Entries())
-                {
-                    t.Reload();
-                }
+                //foreach (var t in _context.ChangeTracker.Entries())
+                //{
+                //    t.Reload();
+                //}
                 template = GetTemplate(template);
                 template = _context.Templates.Remove(template);
                 try
@@ -84,10 +84,10 @@ namespace Zebra.DataRepository.DAL
                 }
                 catch(DbUpdateConcurrencyException e)
                 {
-                    foreach(var t in e.Entries)
-                    {
-                        _context.Entry(t.Entity).State = EntityState.Deleted;
-                    }
+                    //foreach(var t in e.Entries)
+                    //{
+                    //    _context.Entry(t.Entity).State = EntityState.Deleted;
+                    //}
                     _context.SaveChanges();
                 }
                 finally

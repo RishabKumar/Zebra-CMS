@@ -12,7 +12,7 @@ namespace Zebra.CustomAttributes
     {
         public override void OnAuthorization(HttpActionContext actionContext)
         {
-            string returnUrl = HttpUtility.UrlEncode(actionContext.RequestContext.Url.Request.RequestUri.AbsoluteUri);
+            string returnUrl = HttpUtility.UrlEncode(actionContext.RequestContext.Url.Request.RequestUri.PathAndQuery);
             var authCookie = HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName];
             if (authCookie != null)
             {
@@ -56,7 +56,7 @@ namespace Zebra.CustomAttributes
 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
-            string returnUrl = HttpUtility.UrlEncode(filterContext.HttpContext.Request.Url.AbsoluteUri);
+            string returnUrl = HttpUtility.UrlEncode(filterContext.HttpContext.Request.Url.PathAndQuery);
             var authCookie = filterContext.HttpContext.Request.Cookies[FormsAuthentication.FormsCookieName];
             if (authCookie != null)
             {

@@ -1,0 +1,264 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CacheCrow</name>
+    </assembly>
+    <members>
+        <member name="T:CacheCrow.Cache.CacheCrow`2">
+            <summary>
+            Represents A simple LFU based Cache that supports data expiry.
+            </summary>
+            <typeparam name="K">Key</typeparam>
+            <typeparam name="V">Value</typeparam>
+        </member>
+        <member name="E:CacheCrow.Cache.CacheCrow`2.EmptyCacheEvent">
+            <summary>
+            Raised when CacheCrow is empty.Note: It is also periodically raised by Cleaner when CacheCrow is empty.
+            </summary>
+        </member>
+        <member name="M:CacheCrow.Cache.CacheCrow`2.Initialize(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Initializes CacheCrow, creates a directory '_crow' in root if not present.
+            </summary>
+            <param name="size">Count of total entries in Active(in-memory) CacheCrow</param>
+            <param name="activeCacheExpire">Milli-seconds before each entry in Active CacheCrow is expired</param>
+            <param name="dormantCacheExpire">Milli-seconds before each entry in Dormant(disk) CacheCrow is expired</param>
+            <param name="cleanerSnoozeTime">Milli-seconds before Cleaner cleans Dormant CacheCrow. Note: Cleaner is called after every cleanersnoozetime milli-seconds</param>
+            <returns>Returns instance of ICacheCrow</returns>
+        </member>
+        <member name="P:CacheCrow.Cache.CacheCrow`2.GetCacheCrow">
+            <summary>
+            Returns instance of ICacheCrow if it has been initialized
+            </summary>
+        </member>
+        <member name="P:CacheCrow.Cache.CacheCrow`2.ActiveCount">
+            <summary>
+            Gets number of entries in Active CacheCrow
+            </summary>
+        </member>
+        <member name="P:CacheCrow.Cache.CacheCrow`2.Count">
+            <summary>
+            Gets total number of entries in CacheCrow
+            </summary>
+        </member>
+        <member name="P:CacheCrow.Cache.CacheCrow`2.PreviousCount">
+            <summary>
+            Gets a previously calculated total number of entries in CacheCrow. Note: Should be considered if realtime values are not required.
+            </summary>
+        </member>
+        <member name="M:CacheCrow.Cache.CacheCrow`2.Clear">
+            <summary>
+            Removes all entries from CacheCrow, including entries in dormant cache and raises EmptyCacheEvent.
+            </summary> 
+        </member>
+        <member name="M:CacheCrow.Cache.CacheCrow`2.Add(`0,`1)">
+            <summary>
+            Inputs entry in Active CacheCrow if its size is not exceeded else adds the entry in Dormant CacheCrow.
+            </summary>
+            <param name="key">Key</param>
+            <param name="data">Value</param>
+        </member>
+        <member name="M:CacheCrow.Cache.CacheCrow`2.Update(`0,`1)">
+            <summary>
+            Searches the key in both Active and Dormant CacheCrow and if found then updates the value.
+            </summary>
+            <param name="key">Existing key</param>
+            <param name="data">New value</param>
+            <returns>True if value was updated else false</returns>
+        </member>
+        <member name="M:CacheCrow.Cache.CacheCrow`2.ActiveLookUp(`0)">
+            <summary>
+            Checks if key is present in the Active CacheCrow.
+            </summary>
+            <param name="key">The key to find</param>
+            <returns>True if key is found in Active CacheCrow, else false</returns>
+        </member>
+        <member name="M:CacheCrow.Cache.CacheCrow`2.LookUp(`0)">
+            <summary>
+            Checks if key is present in CacheCrow(Active+Dormant)
+            </summary>
+            <param name="key">The key to find</param>
+            <returns>True if key is found, else false</returns>
+        </member>
+        <member name="M:CacheCrow.Cache.CacheCrow`2.ActiveRemove(`0)">
+            <summary>
+            Removes the entry from Active CacheCrow corresponsing to the key.
+            </summary>
+            <param name="key">The key to corresponding value to remove</param>
+            <returns>If removed then returns removed value as CacheData, else returns empty CacheData</returns>
+        </member>
+        <member name="M:CacheCrow.Cache.CacheCrow`2.Remove(`0)">
+            <summary>
+            Removes the entry from CacheCrow(Active+Dormant) corresponsing to the key.
+            </summary>
+            <param name="key">The key to corresponding value to remove</param>
+            <returns>If removed then returns removed value as CacheData, else returns empty CacheData</returns>
+        </member>
+        <member name="M:CacheCrow.Cache.CacheCrow`2.GetValue(`0)">
+            <summary>
+            Lookups the key in Active+Dormant CacheCrow, if found then increments the frequency.
+            </summary>
+            <param name="key">Key to corresponding value</param>
+            <returns>If V is reference type and it is present then Object V else if V is value-type and it is not present then default value of V</returns>
+        </member>
+        <member name="M:CacheCrow.Cache.CacheCrow`2.GetActiveValue(`0)">
+            <summary>
+            Lookups the key in Active CacheCrow, if found then increments the frequency. Note: LFU maybe performed and entries maybe swapped between Active and Dormant CacheCrow.
+            </summary>
+            <param name="key">Key to corresponding value</param>
+            <returns>If V is reference type and it is present then Object V else if V is value-type and it is not present then default value of V</returns>
+        </member>
+        <member name="M:CacheCrow.Cache.CacheCrow`2.Dispose">
+            <summary>
+            Disposes and writes the entries in Active CacheCrow to Dormant CacheCrow.
+            </summary>
+        </member>
+        <member name="M:CacheCrow.Cache.CacheCrow`2.LoadCache">
+            <summary>
+            Loads entries from Dormant CacheCrow into Active CacheCrow
+            </summary>
+        </member>
+        <member name="M:CacheCrow.Cache.CacheCrow`2.PerformLFUAndAdd">
+            <summary>
+            Tries to add value from Dormant CacheCrow to Active CacheCrow using LFU.
+            </summary>
+            <returns>Returns frequency of added/removed entry</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:CacheCrow.Cache.CacheCrow`2.PerformLFUAndReplace(`0,CacheCrow.Model.CacheData{`1})" -->
+        <member name="T:CacheCrow.Cache.ICacheCrow`2">
+            <summary>
+            Interface for implementing LFU based cache
+            </summary>
+            <typeparam name="K"></typeparam>
+            <typeparam name="V"></typeparam>
+        </member>
+        <member name="P:CacheCrow.Cache.ICacheCrow`2.ActiveCount">
+            <summary>
+            Gets number of entries in Active CacheCrow
+            </summary>
+        </member>
+        <member name="P:CacheCrow.Cache.ICacheCrow`2.Count">
+            <summary>
+            Gets total number of entries in CacheCrow
+            </summary>
+        </member>
+        <member name="P:CacheCrow.Cache.ICacheCrow`2.PreviousCount">
+            <summary>
+            Gets a previously calculated total number of entries in CacheCrow. Note: Should be considered if realtime values are not required.
+            </summary>
+        </member>
+        <member name="M:CacheCrow.Cache.ICacheCrow`2.Clear">
+            <summary>
+            Removes all entries from CacheCrow, including entries in dormant cache and raises EmptyCacheEvent.
+            </summary>
+        </member>
+        <member name="M:CacheCrow.Cache.ICacheCrow`2.Add(`0,`1)">
+            <summary>
+            Inputs entry in Active CacheCrow if its size is not exceeded else adds the entry in Dormant CacheCrow.
+            </summary>
+            <param name="key">Key</param>
+            <param name="data">Value</param>
+        </member>
+        <member name="M:CacheCrow.Cache.ICacheCrow`2.Update(`0,`1)">
+            <summary>
+            Searches the key in both Active and Dormant CacheCrow and if found then updates the value.
+            </summary>
+            <param name="key">Existing key</param>
+            <param name="data">New value</param>
+            <returns>True if value was updated else false</returns>
+        </member>
+        <member name="M:CacheCrow.Cache.ICacheCrow`2.ActiveLookUp(`0)">
+            <summary>
+            Checks if key is present in the Active CacheCrow.
+            </summary>
+            <param name="key">The key to find</param>
+            <returns>True if key is found in Active CacheCrow, else false</returns>
+        </member>
+        <member name="M:CacheCrow.Cache.ICacheCrow`2.LookUp(`0)">
+            <summary>
+            Checks if key is present in CacheCrow(Active+Dormant), Note: LFU maybe performed and entries maybe swapped between Active and Dormant CacheCrow.
+            </summary>
+            <param name="key">The key to find</param>
+            <returns>True if key is found, else false</returns>
+        </member>
+        <member name="M:CacheCrow.Cache.ICacheCrow`2.ActiveRemove(`0)">
+            <summary>
+            Removes the entry from Active CacheCrow corresponsing to the key.
+            </summary>
+            <param name="key">The key to corresponding value to remove</param>
+            <returns>If removed then returns removed value as CacheData, else returns empty CacheData</returns>
+        </member>
+        <member name="M:CacheCrow.Cache.ICacheCrow`2.Remove(`0)">
+            <summary>
+            Removes the entry from CacheCrow(Active+Dormant) corresponsing to the key.
+            </summary>
+            <param name="key">The key to corresponding value to remove</param>
+            <returns>If removed then returns removed value as CacheData, else returns empty CacheData</returns>
+        </member>
+        <member name="M:CacheCrow.Cache.ICacheCrow`2.GetValue(`0)">
+            <summary>
+            Lookups the key in Active+Dormant CacheCrow, if found then increments the frequency.
+            </summary>
+            <param name="key">Key to corresponding value</param>
+            <returns>If V is reference type and it is present then Object V else if V is value-type and it is not present then default value of V</returns>
+        </member>
+        <member name="M:CacheCrow.Cache.ICacheCrow`2.GetActiveValue(`0)">
+            <summary>
+            Lookups the key in Active CacheCrow, if found then increments the frequency. Note: LFU maybe performed and entries maybe swapped between Active and Dormant CacheCrow.
+            </summary>
+            <param name="key">Key to corresponding value</param>
+            <returns>If V is reference type and it is present then Object V else if V is value-type and it is not present then default value of V</returns>
+        </member>
+        <member name="E:CacheCrow.Cache.ICacheCrow`2.EmptyCacheEvent">
+            <summary>
+            Raised when CacheCrow is empty.Note: It is also periodically raised by Cleaner when CacheCrow is empty.
+            </summary>
+        </member>
+        <member name="T:CacheCrow.Cache.EmptyCacheHandler">
+            <summary>
+            Handler to handle EmptyCacheEvent.
+            </summary>
+            <param name="sender"></param>
+            <param name="args"></param>
+        </member>
+        <member name="T:CacheCrow.Model.CacheData`1">
+            <summary>
+            Represents User's data value, its frequency and creation date.
+            </summary>
+            <typeparam name="V">Value type</typeparam>
+        </member>
+        <member name="F:CacheCrow.Model.CacheData`1.Frequency">
+            <summary>
+            The count of how many times it was searched.
+            </summary>
+        </member>
+        <member name="F:CacheCrow.Model.CacheData`1.Data">
+            <summary>
+            User data
+            </summary>
+        </member>
+        <member name="F:CacheCrow.Model.CacheData`1.CreationDate">
+            <summary>
+            Time at which the CacheData was created.
+            </summary>
+        </member>
+        <member name="M:CacheCrow.Model.CacheData`1.#ctor(`0)">
+            <summary>
+            Initializes CacheData with data of type V
+            </summary>
+            <param name="data">User data</param>
+        </member>
+        <member name="M:CacheCrow.Model.CacheData`1.#ctor(`0,System.Int32)">
+            <summary>
+            Initializes CacheData with data of type V and user defined frequency.
+            </summary>
+            <param name="data">User data</param>
+            <param name="frequency">Frequency</param>
+        </member>
+        <member name="M:CacheCrow.Model.CacheData`1.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+    </members>
+</doc>

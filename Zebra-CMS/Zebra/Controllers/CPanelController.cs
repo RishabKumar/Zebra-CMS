@@ -11,6 +11,7 @@ using Zebra.Globalization;
 using Zebra.ViewModel;
 using Zebra.Services.Interfaces;
 using Zebra.Services.Operations;
+using System.Text;
 
 namespace Zebra.Controllers
 {
@@ -24,9 +25,9 @@ namespace Zebra.Controllers
         // GET: CPanel
         public override ActionResult Index()
         {
-            NameValueCollection section = (NameValueCollection)ConfigurationManager.GetSection("ZebraUtility");
-            string userName = section["userName"];
-            string userPassword = section["userPassword"];
+            //NameValueCollection section = (NameValueCollection)ConfigurationManager.GetSection("ZebraUtility");
+            //string userName = section["userName"];
+            //string userPassword = section["userPassword"];
             return RedirectToAction("Editor");
         }
 
@@ -147,8 +148,16 @@ namespace Zebra.Controllers
                 {
                     var designdetailfieldid = "06C00328-A252-4BA9-A8C2-95A354A90E2F";
                     var data = _nodeop.GetValueForField(node.Id.ToString(), designdetailfieldid);
-                    // string json = ("[{\"iscontainer\":true,\"children\":[{\"iscontainer\":true,\"children\":[{\"iscontainer\":true,\"children\":[]},{\"iscontainer\":true,\"children\":[{\"iscontainer\":true,\"children\":[{\"iscontainer\":true,\"children\":[]}]},{\"actionid\":\"cd51d86f - c990 - 48f2 - 9655 - 160ec15c1cd8\",\"children\":[]}]}]},{\"iscontainer\":true,\"children\":[]}]},{\"iscontainer\":true,\"children\":[]},{\"iscontainer\":true,\"children\":[]}]");
+                    var parents = _nodeop.GetAllParentNodes(nodeid);
+                    StringBuilder sb = new StringBuilder();
+                    parents.Pop();
+                    while (parents.Count > 0)
+                    {
+                        var parent = parents.Pop();
+                        sb.Append('/').Append(parent.NodeName);
+                    }
                     ViewBag.NodeId = nodeid;
+                    ViewBag.NodePath = sb.ToString();
                     ViewBag.DesignerDetailFieldId = designdetailfieldid;
                     ViewBag.DefaultLanguageId = LanguageManager.GetDefaultLanguage().Id.ToString();
                     return View(model: HttpUtility.HtmlDecode(data));

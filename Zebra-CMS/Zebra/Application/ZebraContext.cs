@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CacheCrow.Cache;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,8 +20,7 @@ namespace Zebra.Application
         public readonly User CurrentUser;
          
         public ZebraContext()
-        {
-            
+        {   
             string startnode = "content/";
             string pagepath = HttpContext.Current.Request.Url.AbsolutePath.Replace("zebrapage/", startnode);
 
@@ -36,11 +36,19 @@ namespace Zebra.Application
                     break;
                 }
             }
-
+            if(CurrentLanguage == null)
+            {
+                CurrentLanguage = LanguageManager.GetDefaultLanguage();
+            }
             var pagenode = OperationsFactory.PageOperations.GetPageNode(pagepath[pagepath.Length - 1] == '/' ? pagepath : pagepath + "/");
             string layoutid = null;
             string rawdesign = null;
-            PageDesign completedesign = new PageDesign();
+            PageDesign completedesign = null;
+            var cache = CacheCrow<string, PageDesign>.GetCacheCrow;
+            if (cache != null)
+            {
+                completedesign = cache.GetValue(Url.PageNodeUrl);
+            }
             //  List<Guid> actions = new List<Guid>();
             if (pagenode != null)
             {
@@ -60,15 +68,20 @@ namespace Zebra.Application
                     //        actions.Add(id);
                     //    }
                     //}
-                    rawdesign = OperationsFactory.NodeOperations.GetValueForField(pagenode.Id.ToString(), FieldId.DesignerDetailFieldId);
-                    rawdesign = HttpUtility.HtmlDecode(rawdesign);
+                   
 
-                    dynamic rawdata = ((dynamic)JsonConvert.DeserializeObject(rawdesign));
-                    
-                    completedesign.IsContainer = true;
-                    foreach(var tmp in rawdata)
+                    if (completedesign == null)
                     {
-                        completedesign.Children.Add(DesignGenerator(tmp));
+                        rawdesign = OperationsFactory.NodeOperations.GetValueForField(pagenode.Id.ToString(), FieldId.DesignerDetailFieldId);
+                        rawdesign = HttpUtility.HtmlDecode(rawdesign);
+                        dynamic rawdata = ((dynamic)JsonConvert.DeserializeObject(rawdesign));
+                        completedesign = new PageDesign();
+                        completedesign.IsContainer = true;
+                        foreach (var tmp in rawdata)
+                        {
+                            completedesign.Children.Add(DesignGenerator(tmp));
+                        }
+                        cache.Add(Url.PageNodeUrl, completedesign);
                     }
                 }
                 var layout = string.IsNullOrEmpty(layoutid) ? (Guid?)null : Guid.Parse(layoutid);
@@ -96,6 +109,7 @@ namespace Zebra.Application
                 obj.IsContainer = rawdata["iscontainer"].Value;
                 if (obj.IsContainer)
                 {
+                    obj.ContainerClass = rawdata["containerclass"].Value;
                     var children = rawdata["children"];
                     if (children != null)
                     {
@@ -109,6 +123,8 @@ namespace Zebra.Application
                 {
                     obj.ActionId = rawdata["actionid"].Value;
                     obj.ActionName = rawdata["actionname"].Value;
+                    obj.DatasourceId = rawdata["datasourceid"].Value;
+                    obj.DatasourceName = rawdata["datasourcename"].Value;
                 }
                 return obj;
             }
@@ -149,6 +165,17 @@ namespace Zebra.Application
             public readonly Guid? PageNodeId;
             public readonly Guid? PageLayout;
             public readonly PageDesign PageDesign;
+            public ActionDatasource Datasource;
+            public class ActionDatasource
+            {
+                public readonly string ActionId;
+                public readonly string DatasourceId;
+                public ActionDatasource(string actionId, string datasourceId)
+                {
+                    ActionId = actionId;
+                    DatasourceId = datasourceId;
+                }
+            }
         }
 
         public class PageUrl
@@ -156,17 +183,20 @@ namespace Zebra.Application
             public PageUrl(Uri AbsolutePageUrl, string PageNodeUrl)
             {
                 this.AbsolutePageUrl = AbsolutePageUrl;
-                this.PageNodeUrl = PageNodeUrl;
+                this.PageNodeUrl = PageNodeUrl.ToLowerInvariant();
             }
             public readonly Uri AbsolutePageUrl;
             public readonly string PageNodeUrl;
         }
 
-        public class PageDesign
+        public sealed class PageDesign
         {
             public bool IsContainer;
+            public string ContainerClass;
             public string ActionId;
             public string ActionName;
+            public string DatasourceId;
+            public string DatasourceName;
             public List<PageDesign> Children;
 
             public PageDesign()

@@ -83,10 +83,11 @@ namespace Zebra.DataRepository.DAL
         {
             using (var dbt = _context.Database.BeginTransaction())
             {
-                    //var t = from nodefieldmap in _context.NodeFieldMaps where nodefieldmap.NodeId == node.Id group nodefieldmap.LanguageId by nodefieldmap.LanguageId;
-                    //var nodefieldmaps1 = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).GroupBy(y => y.LanguageId).Select(s => s.Key).ToList();
-                var languages = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).Select(y=>y.LanguageId).Distinct();
+                //var t = from nodefieldmap in _context.NodeFieldMaps where nodefieldmap.NodeId == node.Id group nodefieldmap.LanguageId by nodefieldmap.LanguageId;
+                //var nodefieldmaps1 = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).GroupBy(y => y.LanguageId).Select(s => s.Key).ToList();
+                // var languages = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).Select(y=>y.LanguageId).Distinct();
                 //var languages = _context.NodeFieldMaps.Where(x => x.NodeId == node.Id).Select(y => y.LanguageId);
+                var languages = _context.NodeLanguageMaps.Where(x => x.NodeId == node.Id).Select(y=>y.LanguageId).Distinct();
                 foreach (var lang in languages)
                 {
                     RegisterFieldsForNode(node, field, new Language() { Id = lang.Value });

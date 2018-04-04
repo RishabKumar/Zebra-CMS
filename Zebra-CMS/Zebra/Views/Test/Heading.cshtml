@@ -1,10 +1,11 @@
 ﻿@{
     Layout = null;
 }
-@model string
 <div>
     <h1>
-        Zebra CMS - @Model
+        @ViewBag.Title
     </h1>
 
+    <p>META: @ViewBag.Meta</p>
+    <p>Copyrights: @ViewBag.Copyrights</p>
 </div>

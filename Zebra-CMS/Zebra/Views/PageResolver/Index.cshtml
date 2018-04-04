@@ -1,15 +1,43 @@
-﻿@using Zebra.ModelView
+﻿@using Zebra.ViewModel
 @using Zebra.Services.Operations;
+@using Zebra.Application;
+@using Zebra.Constants;
 @model PageModel
 @{ 
     Layout = Model.LayoutPath;
+    var pageDesign = Model.Design;
 }
- 
-@foreach (var action in Model.Actions)
+
+
+@Generate(pageDesign)
+
+@helper Generate(ZebraContext.PageDesign design)
+{
+    if (design != null && design.IsContainer)
+    {
+            var containerclass = string.IsNullOrWhiteSpace(design.ContainerClass) ? "" : "class=" + design.ContainerClass;
+            <div @containerclass>
+                @foreach(var child in design.Children)
+                {
+                    @Generate(child);
+                }
+            </div>
+    }
+    else if(design != null)
+    {
+        ZebraContext.Current.Page.Datasource = new ZebraContext.PageData.ActionDatasource(design.ActionId, design.DatasourceId);
+        var controllername = OperationsFactory.NodeOperations.GetValueForField(design.ActionId.ToString(), FieldId.ActionControllerFieldId);
+        var actionname = OperationsFactory.NodeOperations.GetValueForField(design.ActionId.ToString(), FieldId.ActionNameFieldId);
+        Html.RenderAction(actionname, controllername, new { Datasource = design.DatasourceId});
+        
+    }
+}
+
+@*@foreach (var action in Model.Actions)
 {
     var controllername = OperationsFactory.NodeOperations.GetValueForField(action.ToString(), "F66E05E3-0BDA-4FF2-8904-2C285B029BB3");
     var actionname = OperationsFactory.NodeOperations.GetValueForField(action.ToString(), "EBE8BDF5-40ED-4B16-AEAC-2E21F58A4EF8");
     Html.RenderAction(actionname, controllername);
-}
+}*@
 
  

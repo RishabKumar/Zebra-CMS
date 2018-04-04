@@ -9,7 +9,7 @@ namespace Zebra.Services.Operations
 {
     public class OperationsFactory
     {
-        public OperationsFactory(IPageOperations PageOperations, IStructureOperations StructureOperations, INodeOperations NodeOperations, IFieldOperations FieldOperations, IUserOperations UserOperations)
+        public OperationsFactory(Lazy<IPageOperations> PageOperations, Lazy<IStructureOperations> StructureOperations, Lazy<INodeOperations> NodeOperations, Lazy<IFieldOperations> FieldOperations, Lazy<IUserOperations> UserOperations)
         {
             _pageoperations = PageOperations ?? _pageoperations;
             _structureoperations = StructureOperations ?? _structureoperations;
@@ -18,18 +18,16 @@ namespace Zebra.Services.Operations
             _useroperations = UserOperations ?? _useroperations;
         }
 
-        private static IStructureOperations _structureoperations { get; set; }
+        private static Lazy<IStructureOperations> _structureoperations { get; set; }
+        private static Lazy<IPageOperations> _pageoperations { get; set; }
+        private static Lazy<INodeOperations> _nodeoperations { get; set; }
+        private static Lazy<IFieldOperations> _fieldoperations { get; set; }
+        private static Lazy<IUserOperations> _useroperations { get; set; }
 
-        private static IPageOperations _pageoperations { get; set; }
-        private static INodeOperations _nodeoperations { get; set; }
-        private static IFieldOperations _fieldoperations { get; set; }
-        private static IUserOperations _useroperations { get; set; }
-
-        public static IStructureOperations StructureOperations { get { return _structureoperations; } }
-
-        public static IPageOperations PageOperations { get { return _pageoperations; } }
-        public static INodeOperations NodeOperations { get { return _nodeoperations; } }
-        public static IFieldOperations FieldOperations { get { return _fieldoperations; } }
-        public static IUserOperations UserOperations { get { return _useroperations; } }
+        public static IStructureOperations StructureOperations { get { return _structureoperations.Value; } }
+        public static IPageOperations PageOperations { get { return _pageoperations.Value; } }
+        public static INodeOperations NodeOperations { get { return _nodeoperations.Value; } }
+        public static IFieldOperations FieldOperations { get { return _fieldoperations.Value; } }
+        public static IUserOperations UserOperations { get { return _useroperations.Value; } }
     }
 }

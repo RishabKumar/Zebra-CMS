@@ -5,6 +5,7 @@
 @model string
 @{ 
     var data = Model;
+    var nodepath = ViewBag.NodePath;
 }
 <div id="outer-container" class="outer-container">
     <input type="button" class="designer-add-container" value="Add Container"/>
@@ -18,15 +19,21 @@
     <input type="button" class="designer-add-container" value="Add Container" />
     <input type="button" class="designer-add-action" value="Add Action" />
     <input type="button" class="designer-remove-container" value="Remove Container" />
+    <input type="text" class="designer-container-class-name" placeholder="Container Class Name" />
+</div>
+
+<div class="datasource-container-sample">
+    <span data-datasourceid=''><label>Datasource: </label><text><input type='button' class='designer-attach-datasource' value='Attach Datasource'></text></span>
 </div>
 
 <script>
+    var nodepath = "@nodepath";
     var designerdata = JSON.parse("@data".replace(/&quot;/g, '\"'));
     console.log(JSON.stringify(designerdata));
     var parentcontainer = $('#outer-container');
     for (var i = 0; i < designerdata.length; i++) {
         if (designerdata[i]["iscontainer"]) {
-            var childcontainer = AddContainer(parentcontainer);
+            var childcontainer = AddContainer(parentcontainer, designerdata[i]["containerclass"]);
             var childdata = designerdata[i].children;
             TraverseChildren(childcontainer, childdata);
         }
@@ -34,13 +41,19 @@
         {
             var id = designerdata[i]['actionid'];
             var name = designerdata[i]['actionname'];
-            AddActionContainer(parentcontainer, id, name);
+            var datasourceid = designerdata[i]['datasourceid'];
+            var datasourcename = designerdata[i]['datasourcename'];
+            AddActionContainer(parentcontainer, id, name, datasourceid, datasourcename);
         }
     }
 
-    function AddContainer(parent) {
+    function AddContainer(parent, classname) {
         var newcontainer = $('.outer-container-sample').clone();
         newcontainer.attr('class', 'outer-container');
+        if (classname != undefined)
+        {
+            $(newcontainer).children('input.designer-container-class-name')[0].value = classname;
+        }
         $(newcontainer).appendTo(parent);
         var depth = $(newcontainer).parents('.outer-container').length;
         $(newcontainer).prepend('<p>Depth: ' + depth + '</p>');
@@ -48,17 +61,18 @@
     }
 
     function TraverseChildren(currentcontainer, currentdata) {
-
         for (var i = 0; i < currentdata.length; i++) {
             if (currentdata[i]["iscontainer"]) {
-                var childcontainer = AddContainer(currentcontainer);
+                var childcontainer = AddContainer(currentcontainer, currentdata[i]["containerclass"]);
                 var childdata = currentdata[i].children;
                 TraverseChildren(childcontainer, childdata);
             }
             else {
                 var id = currentdata[i]['actionid'];
                 var name = currentdata[i]['actionname'];
-                AddActionContainer(currentcontainer, id, name);
+                var datasourceid = currentdata[i]['datasourceid'];
+                var datasourcename = currentdata[i]['datasourcename'];
+                AddActionContainer(currentcontainer, id, name, datasourceid, datasourcename);
             }
         }
     }
@@ -83,18 +97,57 @@
         AddActionContainer(parentcontainer, nodeid, nodename);
     }
 
-    function AddActionContainer(parentcontainer, nodeid, nodename)
+    function AddActionContainer(parentcontainer, nodeid, nodename, datasourceid, datasourcename)
     {
-        var action = "<div class='designer-action-container' data-nodeid='" + nodeid + "'><span><p>" + nodename + "<i class='fa fa-window-close-o'></i></p></span></div>";
-        $(parentcontainer).append(action);
+        var action = "<div class='designer-action-container' data-nodeid='" + nodeid + "'><span><p>" + nodename + "<i class='fa fa-window-close-o action-remove'></i></p></span></div>";
+        var $action = $(action);
+        //$(action).appendTo(parentcontainer);
+        AddDatasourceContainer($action, datasourceid, datasourcename);
+        $(parentcontainer).append($action);
     }
 
-    $(document).on('click', '.designer-action-container i', function () {
+    function AddDatasourceContainer(actioncontainer, datasourceid, datasourcename)
+    {
+        var datasourcecontainer = "";
+        if (datasourceid != undefined && datasourceid != '') {
+            datasourcecontainer = "<span data-datasourceid=" + datasourceid + "><label>Datasource: </label><text>" + datasourcename + "</text><i class='fa fa-window-close-o datasource-remove'></i></span>";
+        }
+        else {
+            datasourcecontainer = $('.datasource-container-sample span').clone();
+        }
+        $(actioncontainer).append(datasourcecontainer);
+    }
+
+    //remove action
+    $(document).on('click', '.designer-action-container i.action-remove', function () {
         $(this.parentElement.parentElement.parentElement).remove();
+    });
+
+    //remove datasource
+    $(document).on('click', '.designer-action-container i.datasource-remove', function () {
+        var actioncontainer = this.parentElement.parentElement;
+        $(this.parentElement).remove();
+        AddDatasourceContainer(actioncontainer);
     });
 
     $(document).on('click', '.designer-remove-container', function () {
         $(this.parentElement).remove();
+    });
+
+    $(document).on('click', '.designer-attach-datasource', function () {
+        var btn = this;
+        var para = btn.parentElement;
+        var span = para.parentElement;
+        var action = span.parentElement;
+        ShowModelTreePopup('', '', '', '', function () {
+            var node = $(GetSelectedNodeInPopup());
+            var nodename = $(node).find('p')[0].innerHTML;
+            var nodeid = node.attr('data-nodeid');
+            $(span).remove();
+            //  $(para).append(nodename);
+            AddDatasourceContainer(action, nodeid, nodename);
+            //$(span).attr('data-datasourceid', nodeid);
+        });
     });
 
     $(document).on('click', '.designer-save-design', function () {
@@ -113,7 +166,16 @@
             url: "/zebraapi/nodeservice/savenode",
             data: formdata,
             success(data) {
-                alert('Saved');
+                formdata = {};
+                formdata['key'] = nodepath;
+                var ajaxRequest = $.ajax({
+                    type: "POST",
+                    url: "/zebraapi/cacheservice/remove",
+                    data: formdata,
+                    success(data) {
+                        alert('Saved');
+                    }
+                });
             }
         });
         ajaxRequest.done(function (data, textStatus, jqXHR) {
@@ -131,12 +193,25 @@
             var id = $(child[i]).attr('data-nodeid');
             var tmp = {};
             if (id == undefined) {
+                var classname = $(child[i]).children('input.designer-container-class-name')[0].value;
                 tmp['iscontainer'] = true;
+                if (classname != undefined || classname != '')
+                    tmp['containerclass'] = classname;
             }
             else {
+                var actionspan = $(child[i]).children()[0];
+                var actionname = $(actionspan).children()[0].innerText;
+                var datasourcespan = $(child[i]).children()[1];
+                var datasourceid = $(datasourcespan).attr('data-datasourceid');
+                var datasourcename = undefined;
+                if (datasourceid != undefined && datasourceid != '') {
+                    datasourcename = $(datasourcespan).children('text')[0].innerText;
+                }
                 tmp['iscontainer'] = false;
                 tmp['actionid'] = id;
-                tmp['actionname'] = $(child[i]).children().children()[0].innerText;
+                tmp['actionname'] = actionname;
+                tmp['datasourceid'] = datasourceid;
+                tmp['datasourcename'] = datasourcename;
             }
             tmp['children'] = GetAllChildren(child[i]);
             data.push(tmp);
@@ -159,6 +234,11 @@
 
     .designer-action-container{
         margin: 5px;
+        border: groove;
+    }
+
+    .datasource-container-sample{
+        display: none;
     }
 
 </style>

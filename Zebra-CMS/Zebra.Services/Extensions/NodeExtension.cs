@@ -20,7 +20,7 @@ namespace Zebra.Services.Operations
             var dictionary = new Dictionary<string, object>();
             if (language != null && language.Id != null)
             {
-                var nodefieldmaps = node.NodeFieldMaps.Where(x => x.LanguageId == language.Id).ToList();
+                var nodefieldmaps = node.NodeFieldMaps.Where(x => x.LanguageId == language.Id || x.Field.IsStatic);
                 foreach (var nodefieldmap in nodefieldmaps)
                 {
                     var key = nodefieldmap.Field.FieldName;

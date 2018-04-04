@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Zebra.Constants;
 using Zebra.Core.Context;
 using Zebra.DataRepository.DAL;
 using Zebra.DataRepository.Interfaces;
@@ -110,7 +111,8 @@ namespace Zebra.Services.Operations
                     {
                         var template = new Template() { Id = Guid.Parse(nodeid) };
                         template = _templaterepository.GetTemplate(template);
-                        foreach (var tmp in template.TemplateFieldMaps)
+                        var templatefieldmaps = new List<TemplateFieldMap>(template.TemplateFieldMaps);
+                        foreach (var tmp in templatefieldmaps)
                         {
                             _fieldrepository.RemoveFieldTemplateRelation(tmp);
                             _fieldrepository.DeleteField(new Field() { Id = tmp.FieldId });
@@ -237,7 +239,6 @@ namespace Zebra.Services.Operations
                 return false;
             }
         }
-
 
         public string GetValueForField(string nodeid, string fieldid)
         {
@@ -556,7 +557,10 @@ namespace Zebra.Services.Operations
                 case NodeType.TEMPLATE_TYPE:
                     break;
             }
-            FrameworkOperations.Execute(node.Id.ToString(), 1);//validation
+            if (list.Any(x => x.FieldId.ToString() == FieldId.ValidationFieldId))
+            {
+                FrameworkOperations.Execute(node.Id.ToString(), 1);//validation
+            }
         }
 
         public List<NodeFieldMap> GetNodeFieldMapData(string nodeid)

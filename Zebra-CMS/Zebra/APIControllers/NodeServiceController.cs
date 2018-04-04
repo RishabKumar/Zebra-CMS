@@ -52,11 +52,16 @@ namespace Zebra.APIControllers
             string templateid = tmp.templateid;
             var fields = _fieldops.GetInclusiveFieldsOfTemplate(templateid);  //templateid should be passed instead of nodeid
             var node = _structops.CreateNode(nodename, parentid, templateid, fields);
-            return JsonConvert.SerializeObject(node, Formatting.Indented,
-                                                new JsonSerializerSettings
-                                                {
-                                                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                                                });
+            return JsonConvert.SerializeObject(node, new JsonSerializerSettings
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects
+            });
+                //, Formatting.Indented,
+                //                                new JsonSerializerSettings
+                //                                {
+                //                                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                //                                });
+                                                
         }
 
         [HttpPost]
@@ -107,7 +112,7 @@ namespace Zebra.APIControllers
             var nodeid = rawform["nodeid"];
             var node = _nodeops.GetNode(nodeid);
             //var fields = _fieldops.GetAllParentFieldsFromTemplate(node.TemplateId.ToString());
-            _nodeops.SaveNode(node, rawform);
+            result = _nodeops.SaveNode(node, rawform);
             return result;
         }
     }
